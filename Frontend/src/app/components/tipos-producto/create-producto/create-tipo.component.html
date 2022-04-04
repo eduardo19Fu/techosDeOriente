@@ -1,0 +1,56 @@
+<div class="container">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">{{title}}</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Ingrese los datos</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form #tipoform="ngForm">
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label for="marca">Tipo de Producto</label>
+                        <input type="text" class="form-control" name="tipoProducto"
+                            [(ngModel)]="tipoProducto.tipoProducto" required #tipo="ngModel">
+                        <div *ngIf="tipo.invalid && (tipo.touched || tipo.dirty)">
+                            <span class="requerido">
+                                El tipo no puede estar vacío.
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" role="button" class="btn btn-primary"
+                        *ngIf="!tipoProducto.idTipoProducto else elseblock" (click)="create()" [disabled]="!tipoform.form.valid">
+                        Guardar
+                    </button>
+
+                    <ng-template #elseblock>
+                        <button type="submit" role="button" class="btn btn-primary" (click)="update()" [disabled]="!tipoform.form.valid">
+                            Actualizar
+                        </button>
+                    </ng-template>
+
+                </div>
+            </form>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>

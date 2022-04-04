@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="mes" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anho" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select 	sum(doc.total) total,
+	concat(u.nombre,' ',u.apellido) nombre,
+        	day(doc.fecha_emision),
+        	getMes(month(doc.fecha_emision))
+from 
+	tbl_documento doc 
+inner join 
+	tbl_usuario u on u.idusuario = doc.idvendedor
+where 
+	month(doc.fecha_emision) = $P{mes} and year(doc.fecha_emision) = $P{anho} and doc.tipo_documento = 1
+group by 
+	u.usuario, day(doc.fecha_emision)
+order by
+	day(doc.fecha_emision) asc;]]>
+	</queryString>
+	<field name="total" class="java.math.BigDecimal"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="day(doc.fecha_emision)" class="java.lang.Long"/>
+	<field name="getMes(month(doc.fecha_emision))" class="java.lang.String"/>
+	<variable name="suma_ventas" class="java.math.BigDecimal" resetType="Group" resetGroup="dia_venta" incrementType="Group" incrementGroup="vendedor" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<variable name="total_mes" class="java.math.BigDecimal" incrementType="Group" incrementGroup="dia_venta" calculation="Sum">
+		<variableExpression><![CDATA[$V{suma_ventas}]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.math.BigDecimal" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<group name="dia_venta" keepTogether="true">
+		<groupExpression><![CDATA[$F{day(doc.fecha_emision)}]]></groupExpression>
+		<groupHeader>
+			<band height="36">
+				<textField>
+					<reportElement x="41" y="0" width="73" height="31" forecolor="#009966"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Long"><![CDATA[$F{day(doc.fecha_emision)}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="0" width="41" height="31" forecolor="#009966"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="true"/>
+					</textElement>
+					<text><![CDATA[DÍA]]></text>
+				</staticText>
+				<line>
+					<reportElement x="1" y="33" width="570" height="1" forecolor="#006600"/>
+					<graphicElement>
+						<pen lineWidth="2.0" lineStyle="Double"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="39">
+				<staticText>
+					<reportElement x="410" y="15" width="16" height="20" forecolor="#CC0000"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Q.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="1" y="15" width="409" height="20" forecolor="#CC0000"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL DEL DÍA]]></text>
+				</staticText>
+				<line>
+					<reportElement x="396" y="6" width="176" height="1"/>
+				</line>
+				<line>
+					<reportElement x="396" y="36" width="176" height="1" forecolor="#CC0000"/>
+					<graphicElement>
+						<pen lineWidth="2.5" lineStyle="Double"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="426" y="15" width="136" height="20" forecolor="#CC0000"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{suma_ventas}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="vendedor">
+		<groupExpression><![CDATA[$F{nombre}]]></groupExpression>
+		<groupHeader>
+			<band height="24">
+				<textField>
+					<reportElement x="0" y="3" width="384" height="20"/>
+					<textElement>
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="426" y="3" width="136" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{total}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="410" y="3" width="16" height="20"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Q.]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="86" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="462" y="62" width="110" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="82" width="571" height="1"/>
+			</line>
+			<image>
+				<reportElement x="1" y="0" width="167" height="82"/>
+				<imageExpression class="java.lang.String"><![CDATA[new File("").getAbsolutePath()+"\\src\\prstd\\images\\logo-dtodo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="1" y="13" width="570" height="47"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RESUMEN DE VENTAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="62" width="108" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de emisión:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="52" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="1" y="5" width="571" height="47" backcolor="#00CC99"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="5" width="324" height="47"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE VENTAS DEL MES DE:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="324" y="5" width="158" height="47" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{getMes(month(doc.fecha_emision))}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="482" y="5" width="90" height="47" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{anho}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="12" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="49" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="5" width="572" height="40"/>
+			</rectangle>
+			<textField>
+				<reportElement x="426" y="13" width="146" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="410" y="13" width="16" height="20" forecolor="#000000"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Q.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="13" width="126" height="20" forecolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL DEL MES DE ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="126" y="13" width="284" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{getMes(month(doc.fecha_emision))}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="451" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="531" y="0" width="40" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

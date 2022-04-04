@@ -1,0 +1,9 @@
+.modal-header{
+    background-color: cadetblue;
+    color: #fff;
+}
+
+#button-x:hover{
+    background-color: red;
+    color: #fff;
+}

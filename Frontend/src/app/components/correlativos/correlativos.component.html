@@ -1,0 +1,100 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    {{title}}
+                </h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+        <hr>
+        <div class="row">
+            <div class="col s6">
+                <a *ngIf="authService.hasRole('ROLE_ADMIN') || authService.hasRole('ROLE_COBRADOR')"
+                    [routerLink]="['/facturas/correlativos/create']" class="btn bg-gradient-success"><i
+                        class="fas fa-plus-square"></i>&nbsp; Nuevo</a>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Listado</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body table-responsive">
+
+        <div *ngIf="correlativos?.length == 0" class="alert alert-info alert-dismissible">
+            <h5>
+                <i class="icon fas fa-info"></i>
+                Atención!
+            </h5>
+
+            No existe ningún correlativo registrado en la base de datos!
+        </div>
+
+        <table id="correlativos" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid" 
+            *ngIf="correlativos?.length > 0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Corr. Inicial</th>
+                    <th>Corr. Final</th>
+                    <th>Corr. Actual</th>
+                    <th>Fecha Registro</th>
+                    <th>Usuario Asignado</th>
+                    <th>Estado</th>
+                    <th *ngIf="authService.hasRole('ROLE_ADMIN')">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let correlativo of correlativos">
+                    <td>{{correlativo.idCorrelativo}}</td>
+                    <td>{{correlativo.correlativoInicial}}</td>
+                    <td>{{correlativo.correlativoFinal}}</td>
+                    <td>{{correlativo.correlativoActual}}</td>
+                    <td>{{correlativo.fechaCreacion | date: 'dd/MM/yyyy - hh:mm'}}</td>
+                    <td>{{correlativo.usuario.usuario}}</td>
+                    <td>
+                        <span class="badge" 
+                            [ngClass]="{'badge-primary': correlativo.estado.estado === 'ACTIVO',
+                                'badge-danger' : correlativo.estado.estado === 'ANULADO',
+                                'badge-secondary' : correlativo.estado.estado === 'INACTIVO'}">
+                            {{correlativo.estado.estado}}
+                        </span>
+                    </td>
+                    <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+
+                        <button class="btn bg-gradient-info margin" name="edit" type="button"
+                            [routerLink]="['/facturas/correlativos/create', correlativo.idCorrelativo]">
+                            <i class="fas fa-edit"></i>
+                        </button>
+
+                        <!-- Aquí va el botón de eliminar -->
+                        <button class="btn bg-gradient-danger margin" name="delete"
+                            type="button" (click)="anularCorrelativo(correlativo)">
+                            <i class="fas fa-ban"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Corr. Inicial</th>
+                    <th>Corr. Final</th>
+                    <th>Corr. Actual</th>
+                    <th>Fecha Registro</th>
+                    <th>Usuario Asignado</th>
+                    <th>Estado</th>
+                    <th *ngIf="authService.hasRole('ROLE_ADMIN')">Opciones</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+

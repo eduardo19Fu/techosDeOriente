@@ -1,0 +1,82 @@
+<div *ngIf="detailUsuarioService.modal" class="abrir-modal animacion fadeIn">
+    <div class="modal" tabindex="-1" style="display: block; overflow-y: scroll;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{title}}</h5>
+                    <button (click)="cerrarModal()" id="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white;">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <h4>Datos Generales</h4>
+                        <div class="row">
+                            <div class="col-sm">
+
+                                <ul *ngIf="usuario" class="list-group mb-3">
+                                    <li class="list-group-item">
+                                        <strong>Primer Nombre: </strong>
+                                        {{usuario.primerNombre}}
+                                    </li>
+                                    <li class="list-group-item" *ngIf="usuario.segundoNombre">
+                                        <strong>Segundo Nombre: </strong>
+                                        {{usuario.segundoNombre}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Apellidos: </strong>
+                                        {{usuario.apellido}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Usuario: </strong>
+                                        {{usuario.usuario}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Fecha Registro: </strong>
+                                        {{usuario.fechaRegistro | date: 'dd/MM/yyyy - hh:mm'}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Estado: </strong>
+                                        <span class="badge badge-success"
+                                            *ngIf="usuario.enabled else elseblock">ACTIVO</span>
+
+                                        <ng-template #elseblock>
+                                            <span class="badge badge-danger"
+                                                *ngIf="usuario.enabled else elseblock">INACTIVO</span>
+                                        </ng-template>
+
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                            <div class="col-sm">
+                                <h4>Roles</h4>&nbsp;
+                                <table class="table table-striped">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>ROL</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr *ngFor="let rol of usuario.roles">
+                                            <td>{{rol.idRole}}</td>
+                                            <td>{{rol.role}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button (click)="cerrarModal()" type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

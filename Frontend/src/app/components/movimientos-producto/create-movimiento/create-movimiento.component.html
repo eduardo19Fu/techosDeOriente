@@ -1,0 +1,83 @@
+<div class="modal fade" id="modal-movimiento">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{title}}</h4>
+                <button id="button-x" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #formMovimiento="ngForm" id="form-movimiento">
+                    <div class="row">
+                        <div class="form-group col-sm-3">
+                            <label for="cod-producto" style="display: block;">Código</label>
+                            <input type="text" class="form-control" name="cod-producto" id="cod-producto" [(ngModel)]="producto.codProducto"
+                                style="width: 70%; display: inline; margin-right: 10px;" required #codigo="ngModel">
+
+                            <button class="btn bg-gradient-fuchsia" (click)="buscarProducto()">
+                                <i class="fas fa-search"></i>
+                            </button>
+
+                        </div>
+
+                        <div class="form-group col-lg-7">
+                            <label for="nombre">Producto</label>
+                            <input type="text" class="form-control" name="nombre" id="nombre" value="{{producto.nombre ? producto.nombre : ''}}"
+                                required [disabled]="producto.nombre">
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                            <label for="stock">Disponible</label>
+                            <input type="number" class="form-control" name="stock" id="stock" value="{{producto.stock ? producto.stock : ''}}"
+                                required [disabled]="producto.stock">
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="cantidad">Cantidad</label>
+                            <input type="number" class="form-control" name="cantidad" id="cantidad" required #cantidad="ngModel"
+                                [(ngModel)]="movimientoProducto.cantidad">
+
+                            <div *ngIf="cantidad.invalid && (cantidad.touched || cantidad.dirty)">
+                                <span class="requerido">
+                                    La cantidad no puede estar vacía.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col">
+                            <label for="tipo-movimiento">Tipo Movimiento</label>
+                            <select name="tipo-movimiento" class="form-control" style="width: 100%;"
+                                [(ngModel)]="movimientoProducto.tipoMovimiento" required #tipo="ngModel">
+
+                                <option selected="selected" value="ENTRADA">Entrada</option>
+                                <option value="SALIDA">Salida</option>
+                            </select>
+
+                            <div *ngIf="tipo.invalid && (tipo.touched || tipo.dirty)">
+                                <span class="requerido">
+                                    Elija un movimiento antes de continuar.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary" style="float: right; width: 100%;"
+                        [disabled]="!formMovimiento.form.valid" (click)="create()">
+                        Ingresar
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" id="cerrar-modal" data-dismiss="modal"
+                    style="display: right;">Cerrar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

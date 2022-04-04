@@ -1,0 +1,90 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{title}}</h1>
+                <br>
+                <a *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')"
+                    [routerLink]="['/clientes/create']" class="btn bg-gradient-success">
+                    <i class="fas fa-plus-circle"></i>
+                    Nuevo
+                </a>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<div class="card">
+    <div class="card-header">
+        Listado de Tipos de Identificación
+    </div>
+    <div class="card-body table-responsive">
+
+        <div *ngIf="clientes?.length == 0" class="alert alert-info alert-dismissible">
+            <h5>
+                <i class="icon fas fa-info"></i>
+                Atención!
+            </h5>
+
+            No existe ningún cliente registrado en la base de datos!
+        </div>
+
+        <table id="clientes" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid" 
+            *ngIf="clientes?.length > 0">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>NIT</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Fecha Registro</th>
+                    <th *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')">Opciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let cliente of clientes">
+                    <td>{{cliente.idCliente}}</td>
+                    <td>{{cliente.nombre}}</td>
+                    <td>{{cliente.nit}}</td>
+                    <td>{{cliente.telefono}}</td>
+                    <td>{{cliente.direccion}}</td>
+                    <td>{{cliente.fechaRegistro | date: 'dd/MM/yyyy - hh:mm'}}</td>
+                    <td *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')" class="center-options">
+
+                        <button class="btn bg-gradient-info margin" type="button" name="edit" 
+                            data-toggle="tooltip" data-placement="top" title="Editar"
+                            [routerLink]="['/clientes/create', cliente.idCliente]">
+
+                            <i class="fas fa-edit"></i>
+                        </button>&nbsp;
+
+                        <button class="btn bg-gradient-danger margin" type="button" name="delete" (click)="delete(cliente)"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>NIT</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Fecha Registro</th>
+                    <th *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')">Opciones</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+

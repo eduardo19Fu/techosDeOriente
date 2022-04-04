@@ -1,0 +1,91 @@
+<div class="container">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">{{title}}</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Ingrese los datos</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form #clienteForm="ngForm">
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control" name="nombre" [(ngModel)]="cliente.nombre" required placeholder="Ingrese nombre del cliente"
+                                #nombre="ngModel">
+                                
+                            <div *ngIf="nombre.invalid && (nombre.touched || nombre.dirty)">
+                                <span class="requerido">
+                                    El nombre no puede estar vacío.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col">
+                            <label for="nit">NIT</label>
+                            <input type="text" name="nit" class="form-control" [(ngModel)]="cliente.nit" required placeholder="Ingrese NIT del cliente"
+                                #nit="ngModel">
+
+                            <div *ngIf="nit.invalid && (nit.touched || nit.dirty)">
+                                <span class="requerido">
+                                    El NIT no puede estar vacío.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="direccion">Dirección</label>
+                            <input type="text" name="direccion" class="form-control" [(ngModel)]="cliente.direccion" placeholder="Ingrese dirección del cliente"
+                                required #direccion="ngModel">
+
+                            <div *ngIf="direccion.invalid && (direccion.dirty || direccion.touched)">
+                                <span class="requerido">
+                                    La dirección no puede estar vacía.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col">
+                            <label for="telefono">Teléfono</label>
+                            <input type="text" name="telefono" id="telefono" class="form-control" [(ngModel)]="cliente.telefono"
+                                placeholder="Ingrese número de teléfono">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" role="button" class="btn btn-primary" (click)="create()"
+                        *ngIf="!cliente.idCliente else elseBlock" [disabled]="!clienteForm.form.valid">
+                        Guardar
+                    </button>
+
+                    <ng-template #elseBlock>
+                        <button type="submit" role="button" class="btn btn-primary" (click)="update()"
+                                [disabled]="!clienteForm.form.valid">
+                            Actualizar
+                        </button>
+                    </ng-template>
+
+                </div>
+            </form>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>

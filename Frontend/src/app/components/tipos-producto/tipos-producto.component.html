@@ -1,0 +1,81 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{title}}</h1>
+                <br>
+                <a [routerLink]="['/productos/categorias/create']" class="btn bg-gradient-success">
+                    <i class="fas fa-plus-circle"></i>
+                    Nuevo
+                </a>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<div class="card">
+    <div class="card-header">
+        Listado de Tipos de Identificación
+    </div>
+    <div class="card-body table-responsive">
+
+        <div *ngIf="tipos?.length == 0" class="alert alert-info alert-dismissible">
+            <h5>
+                <i class="icon fas fa-info"></i>
+                Atención!
+            </h5>
+
+            No existe ninguna categoría registrada en la base de datos!
+        </div>
+
+        <table id="tipos" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid"
+            *ngIf="tipos?.length > 0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo Producto</th>
+                    <th>Fecha de Registro</th>
+                    <th>Creador</th>
+                    <th *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">Opciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let tipo of tipos">
+                    <td>{{tipo.idTipoProducto}}</td>
+                    <td>{{tipo.tipoProducto}}</td>
+                    <td>{{tipo.fechaRegistro | date: 'dd/MM/yyyy - hh:mm'}}</td>
+                    <td>{{tipo.usuario.usuario}}</td>
+                    <td class="center-options" *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
+
+                        <button class="btn bg-gradient-info margin" type="button" name="edit" 
+                            data-toggle="tooltip" data-placement="top" title="Editar"
+                            [routerLink]="['/productos/categorias/create', tipo.idTipoProducto]">
+
+                            <i class="fas fa-edit"></i>
+                        </button>&nbsp;
+
+                        <button class="btn bg-gradient-danger margin" type="button" name="delete" (click)="delete(tipo)"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo Producto</th>
+                    <th>Fecha de Registro</th>
+                    <th>Creador</th>
+                    <th *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">Opciones</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+

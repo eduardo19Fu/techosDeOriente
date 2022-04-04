@@ -1,0 +1,152 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">{{title}}</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!--TARJETA DE DATOS DE USUARIO-->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h4>Datos del usuario</h4>
+            </div>
+
+            <div class="card-body">
+                <form #usuarioForm="ngForm">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="primerNombre">Primer Nombre</label>
+                                <input type="text" name="primerNombre" id="primerNombre" [(ngModel)]="usuarioAuxiliar.primerNombre"
+                                    class="form-control" placeholder="Ingrese el primer nombre" required
+                                    #primerNombre="ngModel">
+
+                                <div *ngIf="primerNombre.invalid && (primerNombre.touched || primerNombre.dirty)">
+                                    <span class="requerido">
+                                        El Primer Nombre no puede estar vacío.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="segundoNombre">Segundo Nombre</label>
+                                <input type="text" name="segundoNombre" id="segundoNombre" [(ngModel)]="usuarioAuxiliar.segundoNombre"
+                                    class="form-control" placeholder="Ingrese el segundo nombre del usuario">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="apellido">Apellidos</label>
+                                <input type="text" name="apellido" id="apellido" [(ngModel)]="usuarioAuxiliar.apellido" class="form-control"
+                                    placeholder="Ingrese los apellidos del usuario" required #apellido="ngModel">
+
+                                <div *ngIf="apellido.invalid && (apellido.touched || apellido.dirty)">
+                                    <span class="requerido">
+                                        Los Apellidos no puede estar vacío.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="usuario">Usuario</label>
+                                <input type="text" name="usuario" id="usuario" [(ngModel)]="usuarioAuxiliar.usuario" class="form-control"
+                                    placeholder="Ingrese un usuario" required #usuario="ngModel">
+
+                                <div *ngIf="usuario.invalid && (usuario.touched || usuario.dirty)">
+                                    <span class="requerido">
+                                        El usuario no puede estar vacío.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="password">Contraseña</label>
+                                <input type="password" name="password" id="password" [(ngModel)]="usuarioAuxiliar.password"
+                                    class="form-control" required #password="ngModel"
+                                    placeholder="Ingrese una contraseña">
+
+                                <div *ngIf="password.invalid && (password.touched || password.dirty)">
+                                    <span class="requerido">
+                                        La contraseña es obligatoria.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="role">Rol</label>
+                                <select  name="role" (change)="cargarRole($event.target.value)" class="form-control">
+                                    <option value="">---- Elija un Rol ----</option>
+                                    <option *ngFor="let role of roles" value="{{role.idRole}}">{{role.role}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button *ngIf="!usuarioAuxiliar.idUsuario else elseblock" type="submit" role="button" class="btn bg-gradient-primary btn-lg" 
+                        (click)="create()" [disabled]="filas.length == 0 || !usuarioForm.form.valid">
+                        Crear Usuario
+                    </button>
+
+                    <ng-template #elseblock>
+                        <button class="btn bg-gradient-warning btn-lg" role="button" (click)="update()"
+                            [disabled]="filas.length == 0 || !usuarioForm.form.valid">
+                            Actualizar
+                        </button>
+                    </ng-template>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--TERJETA DE ROLES-->
+    <div class="col-md-6">
+        <div class="card card-warning">
+            <div class="card-header">
+                <h4>Roles</h4>
+            </div>
+
+            <div class="card-body table-responsive">
+                <table class="table" *ngIf="!null">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let fila of filas; let i = index">
+                            <td>{{fila.idRole}}</td>
+                            <td>{{fila.role}}</td>
+                            <td>
+                                <button type="button" class="btn bg-gradient-danger"
+                                    (click)="eliminarFila(i)">X</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

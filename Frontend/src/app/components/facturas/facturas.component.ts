@@ -1,0 +1,129 @@
+import { Component, OnInit, EventEmitter, AfterViewInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { AuthService } from 'src/app/services/auth.service';
+import { DetailService } from 'src/app/services/facturas/detail.service';
+import { FacturaService } from 'src/app/services/facturas/factura.service';
+
+import { Factura } from 'src/app/models/factura';
+import { Usuario } from 'src/app/models/usuario';
+
+import { JqueryConfigs } from '../../utils/jquery/jquery-utils';
+import swal from 'sweetalert2';
+
+@Component({
+  selector: 'app-facturas',
+  templateUrl: './facturas.component.html',
+  styleUrls: ['./facturas.component.css']
+})
+export class FacturasComponent implements OnInit, AfterViewInit {
+
+  title: string;
+
+  facturas: Factura[];
+
+  usuario: Usuario;
+  facturaSeleccionada: Factura;
+  jQueryConfigs: JqueryConfigs;
+
+  private notificarAnulacion: EventEmitter<any>;
+
+  swalWithBootstrapButtons = swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-success',
+      cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: true
+  });
+
+  constructor(
+    private detailService: DetailService,
+    private facturaService: FacturaService,
+    private activatedRoute: ActivatedRoute,
+    public auth: AuthService
+  ) {
+    this.title = 'Facturas';
+    this.jQueryConfigs = new JqueryConfigs();
+    this.usuario = auth.usuario;
+  }
+
+  ngOnInit(): void {
+    this.getFacturas();
+  }
+
+  ngAfterViewInit(): void {
+  }
+
+  getFacturas(): void {
+    this.facturaService.getFacturas().subscribe(
+      facturas => {
+        this.facturas = facturas;
+        this.jQueryConfigs.configDataTable('facturas');
+      }
+    );
+  }
+
+  abrirDetalle(factura: Factura): void {
+    this.facturaSeleccionada = factura;
+    this.detailService.abrirModal();
+  }
+
+  cancel(factura: Factura): void {
+    this.swalWithBootstrapButtons.fire({
+      title: '¿Está seguro?',
+      text: `¿Seguro que desea anular la factura No. ${factura.noFactura}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '¡Si, anular!',
+      cancelButtonText: '¡No, cancelar!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        // aqui va el codigo de confirmación para anular factura
+        this.facturaService.cancel(factura.idFactura, this.usuario.idUsuario).subscribe(
+          response => {
+            factura.estado = response.factura.estado;
+            this.swalWithBootstrapButtons.fire(
+              `${response.mensaje}`,
+              `La factura No. ${factura.noFactura} ha sido anulada con éxito`,
+              'success'
+            );
+          }
+        );
+
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === swal.DismissReason.cancel
+      ) {
+        this.swalWithBootstrapButtons.fire(
+          'Proceso Cancelado',
+          `La factura No. ${factura.noFactura} no fué anulada.`,
+          'error'
+        );
+      }
+    });
+  }
+
+  printBill(factura: Factura): void {
+    const id = factura.idFactura;
+    this.facturaService.getBillPDF(id).subscribe(res => {
+      const url = window.URL.createObjectURL(res.data);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.setAttribute('target', 'blank');
+      a.href = url;
+      /*
+        opcion para pedir descarga de la respuesta obtenida
+        a.download = response.filename;
+      */
+      window.open(a.toString(), '_blank');
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    },
+      error => {
+        console.log(error);
+      });
+  }
+}

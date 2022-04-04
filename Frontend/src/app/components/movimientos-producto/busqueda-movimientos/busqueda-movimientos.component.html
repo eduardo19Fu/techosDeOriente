@@ -1,0 +1,44 @@
+<div class="modal fade" id="modal-busqueda">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{title}}</h4>
+                <button id="button-x" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Ingrese rango de fechas para generar informe</h4>
+                <br>
+                <form #formBusqueda="ngForm" id="form-busqueda">
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="fecha-inicio">Fecha Inicial</label>
+                            <input type="date" class="form-control" name="fecha-inicio" id="fecha-inicio" [(ngModel)]="fechaIni">
+                        </div>
+                        
+                        <div class="form-group col">
+                            <label for="fecha-fin">Fecha Final</label>
+                            <input type="date" name="fecha-fin" id="fecha-fin" class="form-control" [(ngModel)]="fechaFin">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn bg-gradient-warning" style="width: 100%;"
+                        [disabled]="!formBusqueda.form.valid" (click)="onSubmit()">
+                        <i class="fas fa-print"></i>
+                        Imprimir
+                    </button>
+
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" id="cerrar-modal" data-dismiss="modal"
+                    style="display: right;">Cerrar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

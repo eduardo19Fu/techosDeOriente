@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="orden_despacho" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="orden" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select 
+	lpad(cast(od.idorden as char(500)),5,'0') as idorden,
+	od.estado,
+	od.fecha_creacion,
+	od.usuario,
+	de.*,
+	concat(u.nombre, ' ', u.apellido) as nombre,
+	pro.nombre_producto
+from 
+	tbl_orden_despacho od
+inner join
+	tbl_detalle_orden de on de.idorden = od.idorden
+inner join
+	tbl_usuario u on u.idusuario = od.usuario
+inner join 
+	tbl_producto pro on pro.codigo = de.codigo
+where
+	od.idorden = $P{orden}
+order by
+	pro.nombre_producto asc;]]>
+	</queryString>
+	<field name="idorden" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="fecha_creacion" class="java.sql.Timestamp"/>
+	<field name="usuario" class="java.lang.Integer"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="cantidad" class="java.lang.Integer"/>
+	<field name="stuck_bodega_anterior" class="java.lang.Integer"/>
+	<field name="stuck_tienda_anterior" class="java.lang.Integer"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="nombre_producto" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="5" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="160" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="133" width="85" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Emitida Por:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="25" width="142" height="45"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Orden No.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="47" y="99" width="136" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_creacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="99" width="47" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="85" y="133" width="469" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="143" y="25" width="137" height="45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{idorden}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="371" y="0" width="183" height="99"/>
+				<imageExpression class="java.lang.String"><![CDATA[new File("").getAbsolutePath() + "\\src\\prstd\\images\\logo-dtodo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="26" isPrintWhenDetailOverflows="true" backcolor="#3399FF"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double" lineColor="#006666"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="85" height="26" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="85" y="0" width="469" height="26" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Producto]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="85" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double" lineColor="#006666"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="84" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double" lineColor="#009966"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="85" y="0" width="469" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre_producto}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="554" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double" lineColor="#009966"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="1" y="19" width="553" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double" lineColor="#009966"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement x="396" y="10" width="101" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="497" y="10" width="58" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="5" width="553" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Double" lineColor="#009966"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>

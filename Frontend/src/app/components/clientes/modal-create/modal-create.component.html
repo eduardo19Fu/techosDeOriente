@@ -1,0 +1,68 @@
+<div *ngIf="clienteCreateService.modal" class="abrir-modal animacion fadeIn">
+    <div class="modal" tabindex="-1" style="display: block; overflow-y: scroll;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title ">{{title}}</h5>
+                    <button (click)="cerrarModal()" id="close" type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true" style="color: white;">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- FORMULARIO DE CREACION DE CLIENTE -->
+                    <form #clienteForm="ngForm">
+
+                        <div class="row">
+                            <div class="form-group col">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control" name="nombre" [(ngModel)]="cliente.nombre"
+                                    required placeholder="Ingrese nombre del cliente" #nombre="ngModel">
+
+                                <div *ngIf="nombre.invalid && (nombre.touched || nombre.dirty)">
+                                    <span class="requerido">
+                                        El nombre no puede estar vacío.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group col">
+                                <label for="nit">NIT</label>
+                                <input type="text" name="nit" class="form-control" [(ngModel)]="cliente.nit" required
+                                    placeholder="Ingrese NIT del cliente" #nit="ngModel" [disabled]="cliente.nit">
+
+                                <div *ngIf="nit.invalid && (nit.touched || nit.dirty)">
+                                    <span class="requerido">
+                                        El NIT no puede estar vacío.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col">
+                                <label for="direccion">Dirección</label>
+                                <input type="text" name="direccion" class="form-control" [(ngModel)]="cliente.direccion"
+                                    placeholder="Ingrese dirección del cliente" required #direccion="ngModel">
+
+                                <div *ngIf="direccion.invalid && (direccion.dirty || direccion.touched)">
+                                    <span class="requerido">
+                                        La dirección no puede estar vacía.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" role="button" class="btn btn-primary" (click)="create()"
+                            [disabled]="!clienteForm.form.valid"> Guardar
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button (click)="cerrarModal()" type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

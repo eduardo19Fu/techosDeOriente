@@ -1,0 +1,90 @@
+<!-- VENTANA MODAL DEL DETALLE DEL USUARIO -->
+<app-detail-usuario *ngIf="usuarioSeleccionado" [usuario]="usuarioSeleccionado"></app-detail-usuario>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{title}}</h1>
+                <br>
+                <a [routerLink]="['/usuarios/create']" class="btn bg-gradient-success">
+                    <i class="fas fa-plus-circle"></i>
+                    Nuevo
+                </a>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<div class="card">
+    <div class="card-header">
+        Listado
+    </div>
+    <div class="card-body table-responsive">
+
+        <div *ngIf="usuarios?.length == 0" class="alert alert-info alert-dismissible">
+            <h5>
+                <i class="icon fas fa-info"></i>
+                Atención!
+            </h5>
+
+            No existe ningún cliente registrado en la base de datos!
+        </div>
+
+        <table id="usuarios" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid" 
+            *ngIf="usuarios?.length > 0">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Fecha Registro</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let usuario of usuarios">
+                    <td>{{usuario.idUsuario}}</td>
+                    <td>{{usuario.usuario}}</td>
+                    <td>{{usuario.primerNombre + ' ' + (usuario.segundoNombre == null ? '': usuario.segundoNombre)}}</td>
+                    <td>{{usuario.apellido}}</td>
+                    <td>{{usuario.fechaRegistro | date: 'dd/MM/yyyy - hh:mm'}}</td>
+                    <td class="center-options">
+
+                        <button class="btn bg-gradient-info" name="edit" type="button"
+                            [routerLink]="['/usuarios/create', usuario.idUsuario]">
+                            <i class="fas fa-edit"></i>
+                        </button>&nbsp;
+
+                        <button class="btn bg-gradient-success" type="button" (click)="abrirDetalle(usuario)">
+                            <i class="fas fa-asterisk"></i>
+                        </button>&nbsp;
+
+                        <!-- Aquí va el botón de eliminar -->
+                        <button class="btn bg-gradient-danger" name="delete" type="button" (click)="delete(usuario)">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Fecha Registro</th>
+                    <th>Opciones</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+
