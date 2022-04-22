@@ -10,6 +10,12 @@ export class Factura {
     total: number;
     fecha: Date;
     serie: string;
+    iva: number;
+    correlativoSat: string;
+    certificacionSat: string;
+    serieSat: string;
+    mensajeSat: string;
+    fechaCertificacionSat: string;
 
     estado: Estado;
     usuario: UsuarioAuxiliar;

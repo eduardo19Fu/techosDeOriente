@@ -107,23 +107,30 @@ export class FacturasComponent implements OnInit, AfterViewInit {
 
   printBill(factura: Factura): void {
     const id = factura.idFactura;
-    this.facturaService.getBillPDF(id).subscribe(res => {
-      const url = window.URL.createObjectURL(res.data);
-      const a = document.createElement('a');
-      document.body.appendChild(a);
-      a.setAttribute('style', 'display: none');
-      a.setAttribute('target', 'blank');
-      a.href = url;
-      /*
-        opcion para pedir descarga de la respuesta obtenida
-        a.download = response.filename;
-      */
-      window.open(a.toString(), '_blank');
-      window.URL.revokeObjectURL(url);
-      a.remove();
-    },
-      error => {
-        console.log(error);
-      });
+
+    /************ REGIMEN FEL *************/
+    const url = 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid=' + factura.certificacionSat;
+    window.open(url, '_blank').focus();
+
+    /************* FACTURA PDF ***************/
+
+    // this.facturaService.getBillPDF(id).subscribe(res => {
+    //   const url = window.URL.createObjectURL(res.data);
+    //   const a = document.createElement('a');
+    //   document.body.appendChild(a);
+    //   a.setAttribute('style', 'display: none');
+    //   a.setAttribute('target', 'blank');
+    //   a.href = url;
+    //   /*
+    //     opcion para pedir descarga de la respuesta obtenida
+    //     a.download = response.filename;
+    //   */
+    //   window.open(a.toString(), '_blank');
+    //   window.URL.revokeObjectURL(url);
+    //   a.remove();
+    // },
+    //   error => {
+    //     console.log(error);
+    //   });
   }
 }

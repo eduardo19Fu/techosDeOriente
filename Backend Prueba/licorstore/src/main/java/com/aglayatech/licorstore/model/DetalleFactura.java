@@ -22,8 +22,8 @@ public class DetalleFactura implements Serializable {
 	private Long idDetalle;
 	private Integer cantidad;
 	private Double subTotal;
-	private Float descuento;
-	private Float subTotalDescuento;
+	private Double descuento;
+	private Double subTotalDescuento;
 
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -67,19 +67,19 @@ public class DetalleFactura implements Serializable {
 		this.producto = producto;
 	}
 
-	public Float getDescuento() {
+	public Double getDescuento() {
 		return descuento;
 	}
 
-	public void setDescuento(Float descuento) {
+	public void setDescuento(Double descuento) {
 		this.descuento = descuento;
 	}
 
-	public Float getSubTotalDescuento() {
+	public Double getSubTotalDescuento() {
 		return subTotalDescuento;
 	}
 
-	public void setSubTotalDescuento(Float subTotalDescuento) {
+	public void setSubTotalDescuento(Double subTotalDescuento) {
 		this.subTotalDescuento = subTotalDescuento;
 	}
 

@@ -1,0 +1,22 @@
+
+Metodos a utilizar para documentos tipo CIVA - CAISñ
+//========================================================================
+        /*Complementos indispensables para este tipo de documento*/
+
+        //Clase que generar el no de constancias como parte de complementos
+         ComplementoConstancias complementoConstancia = new ComplementoConstancias();
+
+        /*Referencia: complementoNotas.setFechaEmisionDocumentoOrigen(FechaEmisionDocumentoOrigen);
+        Colocar la fecha del documento al cual se aplicara la constancia, el campo de fecha unicamente acepata fechas en formato
+         yyyy/MM/dd
+        */
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());        
+        
+        //Seteando los datos para el complemento
+        complementoConstancia.setFechaDocumentoOrigen(simpleDateFormat.format(new Date()));
+        complementoConstancia.setNumeroAutorizacionDocumentoOrigen("3C734218-E608-4E39-A33B-A87BD9F0DCBA"); 
+        
+        //Se guarda el objeto generado dentro de los complementos del documento.
+        documento_fel.setComplementos(complementoConstancia);
+        
+//========================================================================

@@ -32,6 +32,11 @@ public class Factura implements Serializable {
 	private String serie;
 	private Double total;
 	private Double iva;
+	private String correlativoSat;
+	private String certificacionSat;
+	private String serieSat;
+	private String mensajeSat;
+	private String fechaCertificacionSat;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha;
@@ -108,6 +113,46 @@ public class Factura implements Serializable {
 
 	public void setIva(Double iva) {
 		this.iva = iva;
+	}
+
+	public String getCorrelativoSat() {
+		return correlativoSat;
+	}
+
+	public void setCorrelativoSat(String correlativoSat) {
+		this.correlativoSat = correlativoSat;
+	}
+
+	public String getCertificacionSat() {
+		return certificacionSat;
+	}
+
+	public void setCertificacionSat(String certificacionSat) {
+		this.certificacionSat = certificacionSat;
+	}
+
+	public String getSerieSat() {
+		return serieSat;
+	}
+
+	public void setSerieSat(String serieSat) {
+		this.serieSat = serieSat;
+	}
+
+	public String getMensajeSat() {
+		return mensajeSat;
+	}
+
+	public void setMensajeSat(String mensajeSat) {
+		this.mensajeSat = mensajeSat;
+	}
+
+	public String getFechaCertificacionSat() {
+		return fechaCertificacionSat;
+	}
+
+	public void setFechaCertificacionSat(String fechaCertificacionSat) {
+		this.fechaCertificacionSat = fechaCertificacionSat;
 	}
 
 	public Date getFecha() {

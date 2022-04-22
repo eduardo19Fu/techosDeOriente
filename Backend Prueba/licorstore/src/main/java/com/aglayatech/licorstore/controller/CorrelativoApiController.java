@@ -44,6 +44,7 @@ public class CorrelativoApiController {
 	@Autowired
 	private IUsuarioService serviceUsuario;
 
+	@Secured(value = {"ROLE_ADMIN"})
 	@GetMapping(value = "/correlativos")
 	public List<Correlativo> index() {
 		return serviceCorrelativo.findAll();
@@ -54,7 +55,7 @@ public class CorrelativoApiController {
 		return serviceCorrelativo.findAll(PageRequest.of(page, 5));
 	}
 
-	@Secured(value = {"ROLE_ADMIN"})
+	@Secured(value = {"ROLE_ADMIN", "ROLE_COBRADOR"})
 	@GetMapping(value = "/correlativos/{id}")
 	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
 
@@ -77,7 +78,7 @@ public class CorrelativoApiController {
 		return new ResponseEntity<Correlativo>(correlativo, HttpStatus.OK);
 	}
 	
-	@Secured(value = {"ROLE_COBRADOR"})
+	@Secured(value = {"ROLE_COBRADOR", "ROLE_COBRADOR"})
 	@GetMapping(value = "/correlativos/usuario/{id}")
 	public ResponseEntity<?> findByUsuario(@PathVariable("id") Integer idusuario){
 		
