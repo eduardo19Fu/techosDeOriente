@@ -199,14 +199,18 @@ public class FacturaApiController {
 					items.setCantidad((double) factura.getItemsFactura().get(i).getCantidad());
 					items.setDescripcion(factura.getItemsFactura().get(i).getProducto().getNombre());
 
-					// items.setDescuento(Double.parseDouble(modelo.getValueAt(i, 5).toString()));
+					// Descuento siempre debe ir a cero para reflejarlo despues en el precio unitario
+					items.setDescuento(0.0);
 					// items.setDescuento((double) ((producto.getPrecio_venta() * items.getCantidad()) * (Double.parseDouble(modelo.getValueAt(i, 5).toString()))));
-					items.setDescuento(((producto.getPrecioVenta() * items.getCantidad()) * (factura.getItemsFactura().get(i).getDescuento() / 100)));
+					// items.setDescuento(((producto.getPrecioVenta() * items.getCantidad()) * (factura.getItemsFactura().get(i).getDescuento() / 100)));
 
+					if(factura.getItemsFactura().get(i).getDescuento() > 0){
+						items.setPrecioUnitario(producto.getPrecioVenta() - (producto.getPrecioVenta() * (factura.getItemsFactura().get(i).getDescuento() / 100)));
+					} else {
+						items.setPrecioUnitario((double) producto.getPrecioVenta());
+					}
 
-					// items.setPrecio(Double.parseDouble(modelo.getValueAt(i, 4).toString())); // PREGUNTAR SOBRE LA DIFERENCIA
-					items.setPrecio((double) producto.getPrecioVenta() * items.getCantidad());
-					items.setPrecioUnitario((double) producto.getPrecioVenta());
+					items.setPrecio(items.getPrecioUnitario() * items.getCantidad());
 					items.setUnidadMedida("UND");
 					items.setTotal(items.getPrecio() - items.getDescuento());
 

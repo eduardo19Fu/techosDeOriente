@@ -39,7 +39,8 @@ public class UsuarioApiController {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	
+
+	@Secured(value = {"ROLE_ADMIN"})
 	@GetMapping(value = "/usuarios")
 	public List<Usuario> index(){
 		return this.serviceUsuario.findAll();
