@@ -180,10 +180,10 @@ public class FacturaApiController {
 					datos_receptor.setIDReceptor(factura.getCliente().getNit().replace("/", "").trim());
 				else
 					datos_receptor.setIDReceptor(factura.getCliente().getNit().replace("-", "").trim());
-				datos_receptor.setMunicipio("JALAPA");
-				datos_receptor.setNombreReceptor(factura.getCliente().getNombre().trim());
-				datos_receptor.setPais("GT");
-				documento_fel.setDatos_receptor(datos_receptor);
+					datos_receptor.setMunicipio("JALAPA");
+					datos_receptor.setNombreReceptor(factura.getCliente().getNombre().trim());
+					datos_receptor.setPais("GT");
+					documento_fel.setDatos_receptor(datos_receptor);
 
 				// NO MOVER ESTO
 				for (int i = 1; i <= 1; i++) {
@@ -209,14 +209,19 @@ public class FacturaApiController {
 					// items.setDescuento(((producto.getPrecioVenta() * items.getCantidad()) * (factura.getItemsFactura().get(i).getDescuento() / 100)));
 
 					if(factura.getItemsFactura().get(i).getDescuento() > 0){
-						items.setPrecioUnitario(producto.getPrecioVenta() - (producto.getPrecioVenta() * (factura.getItemsFactura().get(i).getDescuento() / 100)));
+//						items.setPrecioUnitario(producto.getPrecioVenta() - (producto.getPrecioVenta() * (factura.getItemsFactura().get(i).getDescuento() / 100)));
+//						items.setPrecioUnitario(factura.calcularDescuento(producto.getPrecioVenta()));
+						items.setPrecioUnitario(factura.redondearPrecio(producto.getPrecioVenta() - (producto.getPrecioVenta() * (factura.getItemsFactura().get(i).getDescuento() / 100))));
+						System.out.println(items.getPrecioUnitario());
 					} else {
 						items.setPrecioUnitario((double) producto.getPrecioVenta());
 					}
 
 					items.setPrecio(items.getPrecioUnitario() * items.getCantidad());
+					System.out.println(items.getPrecio());
 					items.setUnidadMedida("UND");
 					items.setTotal(items.getPrecio() - items.getDescuento());
+					System.out.println(items.getTotal());
 
 					for (int j = 1; j <= 1; j++) {
 						ImpuestosDetalle impuestos_detalle = new ImpuestosDetalle();

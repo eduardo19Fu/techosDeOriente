@@ -20,6 +20,7 @@ export class AuthService {
   ) {
     this.url = 'http://localhost:8282';
     // this.url = 'https://dtodojalapa.herokuapp.com';
+    // this.url = 'http://31.220.56.29:8282';
   }
 
   public get usuario(): Usuario{

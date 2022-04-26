@@ -1,8 +1,8 @@
 <div class="modal fade" id="modal-buscar-producto">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header header-modal">
-                <h4 class="modal-title">{{title}}</h4>
+            <div class="modal-header header-modal" style="background-color: rebeccapurple;">
+                <h4 class="modal-title" style="color: #ffffff">{{title}}</h4>
                 <button type="button" id="button-x" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -30,7 +30,7 @@
                                 <td>{{ producto.idProducto }}</td>
                                 <td>{{ producto.codProducto }}</td>
                                 <td>{{ producto.nombre }}</td>
-                                <td>{{ producto.precioVenta }}</td>
+                                <td>{{ producto.precioVenta | currency: "Q" : "symbol" }}</td>
                                 <td>{{ producto.stock }}</td>
                                 <td>{{ producto.marcaProducto.marca }}</td>
                                 <td class="center-options">

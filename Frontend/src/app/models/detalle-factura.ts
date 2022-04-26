@@ -17,6 +17,8 @@ export class DetalleFactura {
 
     public calcularImporteDescuento(): number{
         return this.descuento <= 0 ? this.producto.precioVenta * this.cantidad
-        : (this.producto.precioVenta * this.cantidad) - ((this.descuento / 100) * (this.producto.precioVenta * this.cantidad));
+        // : (this.producto.precioVenta * this.cantidad) - ((this.descuento / 100) * (this.producto.precioVenta * this.cantidad));
+        // : (Number((Math.abs((this.producto.precioVenta - (this.producto.precioVenta * (this.descuento / 100)))).toPrecision(15))) * this.cantidad);
+        : (Math.round(((this.producto.precioVenta - (this.producto.precioVenta * (this.descuento / 100))) + Number.EPSILON) * 100) / 100) * this.cantidad;
     }
 }
