@@ -70,6 +70,9 @@ public class FacturaApiController {
 	@Autowired
 	private ICertificadorService serviceCertificador;
 
+	@Autowired
+	private ITipoFacturaService serviceTipoFactura;
+
 	@Secured(value = {"ROLE_ADMIN", "ROLE_COBRADOR"})
 	@GetMapping(value = "/facturas")
 	public List<Factura> index(){
@@ -111,6 +114,7 @@ public class FacturaApiController {
 		Factura newFactura = null;
 		Estado estado = serviceEstado.findByEstado("PAGADO");
 		Estado estadoCorr = serviceEstado.findByEstado("ACTIVO");
+		TipoFactura tipoFactura = serviceTipoFactura.getTipoFactura(1);
 
 		Emisor emisor = null;
 		Certificador certificador = null;
@@ -322,6 +326,7 @@ public class FacturaApiController {
 							factura.setMensajeSat(respuesta_servicio.getInfo());
 							factura.setFechaCertificacionSat(respuesta_servicio.getFecha());
 							factura.setIva(totalImpuestos);
+							factura.setTipoFactura(tipoFactura);
 
 							newFactura = serviceFactura.save(factura);
 
