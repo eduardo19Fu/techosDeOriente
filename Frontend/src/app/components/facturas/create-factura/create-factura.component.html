@@ -4,6 +4,9 @@
 <!-- MODAL CALCULAR CAMBIO -->
 <app-modal-cambio *ngIf="pagar" [factura]="factura"></app-modal-cambio>
 
+<!-- MODAL PARA BUSCAR PRODUCTOS -->
+<app-modal-buscar-producto (producto)="loadProducto($event)"></app-modal-buscar-producto>
+
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -97,12 +100,14 @@
                                 <label for="codigo" style="display: block;">Codigo</label>
                                 <input type="text" class="form-control" name="codigo" id="codigo"
                                     value="{{producto ? producto.codProducto : ''}}"
-                                    style="width: 70%; display: inline; margin-right: 10px;" (blur)="buscarProducto()">
+                                    style="width: 70%; display: inline; margin-right: 10px;" (blur)="buscarProducto()"
+                                    (keyup)="buscarProducto()">
 
-                                <button class="btn bg-gradient-fuchsia" (click)="buscarProducto()">
+                                <button class="btn bg-gradient-fuchsia" data-toggle="modal"
+                                    data-target="#modal-buscar-producto">
                                     <i class="fas fa-search"></i>
                                 </button>
-                                
+
                             </div>
                         </div>
 
@@ -111,7 +116,7 @@
                                 <label for="nombre">Producto</label>
                                 <input type="text" class="form-control" name="nombre"
                                     value="{{producto ? producto.nombre : ''}}" [disabled]="producto.nombre">
-                                
+
                             </div>
                         </div>
 
@@ -147,12 +152,14 @@
                                 <td>{{item.producto.nombre}}</td>
                                 <td>{{item.producto.precioVenta | currency: "Q" : "symbol"}}</td>
                                 <td>
-                                    <input type="number" id="cant" value="{{item.cantidad}}" class="form-control col-sm-6"
+                                    <input type="number" id="cant" value="{{item.cantidad}}"
+                                        class="form-control col-sm-6"
                                         (change)="actualizarCantidad(item.producto.idProducto, $event)">
                                 </td>
                                 <td>
-                                    <input type="number" id="descuento" name="descuento" value="{{item.descuento}}" 
-                                        class="form-control col-sm-6" (change)="actualizarCantidadDescuento(item.producto.idProducto, $event)">
+                                    <input type="number" id="descuento" name="descuento" value="{{item.descuento}}"
+                                        class="form-control col-sm-6"
+                                        (change)="actualizarCantidadDescuento(item.producto.idProducto, $event)">
                                 </td>
                                 <!-- <td>{{item.calcularImporte() | currency: "Q" : "symbol"}}</td> -->
                                 <td>{{item.subTotalDescuento | currency: "Q" : "symbol"}}</td>
@@ -191,8 +198,8 @@
                 <form action="">
                     <div class="form-group">
                         <label for="efectivo">Efectivo:</label>
-                        <input type="number" name="efectivo" id="efectivo" class="form-control" (keyup)="calcularCambio($event)"
-                         [(ngModel)]="efectivo">
+                        <input type="number" name="efectivo" id="efectivo" class="form-control"
+                            (keyup)="calcularCambio($event)" [(ngModel)]="efectivo">
                     </div>
 
                     <div class="form-group">
@@ -206,7 +213,7 @@
 
             <div class="card-footer">
                 <input type="submit" role="button" class="btn btn-primary" value="Pagar"
-                        [disabled]="!cliente.idCliente || (factura.itemsFactura.length <= 0)" (click)="createFactura()">
+                    [disabled]="!cliente.idCliente || (factura.itemsFactura.length <= 0)" (click)="createFactura()">
             </div>
         </div>
     </div>

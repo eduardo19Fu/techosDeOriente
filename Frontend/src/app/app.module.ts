@@ -39,6 +39,7 @@ import { PolizaIndividualComponent } from './components/facturas/poliza-individu
 import { SearchProductModalComponent } from './components/productos/search-product-modal/search-product-modal.component';
 import { HeaderVentasComponent } from './components/header-ventas/header-ventas.component';
 import { ModalCambioComponent } from './components/facturas/create-factura/modal-cambio/modal-cambio.component';
+import { ModalBuscarProductoComponent } from './components/facturas/create-factura/modal-buscar-producto/modal-buscar-producto.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { ModalCambioComponent } from './components/facturas/create-factura/modal
     PolizaIndividualComponent,
     SearchProductModalComponent,
     HeaderVentasComponent,
-    ModalCambioComponent
+    ModalCambioComponent,
+    ModalBuscarProductoComponent
   ],
   imports: [
     BrowserModule,

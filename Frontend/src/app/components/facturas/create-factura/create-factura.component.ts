@@ -94,7 +94,6 @@ export class CreateFacturaComponent implements OnInit {
 
   cargarCorrelativo(): void {
     if (this.usuario) {
-      console.log(this.usuario);
       this.correlativoService.getCorrelativoPorUsuario(this.usuario.idUsuario).subscribe(
         correlativo => {
           this.correlativo = correlativo;
@@ -280,6 +279,12 @@ export class CreateFacturaComponent implements OnInit {
     } else {
       this.cambio = 0.00;
     }
+  }
+
+  loadProducto(event): void{
+    (document.getElementById('codigo') as HTMLInputElement).value = event.codProducto;
+    this.buscarProducto();
+    (document.getElementById('button-x')).click();
   }
 
 }
