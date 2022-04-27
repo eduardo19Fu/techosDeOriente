@@ -30,8 +30,8 @@
             No existe ningún producto registrado en la base de datos!
         </div>
 
-        <table id="productos" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid"
-            *ngIf="productos?.length > 0">
+        <table id="productos" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm"
+            role="grid" *ngIf="productos?.length > 0">
             <thead>
                 <tr>
                     <th>#</th>
@@ -50,26 +50,26 @@
                 <tr *ngFor="let producto of productos">
                     <td>
                         <img (click)="abrirModal(producto)" *ngIf="producto?.imagen"
-                            src="http://localhost:8281/api/uploads/img/{{producto.imagen}}" alt="{{producto.imagen}}"
+                            src="http://localhost:8282/api/uploads/img/{{producto.imagen}}" alt="{{producto.imagen}}"
                             class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;">
 
-                            <!-- <img (click)="abrirModal(producto)" *ngIf="producto?.imagen"
+                        <!-- <img (click)="abrirModal(producto)" *ngIf="producto?.imagen"
                             src="https://dimsa-app2.herokuapp.com/api/uploads/img/{{producto.imagen}}" alt="{{producto.imagen}}"
                             class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;"> -->
 
-                            <!-- <img (click)="abrirModal(producto)" *ngIf="producto?.imagen"
+                        <!-- <img (click)="abrirModal(producto)" *ngIf="producto?.imagen"
                             src="https://dimsa-new.herokuapp.com/api/uploads/img/{{producto.imagen}}" alt="{{producto.imagen}}"
                             class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;"> -->
 
                         <img (click)="abrirModal(producto)" *ngIf="!producto?.imagen"
-                            src="http://localhost:8281/images/no-image.jpg" alt="{{producto.imagen}}"
+                            src="http://31.220.56.29:8282/images/no-image.jpg" alt="{{producto.imagen}}"
                             class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;">
 
-                            <!-- <img (click)="abrirModal(producto)" *ngIf="!producto?.imagen"
+                        <!-- <img (click)="abrirModal(producto)" *ngIf="!producto?.imagen"
                             src="https://dimsa-app2.herokuapp.com/images/no-image.jpg" alt="{{producto.imagen}}"
                             class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;"> -->
 
-                            <!-- <img (click)="abrirModal(producto)" *ngIf="!producto?.imagen"
+                        <!-- <img (click)="abrirModal(producto)" *ngIf="!producto?.imagen"
                             src="https://dimsa-new.herokuapp.com/images/no-image.jpg" alt="{{producto.imagen}}"
                             class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;"> -->
                     </td>
@@ -90,7 +90,8 @@
                             <i class="fa fa-asterisk"></i>
                         </button>
 
-                        <button class="btn bg-gradient-info margin" [routerLink]="['/productos/create', producto.idProducto]"
+                        <button class="btn bg-gradient-info margin"
+                            [routerLink]="['/productos/create', producto.idProducto]"
                             *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
                             <i class="fas fa-edit"></i>
                         </button>
@@ -119,4 +120,3 @@
         </table>
     </div>
 </div>
-
