@@ -40,7 +40,7 @@ import com.aglayatech.licorstore.service.IUploadFileService;
 
 import net.sf.jasperreports.engine.JRException;
 
-@CrossOrigin(origins = { "http://localhost:4200", "https://dimsa-c60bf.web.app" })
+@CrossOrigin(origins = { "http://localhost:4200", "https://31.220.56.29" })
 @RestController
 @RequestMapping(value = "/api")
 public class ProductoApiController {
