@@ -313,7 +313,8 @@ public class FacturaApiController {
 						conexion.setContent_type("application/json");
 						conexion.setUsuario(emisor.getNit()); // MISMO NIT
 						conexion.setLlave(certificador.getLlaveWs());
-						conexion.setIdentificador(factura.getNoFactura().toString() + factura.getSerie()); // DEBE VARIAR SIENDO IDENTIFICADOR UNICO
+						// DEBE VARIAR SIENDO IDENTIFICADOR UNICO
+						conexion.setIdentificador(factura.getNoFactura().toString() + factura.getSerie() + factura.getUsuario().getUsuario());
 
 //						System.out.println("--> Enviando Documento al Servicio FEL...");
 
