@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(value = {"http://localhost:4200", "https://31.220.56.29"})
+@CrossOrigin(value = {"http://localhost:4200", "https://31.220.56.29", "https://dtodojalapa.xyz", "http://dtodojalapa.xyz", "http://dtodo.pangosoft.xyz", "http://dimsa.pangosoft.xyz"})
 @RestController
 @RequestMapping("/api")
 public class ProformaApiController {

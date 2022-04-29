@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@CrossOrigin(value = {"http://localhost:4200", "https://31.220.56.29"})
+@CrossOrigin(value = {"http://localhost:4200", "https://31.220.56.29", "https://dtodojalapa.xyz", "http://dtodojalapa.xyz", "http://dtodo.pangosoft.xyz", "http://dimsa.pangosoft.xyz"})
 @RestController
 @RequestMapping("/pruebaFel")
 public class PruebaFelApiController {
