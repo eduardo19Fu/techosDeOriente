@@ -27,29 +27,30 @@
                         <div class="row">
                             <div class="col">
                                 <label for="codigo">Código</label>
-                                <input type="text" class="form-control" name="codigo" [(ngModel)]="producto.codProducto" #codigo="ngModel"
-                                    required placeholder="Código de Producto">
-                                <div *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)">
+                                <input type="text" class="form-control" name="codigo" [(ngModel)]="producto.codProducto"
+                                    #codigo="ngModel" placeholder="Código de Producto">
+                                <!-- <div *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)">
                                     <span class="requerido" *ngIf="codigo.errors.required">
                                         El código no puede estar vacío.
+                                    </span>
+                                </div> -->
+                            </div>
+
+                            <div class="col">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control" name="nombre" [(ngModel)]="producto.nombre"
+                                    required #nombre="ngModel" placeholder="Ingrese nombre del producto">
+                                <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                                    <span class="requerido" *ngIf="nombre.errors.required">
+                                        El nombre no puede estar vacío.
                                     </span>
                                 </div>
                             </div>
 
                             <div class="col">
-                                <label for="nombre">Nombre</label>
-                                <input type="text" class="form-control" name="nombre" [(ngModel)]="producto.nombre" required #nombre="ngModel"
-                                    placeholder="Ingrese nombre del producto">
-                                    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
-                                        <span class="requerido" *ngIf="nombre.errors.required">
-                                            El nombre no puede estar vacío.
-                                        </span>
-                                    </div>
-                            </div>
-
-                            <div class="col">
                                 <label for="stock">Existencias</label>
-                                <input type="number" name="stock" class="form-control" [(ngModel)]="producto.stock" required #stock="ngModel"
+                                <input type="number" name="stock" class="form-control" [(ngModel)]="producto.stock"
+                                    required #stock="ngModel"
                                     placeholder="Ingrese la cantidad de existencias disponibles">
                                 <div *ngIf="stock.invalid && (stock.dirty || stock.touched)">
                                     <span class="requerido" *ngIf="stock.errors.required">
@@ -90,8 +91,8 @@
 
                             <div class="col">
                                 <label for="porcentaje-ganancia">% Ganancia</label>
-                                <input [(ngModel)]="producto.porcentajeGanancia" type="number" id="porcentaje-ganancia" name="porcentaje-ganancia"
-                                    class="form-control" readonly>
+                                <input [(ngModel)]="producto.porcentajeGanancia" type="number" id="porcentaje-ganancia"
+                                    name="porcentaje-ganancia" class="form-control" readonly>
                             </div>
                         </div>
                         <br>
@@ -101,7 +102,8 @@
 
                             <div class="col">
                                 <label for="marca">Marca</label>
-                                <select [compareWith]="compararMarca" name="marca" class="form-control" [(ngModel)]="producto.marcaProducto">
+                                <select [compareWith]="compararMarca" name="marca" class="form-control"
+                                    [(ngModel)]="producto.marcaProducto">
                                     <option [ngValue]="undefined">--- Seleccionar Marca ----</option>
                                     <option *ngFor="let marca of marcas" [ngValue]="marca">{{marca.marca}}</option>
                                 </select>
@@ -109,7 +111,8 @@
 
                             <div class="col">
                                 <label for="tipo-producto">Tipo</label>
-                                <select [compareWith]="compararTipo" name="tipo-producto" class="form-control" [(ngModel)]="producto.tipoProducto">
+                                <select [compareWith]="compararTipo" name="tipo-producto" class="form-control"
+                                    [(ngModel)]="producto.tipoProducto">
                                     <option [ngValue]="undefined">--- Seleccionar Tipo ----</option>
                                     <option *ngFor="let tipo of tipos" [ngValue]="tipo">{{tipo.tipoProducto}}</option>
                                 </select>
@@ -120,7 +123,7 @@
                                 <input type="date" name="fecha-ingreso" class="form-control"
                                     [(ngModel)]="producto.fechaIngreso">
                             </div>
-                            
+
                         </div>
                         <br>
                         <hr>
@@ -128,17 +131,17 @@
                         <div class="row">
                             <div class="col">
                                 <label for="descripcion">Descripción</label>
-                                <textarea class="form-control" name="descripcion" id="descripcion" placeholder="Ingrese una descripción"
-                                    [(ngModel)]="producto.descripcion"
-                                    cols="30" rows="5"></textarea>
+                                <textarea class="form-control" name="descripcion" id="descripcion"
+                                    placeholder="Ingrese una descripción" [(ngModel)]="producto.descripcion" cols="30"
+                                    rows="5"></textarea>
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="col">
                                 <label for="descripcion">Enlace al Sitio Web</label>
-                                <input type="text" name="link" id="link" class="form-control" placeholder="Ingrese link del sitio oficial"
-                                    [(ngModel)]="producto.link">
+                                <input type="text" name="link" id="link" class="form-control"
+                                    placeholder="Ingrese link del sitio oficial" [(ngModel)]="producto.link">
                             </div>
                         </div>
                     </div>

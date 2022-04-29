@@ -80,12 +80,22 @@ export class CreateProductoComponent implements OnInit {
 
   create(): void{
     this.producto.porcentajeGanancia = Number.parseFloat((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
-    this.serviceProducto.create(this.producto).subscribe(
-      response => {
-        this.router.navigate(['/productos/index']);
-        swal.fire('Producto Guardado', `${response.mensaje}: ${response.producto.nombre}`, 'success');
-      }
-    );
+    if (this.producto.codProducto){
+      this.serviceProducto.create(this.producto).subscribe(
+        response => {
+          this.router.navigate(['/productos/index']);
+          swal.fire('Producto Guardado', `${response.mensaje}: ${response.producto.nombre}`, 'success');
+        }
+      );
+    } else {
+      this.producto.codProducto = this.producto.generarCodigo();
+      this.serviceProducto.create(this.producto).subscribe(
+        response => {
+          this.router.navigate(['/productos/index']);
+          swal.fire('Producto Guardado', `${response.mensaje}: ${response.producto.nombre}`, 'success');
+        }
+      );
+    }
   }
 
   update(): void{
