@@ -284,6 +284,13 @@ public class FacturaApiController {
 					FirmaEmisor firma_emisor = new FirmaEmisor();
 					RespuestaServicioFirma respuesta_firma_emisor = new RespuestaServicioFirma();
 
+					System.out.println("--> FIRMA POR PARTE DEL EMISOR ");
+
+					System.out.println("--> Resultado: " + respuesta_firma_emisor.isResultado());
+					System.out.println("--> Descripcion: " + respuesta_firma_emisor.getDescripcion());
+
+					System.out.println("--> Enviando Documento al Servicio de Firma del Emisor...");
+
 					try {
 						respuesta_firma_emisor = firma_emisor.Firmar(respuesta.getXml(), certificador.getAliasWs(), certificador.getTokenSigner());
 					} catch (NoSuchAlgorithmException ex) {
@@ -305,7 +312,7 @@ public class FacturaApiController {
 					System.out.println("--> Descripcion: " + respuesta_firma_emisor.getDescripcion());
 
 					if(respuesta_firma_emisor.isResultado()){
-//						System.out.println("--> ENVIO AL API DE INFILE");
+						System.out.println("--> ENVIO AL API DE INFILE");
 
 						ConexionServicioFel conexion = new ConexionServicioFel();
 						conexion.setUrl("");
@@ -316,7 +323,7 @@ public class FacturaApiController {
 						// DEBE VARIAR SIENDO IDENTIFICADOR UNICO
 						conexion.setIdentificador(factura.getNoFactura().toString() + factura.getSerie() + factura.getUsuario().getUsuario());
 
-//						System.out.println("--> Enviando Documento al Servicio FEL...");
+						System.out.println("--> Enviando Documento al Servicio FEL...");
 
 						ServicioFel servicio = new ServicioFel();
 
@@ -324,7 +331,19 @@ public class FacturaApiController {
 
 						if(respuesta_servicio.getResultado()){
 
+							System.out.println("--> Resultado: " + respuesta_servicio.getResultado());
+							System.out.println("--> Origen: " + respuesta_servicio.getOrigen());
+							System.out.println("--> Descripcion: " + respuesta_servicio.getDescripcion());
+							System.out.println("--> Cantidad Errores: " + respuesta_servicio.getCantidad_errores());
+							System.out.println("--> INFO: " + respuesta_servicio.getInfo());
+
+							System.out.println("UUID: " + respuesta_servicio.getUuid());
+							System.out.println("Serie: " + respuesta_servicio.getSerie());
+							System.out.println("Numero: " + respuesta_servicio.getNumero());
+							System.out.println("Fecha_certificacion: "+ respuesta_servicio.getFecha());
+
 							// INSERCIÓN DE FACTURA EN LA BASE DE DATOS DE LA EMPRESA
+
 							factura.setEstado(estado);
 							factura.setCorrelativoSat(respuesta_servicio.getNumero());
 							factura.setCertificacionSat(respuesta_servicio.getUuid());
@@ -335,6 +354,7 @@ public class FacturaApiController {
 							factura.setTipoFactura(tipoFactura);
 
 							newFactura = serviceFactura.save(factura);
+
 
 							if(newFactura != null){
 								correlativo.setCorrelativoActual(correlativo.getCorrelativoActual() + 1);
@@ -359,6 +379,18 @@ public class FacturaApiController {
 						} else{
 							// MOSTRAR ERRORES EN PANTALLA
 							String errores = "";
+
+							System.out.println("--> Resultado: " + respuesta_servicio.getResultado());
+							System.out.println("--> Origen: " + respuesta_servicio.getOrigen());
+							System.out.println("--> Descripcion: " + respuesta_servicio.getDescripcion());
+							System.out.println("--> Cantidad Errores: " + respuesta_servicio.getCantidad_errores());
+							System.out.println("--> INFO: " + respuesta_servicio.getInfo());
+
+
+							for (int i = 0; i < respuesta_servicio.getCantidad_errores(); i++) {
+								System.out.println(respuesta_servicio.getDescripcion_errores().get(i).getMensaje_error());
+
+							}
 
 							for (int i = 0; i < respuesta_servicio.getCantidad_errores(); i++) {
 								// System.out.println(respuesta_servicio.getDescripcion_errores().get(i).getMensaje_error());

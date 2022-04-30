@@ -165,7 +165,7 @@ public class PruebaFelApiController {
                         conexion.setContent_type("application/json");
                         conexion.setUsuario("45146276"); // MISMO NIT
                         conexion.setLlave("ECB7BEBC7DD0145F94B3F01F859E5C3F");
-                        conexion.setIdentificador("testconexion10"); // DEBE VARIAR SIENDO IDENTIFICADOR UNICO
+                        conexion.setIdentificador("testconexion11"); // DEBE VARIAR SIENDO IDENTIFICADOR UNICO
 
                         System.out.println("--> Enviando Documento al Servicio FEL...");
 
