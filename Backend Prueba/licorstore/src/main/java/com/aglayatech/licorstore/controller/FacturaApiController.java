@@ -292,7 +292,7 @@ public class FacturaApiController {
 					System.out.println("--> Enviando Documento al Servicio de Firma del Emisor...");
 
 					try {
-						respuesta_firma_emisor = firma_emisor.Firmar(respuesta.getXml(), certificador.getAliasWs(), certificador.getTokenSigner());
+						respuesta_firma_emisor = firma_emisor.Firmar(respuesta.getXml(), certificador.getPrefijo(), certificador.getTokenSigner());
 					} catch (NoSuchAlgorithmException ex) {
 						Logger.getLogger(FacturaApiController.class.getName()).log(Level.SEVERE, null, ex);
 						response.put("message", "Ha ocurrido un error en la peticion");

@@ -15,6 +15,9 @@ public class Certificador implements Serializable {
     private String aliasWs;
     private String llaveWs;
     private String tokenSigner;
+
+    private String prefijo;
+
     private String correoCopia;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,6 +55,14 @@ public class Certificador implements Serializable {
 
     public void setTokenSigner(String tokenSigner) {
         this.tokenSigner = tokenSigner;
+    }
+
+    public String getPrefijo() {
+        return prefijo;
+    }
+
+    public void setPrefijo(String prefijo) {
+        this.prefijo = prefijo;
     }
 
     public String getCorreoCopia() {
