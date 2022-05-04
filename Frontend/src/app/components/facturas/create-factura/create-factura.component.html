@@ -7,6 +7,9 @@
 <!-- MODAL PARA BUSCAR PRODUCTOS -->
 <app-modal-buscar-producto (producto)="loadProducto($event)"></app-modal-buscar-producto>
 
+<!-- MODAL PARA BUSCAR CLIENTES -->
+<app-modal-buscar-cliente (cliente)="loadCliente($event)"></app-modal-buscar-cliente>
+
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -58,9 +61,11 @@
                         <div class="col">
                             <label for="buscar" style="display: block;">Buscar</label>
                             <input type="text" id="buscar" name="buscar" class="form-control"
-                                style="width: 70%; display: inline; margin-right: 10px;" autofocus>
+                                style="width: 70%; display: inline; margin-right: 10px;" (keyup.enter)="buscarCliente()"
+                                autofocus>
 
-                            <button type="submit" role="button" class="btn bg-fuchsia" (click)="buscarCliente()">
+                            <button type="button" role="button" class="btn bg-fuchsia" data-toggle="modal"
+                                data-target="#modal-buscar-cliente">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -100,10 +105,10 @@
                                 <label for="codigo" style="display: block;">Codigo</label>
                                 <input type="text" class="form-control" name="codigo" id="codigo"
                                     value="{{producto ? producto.codProducto : ''}}"
-                                    style="width: 70%; display: inline; margin-right: 10px;" (blur)="buscarProducto()"
+                                    style="width: 70%; display: inline; margin-right: 10px;"
                                     (keyup.enter)="buscarProducto()">
 
-                                <button class="btn bg-gradient-fuchsia" data-toggle="modal"
+                                <button type="button" class="btn bg-gradient-fuchsia" data-toggle="modal"
                                     data-target="#modal-buscar-producto">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -124,9 +129,10 @@
                             <div class="form-group">
                                 <label for="cantidad" style="display: block;">Cantidad</label>
                                 <input type="number" name="cantidad" id="cantidad" class="form-control"
-                                    style="width: 65%; display: inline; margin-right: 10px;" value="0" autofocus>
+                                    style="width: 65%; display: inline; margin-right: 10px;" value="0"
+                                    (keyup.enter)="agregarLinea()" autofocus>
 
-                                <button class="btn bg-gradient-cyan" (click)="agregarLinea()">
+                                <button type="button" class="btn bg-gradient-cyan" (click)="agregarLinea()">
                                     <i class="fas fa-plus-square"></i>
                                 </button>
                             </div>

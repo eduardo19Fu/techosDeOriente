@@ -1,0 +1,60 @@
+<div class="modal fade" id="modal-buscar-producto">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header header-modal" style="background-color: rebeccapurple;">
+                <h4 class="modal-title" style="color: #ffffff">{{title}}</h4>
+                <button type="button" id="button-x" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="card-body">
+                <div class="modal-body table-responsive">
+                    <table id="productos"
+                        class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid"
+                        *ngIf="productos?.length > 0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Codigo</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Marca</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let producto of productos">
+                                <td>{{ producto.idProducto }}</td>
+                                <td>{{ producto.codProducto }}</td>
+                                <td>{{ producto.nombre }}</td>
+                                <td>{{ producto.precioVenta | currency: "Q" : "symbol" }}</td>
+                                <td>{{ producto.stock }}</td>
+                                <td>{{ producto.marcaProducto.marca }}</td>
+                                <td class="center-options">
+                                    <button class="btn bg-gradient-cyan" (click)="chooseProducto(producto)">
+                                        Elegir
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>Codigo</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Marca</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

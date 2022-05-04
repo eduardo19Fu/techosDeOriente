@@ -112,4 +112,9 @@ export class CreateMovimientoComponent implements OnInit, AfterViewInit {
       Swal.fire('Código Inválido', 'Ingrese un código de producto válido para realizar la búsqueda.', 'warning');
     }
   }
+
+  loadProducto(event): void {
+    (document.getElementById('cod-producto') as HTMLInputElement).value = event.codProducto;
+    this.buscarProducto();
+  }
 }

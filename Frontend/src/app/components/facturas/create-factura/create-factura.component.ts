@@ -72,6 +72,7 @@ export class CreateFacturaComponent implements OnInit {
       this.clienteService.getClienteByNit(nit).subscribe(
         cliente => {
           this.cliente = cliente;
+          (document.getElementById('codigo')).focus();
         },
         error => {
           if (error.status === 400) {
@@ -286,6 +287,13 @@ export class CreateFacturaComponent implements OnInit {
     (document.getElementById('button-x')).click();
     this.buscarProducto();
     (document.getElementById('cantidad') as HTMLInputElement).focus();
+  }
+
+  loadCliente(event): void {
+    console.log(event);
+    (document.getElementById('buscar') as HTMLInputElement).value = event.nit;
+    (document.getElementById('button-2x')).click();
+    this.buscarCliente();
   }
 
 }

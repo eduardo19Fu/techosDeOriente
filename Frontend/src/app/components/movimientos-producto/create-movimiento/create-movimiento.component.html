@@ -1,3 +1,6 @@
+<!-- MODAL PRA BUSCAR PRODUCTO -->
+<app-modal-buscar-producto-movimiento (producto)="loadProducto($event)"></app-modal-buscar-producto-movimiento>
+
 <div class="modal fade" id="modal-movimiento">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -12,25 +15,29 @@
                     <div class="row">
                         <div class="form-group col-sm-3">
                             <label for="cod-producto" style="display: block;">Código</label>
-                            <input type="text" class="form-control" name="cod-producto" id="cod-producto" [(ngModel)]="producto.codProducto"
+                            <input type="text" class="form-control" name="cod-producto" id="cod-producto"
+                                [(ngModel)]="producto.codProducto"
                                 style="width: 70%; display: inline; margin-right: 10px;" required #codigo="ngModel">
 
-                            <button class="btn bg-gradient-fuchsia" (click)="buscarProducto()">
+                            <button type="button" class="btn bg-gradient-fuchsia" data-toggle="modal"
+                                data-target="modal-buscar-producto">
                                 <i class="fas fa-search"></i>
                             </button>
+
 
                         </div>
 
                         <div class="form-group col-lg-7">
                             <label for="nombre">Producto</label>
-                            <input type="text" class="form-control" name="nombre" id="nombre" value="{{producto.nombre ? producto.nombre : ''}}"
-                                required [disabled]="producto.nombre">
+                            <input type="text" class="form-control" name="nombre" id="nombre"
+                                value="{{producto.nombre ? producto.nombre : ''}}" required
+                                [disabled]="producto.nombre">
                         </div>
 
                         <div class="form-group col-sm-2">
                             <label for="stock">Disponible</label>
-                            <input type="number" class="form-control" name="stock" id="stock" value="{{producto.stock ? producto.stock : ''}}"
-                                required [disabled]="producto.stock">
+                            <input type="number" class="form-control" name="stock" id="stock"
+                                value="{{producto.stock ? producto.stock : ''}}" required [disabled]="producto.stock">
 
                         </div>
                     </div>
@@ -38,8 +45,8 @@
                     <div class="row">
                         <div class="form-group col">
                             <label for="cantidad">Cantidad</label>
-                            <input type="number" class="form-control" name="cantidad" id="cantidad" required #cantidad="ngModel"
-                                [(ngModel)]="movimientoProducto.cantidad">
+                            <input type="number" class="form-control" name="cantidad" id="cantidad" required
+                                #cantidad="ngModel" [(ngModel)]="movimientoProducto.cantidad">
 
                             <div *ngIf="cantidad.invalid && (cantidad.touched || cantidad.dirty)">
                                 <span class="requerido">
