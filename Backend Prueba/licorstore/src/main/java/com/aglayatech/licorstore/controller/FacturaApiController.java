@@ -149,14 +149,14 @@ public class FacturaApiController {
 				DatosEmisor datos_emisor = new DatosEmisor();
 				datos_emisor.setAfiliacionIVA("GEN");
 				datos_emisor.setCodigoEstablecimiento(1);
-				datos_emisor.setCodigoPostal(emisor.getCodigoPostal());
-				datos_emisor.setCorreoEmisor(emisor.getCorreoEmisor());
-				datos_emisor.setDepartamento(emisor.getDepartamento());
-				datos_emisor.setMunicipio(emisor.getMunicipio());
-				datos_emisor.setDireccion(emisor.getDireccion());
-				datos_emisor.setNITEmisor(emisor.getNit());
-				datos_emisor.setNombreComercial(emisor.getNombreComercial());
-				datos_emisor.setNombreEmisor(emisor.getNombreEmisor());
+				datos_emisor.setCodigoPostal(emisor.getCodigoPostal()); // 01001
+				datos_emisor.setCorreoEmisor(emisor.getCorreoEmisor()); // jairondavida@gmail.com
+				datos_emisor.setDepartamento(emisor.getDepartamento()); // JALAPA
+				datos_emisor.setMunicipio(emisor.getMunicipio()); // JALAPA
+				datos_emisor.setDireccion(emisor.getDireccion()); // 1 CALLE 4-32 ZONA 2
+				datos_emisor.setNITEmisor(emisor.getNit()); // 45146276
+				datos_emisor.setNombreComercial(emisor.getNombreComercial()); // D'TODO
+				datos_emisor.setNombreEmisor(emisor.getNombreEmisor()); // JAIRON DAVID, AGUILAR REYES
 				datos_emisor.setPais("GT");
 				documento_fel.setDatos_emisor(datos_emisor);
 
@@ -170,20 +170,23 @@ public class FacturaApiController {
 
 				// DATOS DEL CLIENTE QUE RECIBIRÁ LA FACTURA POR LA COMPRA REALIZADA
 				// OBTENERLOS DE LA BUSQUEDA REALIZADA SIN '-' EN EL NIT
+
 				DatosReceptor datos_receptor = new DatosReceptor();
 				datos_receptor.setCodigoPostal("01001");
 				datos_receptor.setCorreoReceptor(""); // Quien recibe el pdf por correo, pueden ir varios separados por ;
 				datos_receptor.setDepartamento("JALAPA");
 				datos_receptor.setDireccion(factura.getCliente().getDireccion().trim());
 
-				if(factura.getCliente().getNit().equals("C/F"))
+				if(factura.getCliente().getNit().equals("C/F")) {
 					datos_receptor.setIDReceptor(factura.getCliente().getNit().replace("/", "").trim());
-				else
+				} else {
 					datos_receptor.setIDReceptor(factura.getCliente().getNit().replace("-", "").trim());
-					datos_receptor.setMunicipio("JALAPA");
-					datos_receptor.setNombreReceptor(factura.getCliente().getNombre().trim());
-					datos_receptor.setPais("GT");
-					documento_fel.setDatos_receptor(datos_receptor);
+				}
+
+				datos_receptor.setMunicipio("JALAPA");
+				datos_receptor.setNombreReceptor(factura.getCliente().getNombre().trim());
+				datos_receptor.setPais("GT");
+				documento_fel.setDatos_receptor(datos_receptor);
 
 				// NO MOVER ESTO
 				for (int i = 1; i <= 1; i++) {
@@ -292,6 +295,10 @@ public class FacturaApiController {
 					System.out.println("--> Enviando Documento al Servicio de Firma del Emisor...");
 
 					try {
+						/***** DATOS UTILIZADOS *****/
+						// certificador.getPrefijo = JDARPRO
+						// certificador.getTokenSigner = 392dc79f0800b66331a737dc57c46219
+						/****************************/
 						respuesta_firma_emisor = firma_emisor.Firmar(respuesta.getXml(), certificador.getPrefijo(), certificador.getTokenSigner());
 					} catch (NoSuchAlgorithmException ex) {
 						Logger.getLogger(FacturaApiController.class.getName()).log(Level.SEVERE, null, ex);
@@ -318,8 +325,8 @@ public class FacturaApiController {
 						conexion.setUrl("");
 						conexion.setMetodo("POST");
 						conexion.setContent_type("application/json");
-						conexion.setUsuario(emisor.getNit()); // MISMO NIT
-						conexion.setLlave(certificador.getLlaveWs());
+						conexion.setUsuario(certificador.getPrefijo()); // 45146276 ESTE NO, ACA VA EL ALIAS
+						conexion.setLlave(certificador.getLlaveWs()); // ECB7BEBC7DD0145F94B3F01F859E5C3F
 						// DEBE VARIAR SIENDO IDENTIFICADOR UNICO
 						conexion.setIdentificador(factura.getNoFactura().toString() + factura.getSerie() + factura.getUsuario().getUsuario());
 
@@ -327,7 +334,10 @@ public class FacturaApiController {
 
 						ServicioFel servicio = new ServicioFel();
 
-						RespuestaServicioFel respuesta_servicio = servicio.Certificar(conexion, respuesta_firma_emisor.getArchivo(), emisor.getNit(), certificador.getCorreoCopia(), "CERTIFICACION");
+						// emisor.getNit = 45146276
+						// certificador.getCorreoCopia = dtodolibreria2017@gmail.com
+						RespuestaServicioFel respuesta_servicio = servicio.Certificar(conexion, respuesta_firma_emisor.getArchivo(), emisor.getNit(),
+								certificador.getCorreoCopia(), "CERTIFICACION");
 
 						if(respuesta_servicio.getResultado()){
 

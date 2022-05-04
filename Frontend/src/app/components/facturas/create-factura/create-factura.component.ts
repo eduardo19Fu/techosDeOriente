@@ -283,8 +283,9 @@ export class CreateFacturaComponent implements OnInit {
 
   loadProducto(event): void{
     (document.getElementById('codigo') as HTMLInputElement).value = event.codProducto;
-    this.buscarProducto();
     (document.getElementById('button-x')).click();
+    this.buscarProducto();
+    (document.getElementById('cantidad') as HTMLInputElement).focus();
   }
 
 }

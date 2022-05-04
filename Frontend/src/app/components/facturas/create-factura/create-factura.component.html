@@ -101,7 +101,7 @@
                                 <input type="text" class="form-control" name="codigo" id="codigo"
                                     value="{{producto ? producto.codProducto : ''}}"
                                     style="width: 70%; display: inline; margin-right: 10px;" (blur)="buscarProducto()"
-                                    (keyup)="buscarProducto()">
+                                    (keyup.enter)="buscarProducto()">
 
                                 <button class="btn bg-gradient-fuchsia" data-toggle="modal"
                                     data-target="#modal-buscar-producto">
@@ -124,7 +124,7 @@
                             <div class="form-group">
                                 <label for="cantidad" style="display: block;">Cantidad</label>
                                 <input type="number" name="cantidad" id="cantidad" class="form-control"
-                                    style="width: 65%; display: inline; margin-right: 10px;" value="0">
+                                    style="width: 65%; display: inline; margin-right: 10px;" value="0" autofocus>
 
                                 <button class="btn bg-gradient-cyan" (click)="agregarLinea()">
                                     <i class="fas fa-plus-square"></i>

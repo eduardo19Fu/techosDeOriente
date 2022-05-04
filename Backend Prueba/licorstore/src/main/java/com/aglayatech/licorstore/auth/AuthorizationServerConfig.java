@@ -45,8 +45,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		.secret(passwordEnconder.encode("pangosoftpuntodeventastore2021"))
 		.scopes("read","write")
 		.authorizedGrantTypes("password", "refresh_token")
-		.accessTokenValiditySeconds(240000) //  Tiempo de expiracion del token
-		.refreshTokenValiditySeconds(240000); // Tiempo de expiracion del token de refresco
+		.accessTokenValiditySeconds(-1) //  Tiempo de expiracion del token
+		.refreshTokenValiditySeconds(-1); // Tiempo de expiracion del token de refresco
 	}
 
 	@Override
