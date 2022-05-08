@@ -1,7 +1,98 @@
 <!-- MODAL PRA BUSCAR PRODUCTO -->
 <app-modal-buscar-producto-movimiento (producto)="loadProducto($event)"></app-modal-buscar-producto-movimiento>
 
-<div class="modal fade" id="modal-movimiento">
+<div class="container">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">{{title}}</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <div class="col-md-12">
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">Completar formulario</h3>
+            </div>
+
+            <div class="card-body">
+                <form #formMovimiento="ngForm" id="form-movimiento">
+                    <div class="row">
+                        <div class="form-group col-sm-3">
+                            <label for="cod-producto" style="display: block;">Código</label>
+                            <input type="text" class="form-control" name="cod-producto" id="cod-producto"
+                                [(ngModel)]="producto.codProducto" (keypress.enter)="buscarProducto()"
+                                style="width: 70%; display: inline; margin-right: 10px;" required #codigo="ngModel">
+
+                            <button type="button" class="btn bg-gradient-fuchsia" data-toggle="modal"
+                                data-target="#modal-buscar-producto">
+                                <i class="fas fa-search"></i>
+                            </button>
+
+
+                        </div>
+
+                        <div class="form-group col-lg-7">
+                            <label for="nombre">Producto</label>
+                            <input type="text" class="form-control" name="nombre" id="nombre"
+                                value="{{producto.nombre ? producto.nombre : ''}}" required
+                                [disabled]="producto.nombre">
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                            <label for="stock">Disponible</label>
+                            <input type="number" class="form-control" name="stock" id="stock"
+                                value="{{producto.stock ? producto.stock : ''}}" required [disabled]="producto.stock">
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="cantidad">Cantidad</label>
+                            <input type="number" class="form-control" name="cantidad" id="cantidad" required
+                                #cantidad="ngModel" [(ngModel)]="movimientoProducto.cantidad">
+
+                            <div *ngIf="cantidad.invalid && (cantidad.touched || cantidad.dirty)">
+                                <span class="requerido">
+                                    La cantidad no puede estar vacía.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col">
+                            <label for="tipo-movimiento">Tipo Movimiento</label>
+                            <select name="tipo-movimiento" class="form-control" style="width: 100%;"
+                                [(ngModel)]="movimientoProducto.tipoMovimiento" required #tipo="ngModel">
+
+                                <option selected="selected" value="ENTRADA">Entrada</option>
+                                <option value="SALIDA">Salida</option>
+                            </select>
+
+                            <div *ngIf="tipo.invalid && (tipo.touched || tipo.dirty)">
+                                <span class="requerido">
+                                    Elija un movimiento antes de continuar.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary" style="float: right; width: 100%;"
+                        [disabled]="!formMovimiento.form.valid" (click)="create()">
+                        Ingresar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="modal fade" id="modal-movimiento">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -83,8 +174,7 @@
                     style="display: right;">Cerrar</button>
             </div>
         </div>
-        <!-- /.modal-content -->
+        
     </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
+    
+</div> -->

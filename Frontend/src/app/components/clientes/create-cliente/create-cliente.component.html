@@ -25,9 +25,9 @@
                     <div class="row">
                         <div class="form-group col">
                             <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" name="nombre" [(ngModel)]="cliente.nombre" required placeholder="Ingrese nombre del cliente"
-                                #nombre="ngModel">
-                                
+                            <input type="text" class="form-control" name="nombre" [(ngModel)]="cliente.nombre" required
+                                placeholder="Ingrese nombre del cliente" #nombre="ngModel">
+
                             <div *ngIf="nombre.invalid && (nombre.touched || nombre.dirty)">
                                 <span class="requerido">
                                     El nombre no puede estar vacío.
@@ -37,8 +37,8 @@
 
                         <div class="form-group col">
                             <label for="nit">NIT</label>
-                            <input type="text" name="nit" class="form-control" [(ngModel)]="cliente.nit" required placeholder="Ingrese NIT del cliente"
-                                #nit="ngModel">
+                            <input type="text" name="nit" class="form-control" [(ngModel)]="cliente.nit" required
+                                placeholder="Ingrese NIT del cliente" #nit="ngModel">
 
                             <div *ngIf="nit.invalid && (nit.touched || nit.dirty)">
                                 <span class="requerido">
@@ -51,8 +51,8 @@
                     <div class="row">
                         <div class="form-group col">
                             <label for="direccion">Dirección</label>
-                            <input type="text" name="direccion" class="form-control" [(ngModel)]="cliente.direccion" placeholder="Ingrese dirección del cliente"
-                                required #direccion="ngModel">
+                            <input type="text" name="direccion" class="form-control" [(ngModel)]="cliente.direccion"
+                                placeholder="Ingrese dirección del cliente" required #direccion="ngModel">
 
                             <div *ngIf="direccion.invalid && (direccion.dirty || direccion.touched)">
                                 <span class="requerido">
@@ -63,8 +63,8 @@
 
                         <div class="form-group col">
                             <label for="telefono">Teléfono</label>
-                            <input type="text" name="telefono" id="telefono" class="form-control" [(ngModel)]="cliente.telefono"
-                                placeholder="Ingrese número de teléfono">
+                            <input type="text" name="telefono" id="telefono" class="form-control"
+                                [(ngModel)]="cliente.telefono" placeholder="Ingrese número de teléfono">
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
 
                     <ng-template #elseBlock>
                         <button type="submit" role="button" class="btn btn-primary" (click)="update()"
-                                [disabled]="!clienteForm.form.valid">
+                            [disabled]="!clienteForm.form.valid">
                             Actualizar
                         </button>
                     </ng-template>

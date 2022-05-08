@@ -1,5 +1,5 @@
 <!-- MODAL CREATE MOVIMIENTO -->
-<app-create-movimiento></app-create-movimiento>
+<!-- <app-create-movimiento></app-create-movimiento> -->
 
 <!-- CREAR INVENTARIO -->
 <app-busqueda-movimientos></app-busqueda-movimientos>
@@ -11,7 +11,12 @@
             <div class="col-sm-6">
                 <h1>{{title}}</h1>
                 <br>
-                <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-movimiento">
+                <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-movimiento">
+                    <i class="fas fa-plus-circle"></i>
+                    Nuevo
+                </button>&nbsp; -->
+
+                <button type="button" class="btn bg-gradient-success" [routerLink]="['/productos/inventario/create']">
                     <i class="fas fa-plus-circle"></i>
                     Nuevo
                 </button>&nbsp;
@@ -40,8 +45,8 @@
             No existe ningún movimiento registrado en la base de datos!
         </div>
 
-        <table id="movimientos" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid"
-            *ngIf="movimientosProducto?.length > 0">
+        <table id="movimientos" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm"
+            role="grid" *ngIf="movimientosProducto?.length > 0">
             <thead>
                 <tr>
                     <th>No. Movimiento</th>

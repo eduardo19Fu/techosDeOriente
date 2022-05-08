@@ -1,4 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 
 import { AuthService } from '../../../services/auth.service';
 import { MovimientosProductoService } from '../../../services/movimientos/movimientos-producto.service';
@@ -11,7 +13,6 @@ import { UsuarioAuxiliar } from 'src/app/models/auxiliar/usuario-auxiliar';
 
 import { JqueryConfigs } from '../../../utils/jquery/jquery-utils';
 import Swal from 'sweetalert2';
-import { FormGroup } from '@angular/forms';
 
 declare const $;
 
@@ -38,7 +39,8 @@ export class CreateMovimientoComponent implements OnInit, AfterViewInit {
     private movimientoProductoService: MovimientosProductoService,
     private productoService: ProductoService,
     private usuarioService: UsuarioService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.title = 'Ingresar Nuevo Movimiento';
     this.movimientoProducto = new MovimientoProducto();
@@ -73,13 +75,15 @@ export class CreateMovimientoComponent implements OnInit, AfterViewInit {
 
         this.movimientoProductoService.create(this.movimientoProducto).subscribe(
           response => {
+            this.router.navigate(['/productos/inventario/index']);
             Swal.fire('Movimiento creado con éxito', `El movimiento ${response.movimientoProducto.idMovimiento} ha sido creada con éxito!`, 'success');
-            (document.getElementById('cerrar-modal')).click();
-            this.producto = new Producto();
-            this.movimientoProducto = new MovimientoProducto();
+            // (document.getElementById('cerrar-modal')).click();
+            // this.producto = new Producto();
+            // this.movimientoProducto = new MovimientoProducto();
           },
           error => {
-            (document.getElementById('cerrar-modal')).click();
+            // (document.getElementById('cerrar-modal')).click();
+            Swal.fire('Error', error.error, 'error');
           }
         );
 
@@ -115,6 +119,7 @@ export class CreateMovimientoComponent implements OnInit, AfterViewInit {
 
   loadProducto(event): void {
     (document.getElementById('cod-producto') as HTMLInputElement).value = event.codProducto;
+    (document.getElementById('button-x')).click();
     this.buscarProducto();
   }
 }

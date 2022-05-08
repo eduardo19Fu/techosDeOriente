@@ -551,7 +551,7 @@ public class FacturaApiController {
 						conexion.setUrl("");
 						conexion.setMetodo("POST");
 						conexion.setContent_type("application/json");
-						conexion.setUsuario(emisor.getNit());
+						conexion.setUsuario(certificador.getPrefijo());
 						conexion.setLlave(certificador.getLlaveWs());
 						conexion.setIdentificador("ANULACION_" + cancelFactura.getNoFactura());
 

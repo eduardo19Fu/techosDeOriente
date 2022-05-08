@@ -27,6 +27,7 @@ export class ModalBuscarProductoMovimientoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadProductos();
   }
 
   loadProductos(): void {

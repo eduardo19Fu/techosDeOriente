@@ -48,7 +48,7 @@ export class CreateClienteComponent implements OnInit {
     console.log(this.cliente);
     this.serviceCliente.create(this.cliente).subscribe(
       response => {
-        this.router.navigate(['/clientes']);
+        this.router.navigate(['/clientes/index']);
         swal.fire('Cliente Registrado', `${response.mensaje}: ${response.cliente.nombre}`, 'success');
       },
       error => { }
