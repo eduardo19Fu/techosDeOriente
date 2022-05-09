@@ -15,6 +15,11 @@ export class DetalleFactura {
         // return this.producto.precioVenta * this.cantidad;
     }
 
+    public calcularPrecioDescuento(): number{
+        return this.descuento <= 0 ? this.producto.precioVenta 
+        : (Math.round(((this.producto.precioVenta - (this.producto.precioVenta * (this.descuento / 100))) + Number.EPSILON) * 100) / 100);
+    }
+
     public calcularImporteDescuento(): number{
         return this.descuento <= 0 ? this.producto.precioVenta * this.cantidad
         // : (this.producto.precioVenta * this.cantidad) - ((this.descuento / 100) * (this.producto.precioVenta * this.cantidad));

@@ -149,6 +149,7 @@
                                 <th>Precio</th>
                                 <th>Cantidad</th>
                                 <th>Descuento</th>
+                                <th>N. Precio</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
@@ -160,13 +161,20 @@
                                 <td>
                                     <input type="number" id="cant" value="{{item.cantidad}}"
                                         class="form-control col-sm-6"
-                                        (change)="actualizarCantidad(item.producto.idProducto, $event)">
+                                        (change)="actualizarCantidad(item.producto.idProducto, $event)"
+                                        (keyup)="actualizarCantidad(item.producto.idProducto, $event)">
                                 </td>
                                 <td>
                                     <input type="number" id="descuento" name="descuento" value="{{item.descuento}}"
                                         class="form-control col-sm-6"
-                                        (change)="actualizarCantidadDescuento(item.producto.idProducto, $event)">
+                                        (change)="actualizarCantidadDescuento(item.producto.idProducto, $event)"
+                                        (keyup)="actualizarCantidadDescuento(item.producto.idProducto, $event)">
                                 </td>
+
+                                <td>
+                                    {{item.calcularPrecioDescuento() | currency: "Q" : "symbol"}}
+                                </td>
+
                                 <!-- <td>{{item.calcularImporte() | currency: "Q" : "symbol"}}</td> -->
                                 <td>{{item.subTotalDescuento | currency: "Q" : "symbol"}}</td>
                                 <td>
