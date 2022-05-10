@@ -18,25 +18,24 @@ export class AuthService {
   constructor(
     private http: HttpClient
   ) {
-    this.url = 'http://localhost:8282';
-    // this.url = 'https://dtodojalapa.xyz:8282';
-    // this.url = 'http://31.220.56.29:8282';
+    // this.url = 'http://localhost:8282';
+    this.url = 'https://dtodojalapa.xyz:8282';
   }
 
-  public get usuario(): Usuario{
-    if (this._usuario != null){
+  public get usuario(): Usuario {
+    if (this._usuario != null) {
       return this._usuario;
-    } else if (this._usuario == null && sessionStorage.getItem('usuario')){
+    } else if (this._usuario == null && sessionStorage.getItem('usuario')) {
       this._usuario = JSON.parse(sessionStorage.getItem('usuario')) as Usuario;
       return this._usuario;
     }
     return new Usuario();
   }
 
-  public get token(): string{
-    if (this._token != null){
+  public get token(): string {
+    if (this._token != null) {
       return this._token;
-    } else if (this._token == null && sessionStorage.getItem('token')){
+    } else if (this._token == null && sessionStorage.getItem('token')) {
       this._token = sessionStorage.getItem('token');
       return this._token;
     }
@@ -77,30 +76,30 @@ export class AuthService {
     sessionStorage.setItem('usuario', JSON.stringify(this._usuario));
   }
 
-  obtenerDatos(accessToken: string): any{
-    if (accessToken != null){
+  obtenerDatos(accessToken: string): any {
+    if (accessToken != null) {
       return JSON.parse(atob(accessToken.split('.')[1]));
     }
 
     return null;
   }
 
-  isAuthenticated(): boolean{
+  isAuthenticated(): boolean {
     const payload = this.obtenerDatos(this.token);
-    if (payload != null && payload.user_name && payload.user_name.length > 0){
+    if (payload != null && payload.user_name && payload.user_name.length > 0) {
       return true;
     }
     return false;
   }
 
-  hasRole(role: string): boolean{
-    if (this.usuario.roles.includes(role)){
+  hasRole(role: string): boolean {
+    if (this.usuario.roles.includes(role)) {
       return true;
     }
     return false;
   }
 
-  logout(): void{
+  logout(): void {
     this._token = null;
     this._usuario = null;
     sessionStorage.clear();
