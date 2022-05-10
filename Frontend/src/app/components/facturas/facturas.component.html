@@ -40,8 +40,8 @@
             No existe ninguna factura registrada en la base de datos!
         </div>
 
-        <table id="facturas" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid"
-            *ngIf="facturas?.length > 0">
+        <table id="facturas" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm"
+            role="grid" *ngIf="facturas?.length > 0">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -61,7 +61,7 @@
                     <td>{{factura.fecha | date: 'dd/MM/yyyy - hh:mm'}}</td>
                     <td>{{factura.total | currency: 'Q' : 'symbol'}}</td>
                     <td>
-                        <span class="badge" 
+                        <span class="badge"
                             [ngClass]="{'badge-success': factura.estado.idEstado === 3, 'badge-danger': factura.estado.idEstado === 4}">
                             {{factura.estado.estado}}
                         </span>
@@ -69,17 +69,19 @@
                     <td>{{factura.usuario.usuario}}</td>
                     <td class="center-options" *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')">
 
-                        <button class="btn bg-gradient-success margin" name="detail" type="button" (click)="abrirDetalle(factura)">
+                        <button class="btn bg-gradient-success margin" name="detail" type="button"
+                            (click)="abrirDetalle(factura)">
                             <i class="fas fa-asterisk"></i>
                         </button>
 
-                        <button class="btn bg-gradient-warning margin" name="print" type="button" (click)="printBill(factura)"
-                            [disabled]="factura.estado.idEstado === 4">
+                        <button class="btn bg-gradient-warning margin" name="print" type="button"
+                            (click)="printBill(factura)" [disabled]="factura.estado.idEstado === 4">
                             <i class="fas fa-print"></i>
                         </button>
 
                         <!-- Aquí va el botón de eliminar -->
-                        <button class="btn bg-gradient-danger margin" name="cancel" type="button" (click)="cancel(factura)"
+                        <button class="btn bg-gradient-danger margin" name="cancel" type="button"
+                            (click)="cancel(factura)" *ngIf="auth.hasRole('ROLE_ADMIN')"
                             [disabled]="factura.estado.idEstado === 4">
                             <i class="fas fa-ban"></i>
                         </button>
@@ -101,6 +103,3 @@
         </table>
     </div>
 </div>
-
-
-

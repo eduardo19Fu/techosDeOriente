@@ -20,7 +20,7 @@ public class TipoProductoServiceImpl implements ITipoProductoService {
 
 	@Override
 	public List<TipoProducto> findAll() {
-		return repoTipo.findAll(Sort.by(Direction.ASC, "idTipoProducto"));
+		return repoTipo.findAll(Sort.by(Direction.ASC, "tipoProducto"));
 	}
 
 	@Override

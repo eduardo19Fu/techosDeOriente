@@ -114,6 +114,7 @@ public class FacturaApiController {
 		Factura newFactura = null;
 		Estado estado = serviceEstado.findByEstado("PAGADO");
 		Estado estadoCorr = serviceEstado.findByEstado("ACTIVO");
+		Estado estadoCorrFinalizado = serviceEstado.findByEstado("FINALIZADO");
 		TipoFactura tipoFactura = serviceTipoFactura.getTipoFactura(1);
 
 		Emisor emisor = null;
@@ -367,8 +368,15 @@ public class FacturaApiController {
 
 
 							if(newFactura != null){
+
 								correlativo.setCorrelativoActual(correlativo.getCorrelativoActual() + 1);
-								serviceCorrelativo.save(correlativo);
+
+								if(correlativo.getCorrelativoActual() == correlativo.getCorrelativoFinal()){
+									correlativo.setEstado(estadoCorrFinalizado);
+									serviceCorrelativo.save(correlativo);
+								} else {
+									serviceCorrelativo.save(correlativo);
+								}
 
 								// Actualiza el stock de los productos que forman parte de cada una de las lineas de la factura
 								for(DetalleFactura item : newFactura.getItemsFactura()) {

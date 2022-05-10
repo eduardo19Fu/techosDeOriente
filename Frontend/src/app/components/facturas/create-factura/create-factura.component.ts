@@ -100,8 +100,7 @@ export class CreateFacturaComponent implements OnInit {
           this.correlativo = correlativo;
         },
         error => {
-          console.log(error);
-          swal.fire('Error al cargar correlativo', error.error.error, 'error');
+          swal.fire('Error al cargar correlativo', error.error.mensaje, 'error');
         }
       );
     }
@@ -282,7 +281,7 @@ export class CreateFacturaComponent implements OnInit {
     }
   }
 
-  loadProducto(event): void{
+  loadProducto(event): void {
     (document.getElementById('codigo') as HTMLInputElement).value = event.codProducto;
     (document.getElementById('button-x')).click();
     this.buscarProducto();

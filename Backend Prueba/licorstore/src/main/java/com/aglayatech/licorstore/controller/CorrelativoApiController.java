@@ -102,7 +102,7 @@ public class CorrelativoApiController {
 		}
 		
 		if (correlativo == null) {
-			response.put("mensaje", "¡El correlativo no se encuentra registrado en la base de datos!");
+			response.put("mensaje", "¡No existe correlativo activo para este usuario!");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 

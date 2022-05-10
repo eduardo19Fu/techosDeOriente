@@ -42,7 +42,7 @@ export class CreateProductoComponent implements OnInit {
       // tslint:disable-next-line: no-string-literal
       const id = params['id'];
 
-      if (id){
+      if (id) {
         // tslint:disable-next-line: deprecation
         this.serviceProducto.getProducto(id).subscribe(
           producto => this.producto = producto
@@ -53,13 +53,13 @@ export class CreateProductoComponent implements OnInit {
     this.cargarTipos();
   }
 
-  cargarProducto(): void{
+  cargarProducto(): void {
     // tslint:disable-next-line: deprecation
     this.activatedRoute.params.subscribe(params => {
       // tslint:disable-next-line: no-string-literal
       const id = params['id'];
 
-      if (id){
+      if (id) {
         // tslint:disable-next-line: deprecation
         this.serviceProducto.getProducto(id).subscribe(
           producto => this.producto = producto
@@ -68,19 +68,19 @@ export class CreateProductoComponent implements OnInit {
     });
   }
 
-  cargarMarcas(): void{
+  cargarMarcas(): void {
     // tslint:disable-next-line: deprecation
     this.serviceMarca.getMarcas().subscribe(marcas => this.marcas = marcas);
   }
 
-  cargarTipos(): void{
+  cargarTipos(): void {
     // tslint:disable-next-line: deprecation
-    this.serviceTipo.getTiposProducto().subscribe(tipos =>  this.tipos = tipos);
+    this.serviceTipo.getTiposProducto().subscribe(tipos => this.tipos = tipos);
   }
 
-  create(): void{
+  create(): void {
     this.producto.porcentajeGanancia = Number.parseFloat((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
-    if (this.producto.codProducto){
+    if (this.producto.codProducto) {
       this.serviceProducto.create(this.producto).subscribe(
         response => {
           this.router.navigate(['/productos/index']);
@@ -98,7 +98,7 @@ export class CreateProductoComponent implements OnInit {
     }
   }
 
-  update(): void{
+  update(): void {
     this.producto.porcentajeGanancia = Number.parseFloat((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
     this.serviceProducto.update(this.producto).subscribe(
       response => {
@@ -109,32 +109,48 @@ export class CreateProductoComponent implements OnInit {
   }
 
   // Comparar para reemplazar el valor en el select del formulario en caso de existir
-  compararMarca(o1: MarcaProducto, o2: MarcaProducto): boolean{
-    if (o1 === undefined && o2 === undefined){
+  compararMarca(o1: MarcaProducto, o2: MarcaProducto): boolean {
+    if (o1 === undefined && o2 === undefined) {
       return true;
     }
     return o1 === null || o2 === null || o1 === undefined || o2 === undefined ? false : o1.idMarcaProducto === o2.idMarcaProducto;
   }
 
-  compararTipo(o1: TipoProducto, o2: TipoProducto): boolean{
-    if (o1 === undefined && o2 === undefined){
+  compararTipo(o1: TipoProducto, o2: TipoProducto): boolean {
+    if (o1 === undefined && o2 === undefined) {
       return true;
     }
     return o1 == null || o2 == null || o1 === undefined || o2 === undefined ? false : o1.idTipoProducto === o2.idTipoProducto;
   }
 
-  calcularPorcentajeGanancia(): void{
+  calcularPorcentajeGanancia(): void {
     const pcompra = ((document.getElementById('precio-compra') as HTMLInputElement).value);
     const pventa = (document.getElementById('precio-venta') as HTMLInputElement).value;
     let porcentaje = 0;
 
-    if (!pcompra || !pventa){
+    if (!pcompra || !pventa) {
       console.log('valores incorrectos');
     } else {
       porcentaje = ((Number.parseFloat(pventa) - Number.parseFloat(pcompra)) / Number.parseFloat(pcompra)) * 100;
     }
 
     (document.getElementById('porcentaje-ganancia') as HTMLInputElement).value = porcentaje.toString();
+  }
+
+  calcularPrecioVenta(): void {
+    const pcompra = ((document.getElementById('precio-compra') as HTMLInputElement).value);
+    const pporcentaje = ((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
+
+    let precioVenta = 0;
+
+    if (!pcompra || !pporcentaje) {
+      console.log('valores incorrectos');
+    } else {
+      precioVenta = ((Number.parseFloat(pcompra) + ((Number.parseFloat(pporcentaje) / 100) * Number.parseFloat(pcompra))));
+      console.log(precioVenta);
+    }
+
+    (document.getElementById('precio-venta') as HTMLInputElement).value = precioVenta.toString();
   }
 
 }

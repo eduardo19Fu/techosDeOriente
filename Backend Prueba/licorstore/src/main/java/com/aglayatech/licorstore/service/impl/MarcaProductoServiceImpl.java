@@ -20,7 +20,7 @@ public class MarcaProductoServiceImpl implements IMarcaProductoService {
 
 	@Override
 	public List<MarcaProducto> findAll() {
-		return marcaProductoRepo.findAll(Sort.by(Direction.ASC, "idMarcaProducto"));
+		return marcaProductoRepo.findAll(Sort.by(Direction.ASC, "marca"));
 	}
 	
 	@Override

@@ -2,7 +2,7 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            
+
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
@@ -21,7 +21,8 @@
             <div class="icon">
                 <i class="ion ion-bag"></i>
             </div>
-            <a [routerLink]="['/productos/index']" class="small-box-footer">Todos <i class="fas fa-arrow-circle-right"></i></a>
+            <a [routerLink]="['/productos/index']" class="small-box-footer">Todos <i
+                    class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -36,7 +37,8 @@
             <div class="icon">
                 <i class="ion ion-ios-people"></i>
             </div>
-            <a [routerLink]="['/clientes/index']" class="small-box-footer">Todos <i class="fas fa-arrow-circle-right"></i></a>
+            <a [routerLink]="['/clientes/index']" class="small-box-footer">Todos <i
+                    class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -51,11 +53,12 @@
             <div class="icon">
                 <i class="ion ion-person-add"></i>
             </div>
-            <a [routerLink]="['/facturas/index']" class="small-box-footer">Todas <i class="fas fa-arrow-circle-right"></i></a>
+            <a [routerLink]="['/facturas/index']" class="small-box-footer">Todas <i
+                    class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
-    <div class="col-lg-3 col-6">
+    <div class="col-lg-3 col-6" *ngIf="auth.hasRole('ROLE_ADMIN')">
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
@@ -66,7 +69,8 @@
             <div class="icon">
                 <i class="ion ion-pie-graph"></i>
             </div>
-            <a [routerLink]="['/usuarios/index']" class="small-box-footer">Todos <i class="fas fa-arrow-circle-right"></i></a>
+            <a [routerLink]="['/usuarios/index']" class="small-box-footer">Todos <i
+                    class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -77,7 +81,7 @@
 <div class="row">
     <!-- Left col -->
     <section class="col-lg-7 connectedSortable">
-        
+
     </section>
     <!-- /.Left col -->
 

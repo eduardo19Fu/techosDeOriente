@@ -5,6 +5,7 @@ import { FacturaService } from 'src/app/services/facturas/factura.service';
 import { MarcaProductoService } from 'src/app/services/marca-producto.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { UsuarioService } from 'src/app/services/usuarios/usuario.service';
+import { AuthService } from '../../services/auth.service';
 
 import { Cliente } from 'src/app/models/cliente';
 import { MarcaProducto } from 'src/app/models/marca-producto';
@@ -35,10 +36,11 @@ export class HomeComponent implements OnInit {
     private serviceCliente: ClienteService,
     private serviceMarca: MarcaProductoService,
     private serviceUsuario: UsuarioService,
-    private serviceFactura: FacturaService
+    private serviceFactura: FacturaService,
+    public auth: AuthService
   ) {
     this.title = 'Inicio';
-   }
+  }
 
   ngOnInit(): void {
     this.getProductos();
@@ -48,23 +50,23 @@ export class HomeComponent implements OnInit {
     this.getFacturas();
   }
 
-  getProductos(): void{
+  getProductos(): void {
     this.serviceProducto.getProductos().subscribe(productos => this.totalProductos = productos.length);
   }
 
-  getClientes(): void{
+  getClientes(): void {
     this.serviceCliente.getClientes().subscribe(clientes => this.totalClientes = clientes.length);
   }
 
-  getMarcas(): void{
+  getMarcas(): void {
     this.serviceMarca.getMarcas().subscribe(marcas => this.totalMarcas = marcas.length);
   }
 
-  getUsuarios(): void{
+  getUsuarios(): void {
     this.serviceUsuario.getUsuarios().subscribe(usuarios => this.totalUsuarios = usuarios.length);
   }
 
-  getFacturas(): void{
+  getFacturas(): void {
     this.serviceFactura.getFacturas().subscribe(facturas => this.totalFacturas = facturas.length);
   }
 

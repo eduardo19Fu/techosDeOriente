@@ -40,7 +40,7 @@ public class UsuarioApiController {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
-	@Secured(value = {"ROLE_ADMIN"})
+	@Secured(value = {"ROLE_ADMIN", "ROLE_COBRADOR"})
 	@GetMapping(value = "/usuarios")
 	public List<Usuario> index(){
 		return this.serviceUsuario.findAll();
