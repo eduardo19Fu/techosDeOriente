@@ -79,7 +79,8 @@ export class CreateProductoComponent implements OnInit {
   }
 
   create(): void {
-    this.producto.porcentajeGanancia = Number.parseFloat((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
+    // this.producto.porcentajeGanancia = Number.parseFloat((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
+    this.producto.precioVenta = Number.parseFloat((document.getElementById('precio-venta') as HTMLInputElement).value);
     if (this.producto.codProducto) {
       this.serviceProducto.create(this.producto).subscribe(
         response => {
@@ -99,7 +100,8 @@ export class CreateProductoComponent implements OnInit {
   }
 
   update(): void {
-    this.producto.porcentajeGanancia = Number.parseFloat((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
+    // this.producto.porcentajeGanancia = Number.parseFloat((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
+    this.producto.precioVenta = Number.parseFloat((document.getElementById('precio-venta') as HTMLInputElement).value);
     this.serviceProducto.update(this.producto).subscribe(
       response => {
         this.router.navigate(['/productos/index']);
