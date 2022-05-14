@@ -420,12 +420,25 @@ public class FacturaApiController {
 						}
 					}
 
+					response.put("mensaje", "¡La factura ha sido creada con éxito!");
+					response.put("factura", newFactura);
+					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+
 				} else {
 
+					String errores = "";
 					// Ciclo para recorrer los errores.
-					respuesta.getErrores().forEach((error) -> {
-						System.out.println(error);
-					});
+//					respuesta.getErrores().forEach((error) -> {
+//						System.out.println(error);
+//					});
+
+					for(String error : respuesta.getErrores()){
+						errores += error + "; ";
+					}
+
+					response.put("message", "¡No se ha podido llevar a cabo la factura!");
+					response.put("errores", errores);
+					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 				}
 
 				/******************* PROCEDIMIENTO SIN REGIMEN FEL ******************/
@@ -453,6 +466,9 @@ public class FacturaApiController {
 //					}
 //				}
 				/******************************************************************************/
+			} else {
+				response.put("mensaje", "Factura se encuentra vacía.");
+				return  new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 			}
 
 		} catch (DataAccessException e) {
@@ -480,10 +496,6 @@ public class FacturaApiController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		response.put("mensaje", "¡La factura ha sido creada con éxito!");
-		response.put("factura", newFactura);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
 	@Secured(value = {"ROLE_COBRADOR", "ROLE_ADMIN"})
@@ -536,7 +548,7 @@ public class FacturaApiController {
 					anulacion_fel.setIDReceptor(cancelFactura.getCliente().getNit().replace("-", ""));
 
 				anulacion_fel.setNITEmisor(emisor.getNit());
-				anulacion_fel.setMotivoAnulacion("");
+				anulacion_fel.setMotivoAnulacion("Anulacion");
 				anulacion_fel.setNumeroDocumentoAAnular(cancelFactura.getCertificacionSat());
 
 				Respuesta respuesta;
@@ -551,9 +563,40 @@ public class FacturaApiController {
 					FirmaEmisor firma_emisor = new FirmaEmisor();
 					RespuestaServicioFirma respuesta_firma_emisor = new RespuestaServicioFirma();
 
-					respuesta_firma_emisor = firma_emisor.Firmar(respuesta.getXml(), certificador.getPrefijo(), certificador.getTokenSigner());
+					System.out.println("--> FIRMA POR PARTE DEL EMISOR ");
+
+					System.out.println("--> Resultado: " + respuesta_firma_emisor.isResultado());
+					System.out.println("--> Descripcion: " + respuesta_firma_emisor.getDescripcion());
+
+					System.out.println("--> Enviando Documento al Servicio de Firma del Emisor...");
+
+					System.out.println("--> Enviando Documento al Servicio de Firma del Emisor...");
+
+					try {
+						/***** DATOS UTILIZADOS *****/
+						// certificador.getPrefijo = JDARPRO
+						// certificador.getTokenSigner = 392dc79f0800b66331a737dc57c46219
+						/****************************/
+						respuesta_firma_emisor = firma_emisor.Firmar(respuesta.getXml(), certificador.getPrefijo(), certificador.getTokenSigner());
+					} catch (NoSuchAlgorithmException ex) {
+						Logger.getLogger(FacturaApiController.class.getName()).log(Level.SEVERE, null, ex);
+						response.put("message", "Ha ocurrido un error en la peticion");
+						response.put("error", ex.getMessage().concat(": ").concat(ex.getCause().getMessage()));
+						return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+					} catch (UnsupportedEncodingException ex) {
+						Logger.getLogger(FacturaApiController.class.getName()).log(Level.SEVERE, null, ex);
+						response.put("message", "Ha ocurrido un error en la peticion");
+						response.put("error", ex.getMessage().concat(": ").concat(ex.getCause().getMessage()));
+					} catch (KeyManagementException ex) {
+						response.put("message", "Ha ocurrido un error en la peticion");
+						response.put("error", ex.getMessage().concat(": ").concat(ex.getCause().getMessage()));
+						Logger.getLogger(FacturaApiController.class.getName()).log(Level.SEVERE, null, ex);
+						return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+					}
 
 					if(respuesta_firma_emisor.isResultado()){
+
+						System.out.println("--> ENVIO AL API DE INFILE");
 
 						ConexionServicioFel conexion = new ConexionServicioFel();
 						conexion.setUrl("");
@@ -630,6 +673,25 @@ public class FacturaApiController {
 						response.put("mensaje", "¡Petición de anulación ha salido mal");
 						return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 					}
+
+					response.put("mensaje", "¡Factura Anulada!");
+					response.put("factura", cancelFactura);
+					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+				} else {
+
+					// Ciclo para recorrer los errores.
+					respuesta.getErrores().forEach((error) -> {
+						System.out.println(error);
+					});
+
+					String errores = "";
+					for(String error : respuesta.getErrores()) {
+						errores += error + " : ";
+					}
+
+					response.put("errores", errores);
+					response.put("mensaje", "¡Petición de anulación ha salido mal");
+					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 				}
 
 				/******************* PROCEDIMIENTO SIN REGIMEN FEL ******************/
@@ -667,20 +729,22 @@ public class FacturaApiController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			response.put("mensaje", "¡Error en la base de datos!");
+			response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			response.put("mensaje", "¡Error en la base de datos!");
+			response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			response.put("mensaje", "¡Error en la base de datos!");
+			response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (KeyManagementException e) {
-			e.printStackTrace();
+			response.put("mensaje", "¡Error en la base de datos!");
+			response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		response.put("mensaje", "¡Factura Anulada!");
-		response.put("factura", cancelFactura);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
 	/*************** PDF REPORTS CONTROLLERS ********************/
