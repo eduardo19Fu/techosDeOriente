@@ -536,7 +536,7 @@ public class FacturaApiController {
 					anulacion_fel.setIDReceptor(cancelFactura.getCliente().getNit().replace("-", ""));
 
 				anulacion_fel.setNITEmisor(emisor.getNit());
-				anulacion_fel.setMotivoAnulacion("PRUEBA");
+				anulacion_fel.setMotivoAnulacion("");
 				anulacion_fel.setNumeroDocumentoAAnular(cancelFactura.getCertificacionSat());
 
 				Respuesta respuesta;
@@ -551,7 +551,7 @@ public class FacturaApiController {
 					FirmaEmisor firma_emisor = new FirmaEmisor();
 					RespuestaServicioFirma respuesta_firma_emisor = new RespuestaServicioFirma();
 
-					respuesta_firma_emisor = firma_emisor.Firmar(respuesta.getXml(), emisor.getNit(), certificador.getTokenSigner());
+					respuesta_firma_emisor = firma_emisor.Firmar(respuesta.getXml(), certificador.getPrefijo(), certificador.getTokenSigner());
 
 					if(respuesta_firma_emisor.isResultado()){
 
@@ -568,15 +568,15 @@ public class FacturaApiController {
 						RespuestaServicioFel respuesta_servicio = servicio.Certificar(conexion, respuesta_firma_emisor.getArchivo(), emisor.getNit(), "N/A", "ANULACION");
 
 						if(respuesta_servicio.getResultado()){
-//							System.out.println("--> Resultado: " + respuesta_servicio.getResultado());
-//							System.out.println("--> Origen: " + respuesta_servicio.getOrigen());
-//							System.out.println("--> Descripcion: " + respuesta_servicio.getDescripcion());
-//							System.out.println("--> Cantidad Errores: " + respuesta_servicio.getCantidad_errores());
-//							System.out.println("--> INFO: " + respuesta_servicio.getInfo());
-//
-//							System.out.println("UUID: " + respuesta_servicio.getUuid());
-//							System.out.println("Serie: " + respuesta_servicio.getSerie());
-//							System.out.println("Numero: " + respuesta_servicio.getNumero());
+							System.out.println("--> Resultado: " + respuesta_servicio.getResultado());
+							System.out.println("--> Origen: " + respuesta_servicio.getOrigen());
+							System.out.println("--> Descripcion: " + respuesta_servicio.getDescripcion());
+							System.out.println("--> Cantidad Errores: " + respuesta_servicio.getCantidad_errores());
+							System.out.println("--> INFO: " + respuesta_servicio.getInfo());
+
+							System.out.println("UUID: " + respuesta_servicio.getUuid());
+							System.out.println("Serie: " + respuesta_servicio.getSerie());
+							System.out.println("Numero: " + respuesta_servicio.getNumero());
 
 							// INICIA EL PROCESO DE ANULACIÓN DE LA FACTURA EN LA BASE DE DATOS DE LA EMPRESA
 							cancelFactura.setEstado(estado);
@@ -601,6 +601,28 @@ public class FacturaApiController {
 
 							serviceFactura.save(cancelFactura);
 						} else {
+
+							// MOSTRAR ERRORES EN PANTALLA
+							String errores = "";
+
+							System.out.println("--> Resultado: " + respuesta_servicio.getResultado());
+							System.out.println("--> Origen: " + respuesta_servicio.getOrigen());
+							System.out.println("--> Descripcion: " + respuesta_servicio.getDescripcion());
+							System.out.println("--> Cantidad Errores: " + respuesta_servicio.getCantidad_errores());
+							System.out.println("--> INFO: " + respuesta_servicio.getInfo());
+
+
+							for (int i = 0; i < respuesta_servicio.getCantidad_errores(); i++) {
+								System.out.println(respuesta_servicio.getDescripcion_errores().get(i).getMensaje_error());
+
+							}
+
+							for (int i = 0; i < respuesta_servicio.getCantidad_errores(); i++) {
+								// System.out.println(respuesta_servicio.getDescripcion_errores().get(i).getMensaje_error());
+								errores += respuesta_servicio.getDescripcion_errores().get(i).getMensaje_error() + "\n";
+							}
+
+							response.put("errores", errores);
 							response.put("mensaje", "¡Petición de anulación ha salido mal");
 							return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 						}
