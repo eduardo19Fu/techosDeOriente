@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.aglayatech</groupId>
-    <artifactId>detodobackend</artifactId>
+    <artifactId>techosoriente</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>detodobackend</name>
     <description>Punto de venta e inventario para libreria DeTodo</description>
