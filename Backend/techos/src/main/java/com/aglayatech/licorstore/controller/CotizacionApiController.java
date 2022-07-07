@@ -1,7 +1,7 @@
 package com.aglayatech.licorstore.controller;
 
-import com.aglayatech.licorstore.model.Proforma;
-import com.aglayatech.licorstore.service.IProformaService;
+import com.aglayatech.licorstore.model.Cotizacion;
+import com.aglayatech.licorstore.service.ICotizacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -16,14 +16,14 @@ import java.util.Map;
 @CrossOrigin(value = {"http://localhost:4200", "https://dtodojalapa.xyz", "http://dtodojalapa.xyz"})
 @RestController
 @RequestMapping("/api")
-public class ProformaApiController {
+public class CotizacionApiController {
 
     @Autowired
-    private IProformaService proformaService;
+    private ICotizacionService proformaService;
 
     @Secured(value = {"ROLE_ADMIN", "ROLE_COBRADOR"})
     @GetMapping("/proformas")
-    public List<Proforma> index(){
+    public List<Cotizacion> index(){
         return this.proformaService.findAll();
     }
 
@@ -32,7 +32,7 @@ public class ProformaApiController {
     public ResponseEntity<?> findProforma(@PathVariable("id") Long id){
 
         Map<String, Object> response = new HashMap<>();
-        Proforma proforma = null;
+        Cotizacion proforma = null;
 
         try{
             proforma = this.proformaService.findProforma(id);
@@ -47,6 +47,6 @@ public class ProformaApiController {
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<Proforma>(proforma, HttpStatus.OK);
+        return new ResponseEntity<Cotizacion>(proforma, HttpStatus.OK);
     }
 }

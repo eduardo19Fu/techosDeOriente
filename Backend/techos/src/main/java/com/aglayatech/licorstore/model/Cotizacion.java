@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "proformas")
-public class Proforma implements Serializable {
+public class Cotizacion implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class Proforma implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_proforma")
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-    private List<DetalleProforma> itemsProforma;
+    private List<DetalleCotizacion> itemsProforma;
 
     @PrePersist
     public void prepersist(){
@@ -101,11 +101,11 @@ public class Proforma implements Serializable {
         this.cliente = cliente;
     }
 
-    public List<DetalleProforma> getItemsProforma() {
+    public List<DetalleCotizacion> getItemsProforma() {
         return itemsProforma;
     }
 
-    public void setItemsProforma(List<DetalleProforma> itemsProforma) {
+    public void setItemsProforma(List<DetalleCotizacion> itemsProforma) {
         this.itemsProforma = itemsProforma;
     }
 
