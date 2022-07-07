@@ -12,7 +12,7 @@
     <groupId>com.aglayatech</groupId>
     <artifactId>techosoriente</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>detodobackend</name>
+    <name>techosoriente</name>
     <description>Punto de venta e inventario para libreria DeTodo</description>
     <properties>
         <java.version>1.8</java.version>
