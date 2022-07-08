@@ -42,6 +42,10 @@ import { ModalCambioComponent } from './components/facturas/create-factura/modal
 import { ModalBuscarProductoComponent } from './components/facturas/create-factura/modal-buscar-producto/modal-buscar-producto.component';
 import { ModalBuscarClienteComponent } from './components/facturas/create-factura/modal-buscar-cliente/modal-buscar-cliente.component';
 import { ModalBuscarProductoMovimientoComponent } from './components/movimientos-producto/create-movimiento/modal-buscar-producto-movimiento/modal-buscar-producto-movimiento.component';
+import { ProveedoresComponent } from './components/proveedores/proveedores.component';
+import { PaisesComponent } from './components/paises/paises.component';
+import { CreateProveedorComponent } from './components/proveedores/create-proveedor/create-proveedor.component';
+import { CreatePaisComponent } from './components/paises/create-pais/create-pais.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +83,11 @@ import { ModalBuscarProductoMovimientoComponent } from './components/movimientos
     ModalCambioComponent,
     ModalBuscarProductoComponent,
     ModalBuscarClienteComponent,
-    ModalBuscarProductoMovimientoComponent
+    ModalBuscarProductoMovimientoComponent,
+    ProveedoresComponent,
+    PaisesComponent,
+    CreateProveedorComponent,
+    CreatePaisComponent
   ],
   imports: [
     BrowserModule,

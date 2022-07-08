@@ -2,7 +2,7 @@ package com.aglayatech.licorstore.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "proveedores")
@@ -19,7 +19,7 @@ public class Proveedor implements Serializable {
     private String direccion;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime fechaRegistro;
+    private Date fechaRegistro;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_estado")
@@ -33,7 +33,7 @@ public class Proveedor implements Serializable {
 
     @PrePersist
     public void prepersist(){
-        this.fechaRegistro = LocalDateTime.now();
+        this.fechaRegistro = new Date();
     }
 
     public Integer getIdProveedor() {
@@ -84,11 +84,11 @@ public class Proveedor implements Serializable {
         this.direccion = direccion;
     }
 
-    public LocalDateTime getFechaRegistro() {
+    public Date getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+    public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
