@@ -25,6 +25,8 @@ import { CreateProveedorComponent } from './components/proveedores/create-provee
 
 import { AuthGuard } from './components/usuarios/guards/auth.guard';
 import { RoleGuard } from './components/usuarios/guards/role.guard';
+import { PaisesComponent } from './components/paises/paises.component';
+import { CreatePaisComponent } from './components/paises/create-pais/create-pais.component';
 
 const appRoutes: Routes = [
     {path: '', component: LoginComponent},
@@ -57,9 +59,14 @@ const appRoutes: Routes = [
     {path: 'clientes/create/:id', component: CreateClienteComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_COBRADOR']}},
 
     /****** MENUS DE CLIENTES ******/
-    {path: 'proveedores/index', component: ProveedoresComponent},
-    {path: 'proveedores/create', component: CreateProveedorComponent},
-    {path: 'proveedores/create/:id', component: CreateProveedorComponent},
+    {path: 'proveedores/index', component: ProveedoresComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
+    {path: 'proveedores/create', component: CreateProveedorComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
+    {path: 'proveedores/create/:id', component: CreateProveedorComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
+
+    /****** MENUS DE CLIENTES ******/
+    {path: 'paises/index', component: PaisesComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
+    {path: 'paises/create', component: CreatePaisComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
+    {path: 'paises/create/:id', component: CreatePaisComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
 
     /****** MENUS DE USUARIOS ******/
     {path: 'usuarios/index', component: UsuariosComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN']}},

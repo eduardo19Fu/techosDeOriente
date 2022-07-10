@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Pais } from 'src/app/models/pais';
+import { PaisService } from 'src/app/services/paises/pais.service';
 
 @Component({
   selector: 'app-paises',
@@ -8,9 +10,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PaisesComponent implements OnInit {
 
-  constructor() { }
+  title: string;
+
+  paises: Pais[];
+
+  constructor(
+    private paisService: PaisService
+  ) {
+    this.title = 'Listado de Paises Disponibles';
+  }
 
   ngOnInit(): void {
   }
+
+  getPaises(): void {}
 
 }
