@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+
 import { Pais } from 'src/app/models/pais';
 import { PaisService } from 'src/app/services/paises/pais.service';
+import { AuthService } from '../../services/auth.service';
+
+import { JqueryConfigs } from '../../utils/jquery/jquery-utils';
 
 @Component({
   selector: 'app-paises',
@@ -11,10 +15,12 @@ import { PaisService } from 'src/app/services/paises/pais.service';
 export class PaisesComponent implements OnInit {
 
   title: string;
+  jqueryConfigs: JqueryConfigs = new JqueryConfigs();
 
   paises: Pais[];
 
   constructor(
+    public auth: AuthService,
     private paisService: PaisService
   ) {
     this.title = 'Listado de Paises Disponibles';
@@ -23,6 +29,13 @@ export class PaisesComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getPaises(): void {}
+  getPaises(): void {
+    this.paisService.getPaises().subscribe(
+      paises => {
+        this.paises = paises;
+        this.jqueryConfigs.configDataTable('paises');
+      }
+    );
+  }
 
 }

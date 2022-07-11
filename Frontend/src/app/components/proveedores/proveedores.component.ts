@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Proveedor } from 'src/app/models/proveedor';
+import { ProveedorService } from 'src/app/services/proveedores/proveedor.service';
 
 import { JqueryConfigs } from '../../utils/jquery/jquery-utils';
 import { AuthService } from '../../services/auth.service';
@@ -21,7 +22,8 @@ export class ProveedoresComponent implements OnInit {
 
   constructor
   (
-    public auth: AuthService
+    public auth: AuthService,
+    private proveedorService: ProveedorService
   ) 
   {
     this.title = 'Listado de Proveedores';
@@ -30,6 +32,13 @@ export class ProveedoresComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getProveedores(): void {}
+  getProveedores(): void {
+    this.proveedorService.getProveedores().subscribe(
+      proveedores => {
+        this.proveedores = proveedores;
+        this.jqueryConfigs.configDataTable('proveedores');
+      }
+    );
+  }
 
 }
