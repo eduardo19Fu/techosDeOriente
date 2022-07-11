@@ -37,12 +37,9 @@ export class CreateMarcaComponent implements OnInit {
   }
 
   cargarMarca(): void{
-    // tslint:disable-next-line: deprecation
     this.activatedRoute.params.subscribe(params => {
-      // tslint:disable-next-line: no-string-literal
       const id = params['id'];
       if (id){
-        // tslint:disable-next-line: deprecation
         this.marcaService.getMarca(id).subscribe(
           marca => this.marcaProducto = marca
         );
@@ -67,7 +64,6 @@ export class CreateMarcaComponent implements OnInit {
   }
 
   update(): void{
-    // tslint:disable-next-line: deprecation
     this.marcaService.update(this.marcaProducto).subscribe(
       response => {
         this.router.navigate(['/productos/marcas/index']);

@@ -3,6 +3,7 @@ import { Pais } from './pais';
 
 export class Proveedor {
     idProveedor: number;
+    nombre: string;
     contacto: string;
     web: string;
     email: string;

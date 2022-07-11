@@ -11,6 +11,7 @@ public class Proveedor implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idProveedor;
+    private String nombre;
     private String contacto;
     private String web;
     private String email;
@@ -42,6 +43,14 @@ public class Proveedor implements Serializable {
 
     public void setIdProveedor(Integer idProveedor) {
         this.idProveedor = idProveedor;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getContacto() {
@@ -112,6 +121,7 @@ public class Proveedor implements Serializable {
     public String toString() {
         return "Proveedor{" +
                 "idProveedor=" + idProveedor +
+                ", nombre='" + nombre + '\'' +
                 ", contacto='" + contacto + '\'' +
                 ", web='" + web + '\'' +
                 ", eail='" + email + '\'' +
