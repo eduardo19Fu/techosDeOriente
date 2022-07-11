@@ -62,6 +62,9 @@ public class PaisApiController {
             List<String> errors = result.getFieldErrors().stream()
                     .map(err -> "El campo '".concat(err.getField().concat("' ")).concat(err.getDefaultMessage()))
                     .collect(Collectors.toList());
+
+            response.put("errors", errors);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
 
         try{
@@ -79,6 +82,38 @@ public class PaisApiController {
 
         response.put("mensaje", "Pais registrado con éxito!");
         response.put("pais", newPais);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/paises")
+    public ResponseEntity<?> update(@RequestBody Pais pais, BindingResult result) {
+
+        Map<String, Object> response = new HashMap<>();
+        Pais updated = null;
+
+        if(result.hasErrors())
+        {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(err -> "El campo '".concat(err.getField().concat("' ")).concat(err.getDefaultMessage()))
+                    .collect(Collectors.toList());
+
+            response.put("errors", errors);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+
+        }
+
+        try
+        {
+            updated = this.paisService.save(pais);
+        } catch(DataAccessException e)
+        {
+            response.put("mensaje", "¡Ha ocurrido un error en la Base de Datos!");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "Pais actualizado con éxito!");
+        response.put("pais", updated);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 }

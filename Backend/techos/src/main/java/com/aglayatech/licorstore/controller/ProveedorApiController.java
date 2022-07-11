@@ -92,4 +92,32 @@ public class ProveedorApiController {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
     }
+    @PutMapping("/proveedores")
+    public ResponseEntity<?> update(@RequestBody Proveedor proveedor, BindingResult result) {
+
+        Map<String, Object> response = new HashMap<>();
+        Proveedor updated = null;
+
+        if(result.hasErrors())
+        {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(err -> "El campo '".concat(err.getField().concat("' ")).concat(err.getDefaultMessage()))
+                    .collect(Collectors.toList());
+
+            response.put("errors", errors);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            updated = this.proveedorService.save(proveedor);
+        } catch(DataAccessException e) {
+            response.put("mensaje", "¡Ha ocurrido un error en la Base de Datos!");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "¡Proveedor ha sido actualizado con éxito!");
+        response.put("proveedor", updated);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+    }
 }
