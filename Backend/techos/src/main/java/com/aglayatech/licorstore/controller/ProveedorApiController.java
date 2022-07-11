@@ -92,6 +92,7 @@ public class ProveedorApiController {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
     }
+    @Secured(value = {"ROLE_ADMIN", "ROLE_INVENTARIO"})
     @PutMapping("/proveedores")
     public ResponseEntity<?> update(@RequestBody Proveedor proveedor, BindingResult result) {
 

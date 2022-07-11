@@ -85,6 +85,7 @@ public class PaisApiController {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
+    @Secured(value = {"ROLE_ADMIN", "ROLE_INVENTARIO"})
     @PutMapping("/paises")
     public ResponseEntity<?> update(@RequestBody Pais pais, BindingResult result) {
 
