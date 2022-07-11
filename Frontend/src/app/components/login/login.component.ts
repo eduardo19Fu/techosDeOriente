@@ -15,6 +15,9 @@ import swal from 'sweetalert2';
 export class LoginComponent implements OnInit {
 
   title: string;
+  usuarioTitle: string;
+  passwordTitle: string;
+
   usuario: Usuario;
 
   constructor(
@@ -22,6 +25,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService
   ) {
     this.title = 'Iniciar Sesión';
+    this.usuarioTitle = 'Usuario';
+    this.passwordTitle = 'Password';
     this.usuario = new Usuario();
   }
 
