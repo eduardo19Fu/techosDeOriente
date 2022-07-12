@@ -1,1 +1,57 @@
-<p>create-pais works!</p>
+<div class="container">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">{{title}}</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Ingrese los datos</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form #paisForm="ngForm">
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label for="nombre">Nombre del Pa&iacute;s</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre"
+                            [(ngModel)]="pais.nombre" placeholder="Ingrese el nombre del pa&iacute;s" required
+                            #nombre="ngModel">
+                        <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                            <span class="requerido" *ngIf="nombre.errors.required">
+                                El nombre del pa&iacute;s no puede estar vac&iacute;a
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" role="button" class="btn btn-primary" (click)="create()"
+                        *ngIf="!pais.idPais else elseBlock" [disabled]="!paisForm.form.valid">
+                        Guardar
+                    </button>
+
+                    <ng-template #elseBlock>
+                        <button type="submit" role="button" class="btn btn-primary" (click)="update()" [disabled]="!paisForm.form.valid">
+                            Actualizar
+                        </button>
+                    </ng-template>
+                    
+                </div>
+            </form>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>

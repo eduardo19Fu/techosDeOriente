@@ -1,5 +1,7 @@
 package com.aglayatech.licorstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -16,7 +18,6 @@ public class Proveedor implements Serializable {
     private String web;
     private String email;
     private String telefono;
-
     private String direccion;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -24,9 +25,11 @@ public class Proveedor implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_estado")
+    @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
     private Estado estado;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pais")
+    @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
     private Pais pais;
 
     public Proveedor(){
@@ -73,7 +76,7 @@ public class Proveedor implements Serializable {
         return email;
     }
 
-    public void setEmail(String mail) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -124,7 +127,7 @@ public class Proveedor implements Serializable {
                 ", nombre='" + nombre + '\'' +
                 ", contacto='" + contacto + '\'' +
                 ", web='" + web + '\'' +
-                ", eail='" + email + '\'' +
+                ", email='" + email + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", direccion='" + direccion + '\'' +
                 ", fechaRegistro=" + fechaRegistro +

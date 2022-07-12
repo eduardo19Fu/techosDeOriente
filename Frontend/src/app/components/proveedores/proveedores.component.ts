@@ -30,6 +30,7 @@ export class ProveedoresComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getProveedores();
   }
 
   getProveedores(): void {

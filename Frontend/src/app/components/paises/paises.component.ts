@@ -15,7 +15,7 @@ import { JqueryConfigs } from '../../utils/jquery/jquery-utils';
 export class PaisesComponent implements OnInit {
 
   title: string;
-  jqueryConfigs: JqueryConfigs = new JqueryConfigs();
+  jqueryConfigs: JqueryConfigs;
 
   paises: Pais[];
 
@@ -24,9 +24,11 @@ export class PaisesComponent implements OnInit {
     private paisService: PaisService
   ) {
     this.title = 'Listado de Paises Disponibles';
+    this.jqueryConfigs = new JqueryConfigs();
   }
 
   ngOnInit(): void {
+    this.getPaises();
   }
 
   getPaises(): void {

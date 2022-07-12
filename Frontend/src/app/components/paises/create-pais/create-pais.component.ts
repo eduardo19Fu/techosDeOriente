@@ -29,6 +29,7 @@ export class CreatePaisComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cargarPais();
   }
 
   cargarPais(): void 

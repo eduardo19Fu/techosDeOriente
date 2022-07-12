@@ -20,7 +20,7 @@
     </div>
 
     <div class="card-body table-responsive">
-        <div class="alert alert-info alert-dismissible">
+        <div *ngIf="proveedores?.length === 0" class="alert alert-info alert-dismissible">
             <h5>
                 <i class="icon fas fa-info"></i>
                 ¡Atención!
@@ -29,8 +29,8 @@
             No existe ningún proveedor registrado en la base de datos!
         </div>
 
-        <table id="proveedores" class="table-table-hover table-striped table-bordered dataTable dtr-inline table-sm"
-            role="grid" *ngIf="proveedores?.length > 0">
+        <table id="proveedores" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid"
+            *ngIf="proveedores?.length > 0">
             <thead>
                 <tr>
                     <th>#</th>
@@ -61,13 +61,8 @@
                         </span>
                     </td>
                     <td class="center-options">
-                        <button class="btn bg-gradient-success" data-toggle="modal" (click)="abrirModal(producto)">
-                            <i class="fa fa-asterisk"></i>
-                        </button>
-
                         <button class="btn bg-gradient-info margin"
-                            [routerLink]="['/productos/create', producto.idProducto]"
-                            *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
+                            [routerLink]="['/proveedor/create', proveedor.idProveedor]" *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
                             <i class="fas fa-edit"></i>
                         </button>
 
