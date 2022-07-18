@@ -23,6 +23,21 @@ public class Compra implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_proveedor")
+    @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
+    private Proveedor proveedor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_estado")
+    @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
+    private Estado estado;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo_comprobante")
+    @JsonIgnoreProperties(value ={ "hibernateLazyInitializer", "handler" })
+    private TipoComprobante tipoComprobante;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_compra")
     @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
@@ -89,6 +104,30 @@ public class Compra implements Serializable {
         this.items = items;
     }
 
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+    public TipoComprobante getTipoComprobante() {
+        return tipoComprobante;
+    }
+
+    public void setTipoComprobante(TipoComprobante tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
+    }
+
     @Override
     public String toString() {
         return "Compra{" +
@@ -98,6 +137,9 @@ public class Compra implements Serializable {
                 ", totalCompra=" + totalCompra +
                 ", fechaCompra=" + fechaCompra +
                 ", fechaRegistro=" + fechaRegistro +
+                ", proveedor=" + proveedor +
+                ", estado=" + estado +
+                ", tipoComprobante=" + tipoComprobante +
                 ", items=" + items +
                 '}';
     }
