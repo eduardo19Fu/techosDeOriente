@@ -27,6 +27,8 @@ import { AuthGuard } from './components/usuarios/guards/auth.guard';
 import { RoleGuard } from './components/usuarios/guards/role.guard';
 import { PaisesComponent } from './components/paises/paises.component';
 import { CreatePaisComponent } from './components/paises/create-pais/create-pais.component';
+import { ComprasComponent } from './components/compras/compras.component';
+import { CreateCompraComponent } from './components/compras/create-compra/create-compra.component';
 
 const appRoutes: Routes = [
     {path: '', component: LoginComponent},
@@ -58,7 +60,12 @@ const appRoutes: Routes = [
     {path: 'clientes/create', component: CreateClienteComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_COBRADOR']}},
     {path: 'clientes/create/:id', component: CreateClienteComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_COBRADOR']}},
 
-    /****** MENUS DE CLIENTES ******/
+    /****** MENUS DE COMPRAS ******/
+    {path: 'compras/index', component: ComprasComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
+    {path: 'compras/create', component: CreateCompraComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
+    {path: 'compras/create/:id', component: CreateCompraComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
+
+    /****** MENUS DE PROVEEDORES ******/
     {path: 'proveedores/index', component: ProveedoresComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
     {path: 'proveedores/create', component: CreateProveedorComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
     {path: 'proveedores/create/:id', component: CreateProveedorComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},

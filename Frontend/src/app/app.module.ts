@@ -46,6 +46,8 @@ import { ProveedoresComponent } from './components/proveedores/proveedores.compo
 import { PaisesComponent } from './components/paises/paises.component';
 import { CreateProveedorComponent } from './components/proveedores/create-proveedor/create-proveedor.component';
 import { CreatePaisComponent } from './components/paises/create-pais/create-pais.component';
+import { ComprasComponent } from './components/compras/compras.component';
+import { CreateCompraComponent } from './components/compras/create-compra/create-compra.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +89,9 @@ import { CreatePaisComponent } from './components/paises/create-pais/create-pais
     ProveedoresComponent,
     PaisesComponent,
     CreateProveedorComponent,
-    CreatePaisComponent
+    CreatePaisComponent,
+    ComprasComponent,
+    CreateCompraComponent
   ],
   imports: [
     BrowserModule,
