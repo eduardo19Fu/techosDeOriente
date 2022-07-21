@@ -1,1 +1,105 @@
-<p>compras works!</p>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    {{title}}
+                </h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+        <hr>
+        <div class="row">
+            <div class="col s6">
+                <a [routerLink]="['/compras/create']" class="btn bg-gradient-success">
+                    <i class="fas fa-plus-square"></i>&nbsp; Nuevo</a>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Listado</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body table-responsive">
+
+        <div *ngIf="compras?.length == 0" class="alert alert-info alert-dismissible">
+            <h5>
+                <i class="icon fas fa-info"></i>
+                ¡Atención!
+            </h5>
+
+            No existe ninguna compra registrada en la base de datos.
+        </div>
+
+        <table id="compras" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid" 
+            *ngIf="compras?.length > 0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Proveedor</th>
+                    <th>Fecha de Compra</th>
+                    <th>Tipo Comprobante</th>
+                    <th>No. Comprobante</th>
+                    <th>IVA</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Fecha Registro</th>
+                    <th *ngIf="authService.hasRole('ROLE_ADMIN')">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let compra of compras">
+                    <td>{{compra.idCompra}}</td>
+                    <td>{{compra.proveedor.nombre}}</td>
+                    <td>{{compra.fechaCompra | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{compra.tipoComprobante.tipoComprobante}}</td>
+                    <td>{{compra.noComprobante}}</td>
+                    <td>{{compra.iva}}</td>
+                    <td>{{compra.totalCompra}}</td>
+                    <td>
+                        <span class="badge" 
+                            [ngClass]="{'badge-primary': compra.estado.estado === 'ACTIVO',
+                                'badge-danger' : compra.estado.estado === 'ANULADO',
+                                'badge-secondary' : compra.estado.estado === 'INACTIVO'}">
+                            {{compra.estado.estado}}
+                        </span>
+                    </td>
+                    <td>{{compra.fechaRegistro | date: 'dd/MM/yyyy - hh:mm:ss'}}</td>
+                    <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+                        <!-- Aquí val el botón de detalle de compra -->
+                        <button class="btn bg-gradient-success">
+
+                        </button>
+                        <!-- Aquí va el botón de eliminar -->
+                        <button class="btn bg-gradient-danger margin" name="delete"
+                            type="button" (click)="anularCompra(compra)">
+                            <i class="fas fa-ban"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>#</th>
+                    <th>Proveedor</th>
+                    <th>Fecha de Compra</th>
+                    <th>Tipo Comprobante</th>
+                    <th>No. Comprobante</th>
+                    <th>IVA</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Fecha Registro</th>
+                    <th>Estado</th>
+                    <th *ngIf="authService.hasRole('ROLE_ADMIN')">Opciones</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+
+
+

@@ -1,6 +1,7 @@
 package com.aglayatech.licorstore.service.impl;
 
 import com.aglayatech.licorstore.model.Compra;
+import com.aglayatech.licorstore.model.TipoComprobante;
 import com.aglayatech.licorstore.repository.ICompraRepository;
 import com.aglayatech.licorstore.service.ICompraService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,10 @@ public class CompraServiceImpl implements ICompraService {
     @Override
     public void delete(Integer idcompra) {
         this.compraRepository.deleteById(idcompra);
+    }
+
+    @Override
+    public List<TipoComprobante> getTipos() {
+        return this.compraRepository.findtipos();
     }
 }

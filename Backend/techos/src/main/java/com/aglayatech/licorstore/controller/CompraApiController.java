@@ -1,10 +1,9 @@
 package com.aglayatech.licorstore.controller;
 
-import com.aglayatech.licorstore.model.Compra;
-import com.aglayatech.licorstore.model.DetalleCompra;
-import com.aglayatech.licorstore.model.Estado;
+import com.aglayatech.licorstore.model.*;
 import com.aglayatech.licorstore.service.ICompraService;
 import com.aglayatech.licorstore.service.IEstadoService;
+import com.aglayatech.licorstore.service.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -29,6 +28,9 @@ public class CompraApiController {
 
     @Autowired
     private IEstadoService estadoService;
+
+    @Autowired
+    private static IProductoService productoService;
 
     @GetMapping("/compras")
     public List<Compra> index() {
@@ -84,6 +86,15 @@ public class CompraApiController {
             estado = this.estadoService.findByEstado("ACTIVO");
             compra.setEstado(estado);
             newCompra = this.compraService.save(compra);
+
+            if (newCompra != null) {
+                compra.getItems().stream()
+                                    .forEach(item -> {
+//                                        productoService.save(CompraApiController.updateExistencias(item.getProducto(), item.getCantidad()));
+                                        System.out.println(CompraApiController.updateExistencias(item.getProducto(), item.getCantidad()));
+                                    });
+            }
+
         } catch (DataAccessException e)
         {
             response.put("mensaje", "¡Ha ocurrido un error en la Base de Datos!");
@@ -112,20 +123,17 @@ public class CompraApiController {
 
         List<DetalleCompra> itemsCompra = new ArrayList<>();
 
-        try
-        {
+        try {
             estado = this.estadoService.findByEstado("ANULADO");
             compra.setEstado(estado);
             compraDisabled = this.compraService.save(compra);
-        } catch (DataAccessException e)
-        {
+        } catch (DataAccessException e) {
             response.put("mensaje", "¡Ha ocurrido un error en la Base de Datos!");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if(compraDisabled == null)
-        {
+        if (compraDisabled == null) {
             response.put("mensaje", "¡Registro no pudo ser anulado!");
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
@@ -133,5 +141,17 @@ public class CompraApiController {
         response.put("mensaje", "¡Registro Anulado!");
         response.put("compra", compraDisabled);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+    }
+
+    // Endpoint para tipos de comprobante
+    @Secured(value = {"ROLE_ADMIN", "ROLE_INVENTARIO"})
+    @GetMapping("/compras/tipos-comprobante/get")
+    public List<TipoComprobante> tiposComprobante() {
+        return this.compraService.getTipos();
+    }
+
+    public static Producto updateExistencias(Producto producto, int cantidad) {
+        producto.setStock(producto.getStock() + cantidad);
+        return producto;
     }
 }
