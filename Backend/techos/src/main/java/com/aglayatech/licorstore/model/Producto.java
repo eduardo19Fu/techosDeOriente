@@ -28,7 +28,7 @@ public class Producto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idProducto;
-
+	@NotNull(message = "Código de Producto no puede estar vacío.")
 	private String codProducto;
 	private String nombre;
 	private Double precioCompra;

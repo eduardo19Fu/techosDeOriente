@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import com.aglayatech.licorstore.model.TipoMovimiento;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,4 +29,6 @@ public interface IMovimientoProductoService {
 	/********* PDF REPORTS SERVICES ***********/
 	
 	public byte[] inventory(Date fechaIni, Date fechaFin) throws JRException, FileNotFoundException, SQLException;
+
+    public TipoMovimiento findTipoMovimiento(String venta);
 }

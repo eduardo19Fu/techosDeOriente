@@ -24,7 +24,6 @@ public class MovimientoProducto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idMovimiento;
-	private String tipoMovimiento;
 	private Integer cantidad;
 	private Integer stockInicial;
 
@@ -40,6 +39,11 @@ public class MovimientoProducto implements Serializable {
 	@JoinColumn(name = "id_usuario")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Usuario usuario;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_tipo_movimiento")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private TipoMovimiento tipoMovimiento;
 	
 	@PrePersist
 	public void configFecha() {
@@ -54,11 +58,11 @@ public class MovimientoProducto implements Serializable {
 		this.idMovimiento = idMovimiento;
 	}
 
-	public String getTipoMovimiento() {
+	public TipoMovimiento getTipoMovimiento() {
 		return tipoMovimiento;
 	}
 
-	public void setTipoMovimiento(String tipoMovimiento) {
+	public void setTipoMovimiento(TipoMovimiento tipoMovimiento) {
 		this.tipoMovimiento = tipoMovimiento;
 	}
 

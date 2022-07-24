@@ -6,13 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.sql.DataSource;
 
+import com.aglayatech.licorstore.model.TipoMovimiento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -86,7 +84,13 @@ public class MovimientoProductoServiceImpl implements IMovimientoProductoService
 		con.close();
 		return byteArrayOutputStream.toByteArray();
 	}
-	
+
+	@Override
+	public TipoMovimiento findTipoMovimiento(String tipoMovimiento) {
+		Optional<TipoMovimiento> optional = this.repoMovimiento.findTipoMovimientoByNombre(tipoMovimiento);
+		return (optional.isPresent() ? optional.get() : null);
+	}
+
 	protected ByteArrayOutputStream getByteArrayOutputStream(JasperPrint jasperPrint) throws JRException {
 	    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 	    JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream);

@@ -3,6 +3,7 @@ package com.aglayatech.licorstore.controller;
 import com.aglayatech.licorstore.model.*;
 import com.aglayatech.licorstore.service.ICompraService;
 import com.aglayatech.licorstore.service.IEstadoService;
+import com.aglayatech.licorstore.service.IMovimientoProductoService;
 import com.aglayatech.licorstore.service.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -30,7 +31,10 @@ public class CompraApiController {
     private IEstadoService estadoService;
 
     @Autowired
-    private static IProductoService productoService;
+    private IProductoService productoService;
+
+    @Autowired
+    private IMovimientoProductoService movimientoProductoService;
 
     @GetMapping("/compras")
     public List<Compra> index() {
@@ -88,11 +92,12 @@ public class CompraApiController {
             newCompra = this.compraService.save(compra);
 
             if (newCompra != null) {
-                compra.getItems().stream()
-                                    .forEach(item -> {
-//                                        productoService.save(CompraApiController.updateExistencias(item.getProducto(), item.getCantidad()));
-                                        System.out.println(CompraApiController.updateExistencias(item.getProducto(), item.getCantidad()));
-                                    });
+
+                for(DetalleCompra item : compra.getItems()) {
+                    this.movimiento(item.getProducto(), compra, item.getCantidad());
+                    this.updateExistencias(item.getProducto(), item.getCantidad());
+                }
+
             }
 
         } catch (DataAccessException e)
@@ -144,14 +149,27 @@ public class CompraApiController {
     }
 
     // Endpoint para tipos de comprobante
-    @Secured(value = {"ROLE_ADMIN", "ROLE_INVENTARIO"})
     @GetMapping("/compras/tipos-comprobante/get")
     public List<TipoComprobante> tiposComprobante() {
         return this.compraService.getTipos();
     }
 
-    public static Producto updateExistencias(Producto producto, int cantidad) {
+    public void updateExistencias(Producto producto, int cantidad) {
+        Producto productoUpdated = new Producto();
         producto.setStock(producto.getStock() + cantidad);
-        return producto;
+        productoUpdated = productoService.save(producto);
+    }
+
+    public void movimiento(Producto producto, Compra compra, int cantidad) {
+        MovimientoProducto movimiento = new MovimientoProducto();
+
+        movimiento.setTipoMovimiento(movimientoProductoService.findTipoMovimiento("INGRESO"));
+        movimiento.setUsuario(compra.getUsuario());
+        movimiento.setProducto(producto);
+        movimiento.setStockInicial(producto.getStock());
+        movimiento.setCantidad(cantidad);
+        movimiento.calcularStock();
+
+        movimientoProductoService.save(movimiento);
     }
 }

@@ -61,5 +61,16 @@ public class DetalleCompra implements Serializable {
         this.producto = producto;
     }
 
+    @Override
+    public String toString() {
+        return "DetalleCompra{" +
+                "idDetalleCompra=" + idDetalleCompra +
+                ", cantidad=" + cantidad +
+                ", precioUnitario=" + precioUnitario +
+                ", subTotal=" + subTotal +
+                ", producto=" + producto +
+                '}';
+    }
+
     private static final long serialVersionUID = 1L;
 }

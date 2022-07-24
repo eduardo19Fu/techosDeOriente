@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,12 +19,8 @@ public class Compra implements Serializable {
     private String noComprobante;
     private float iva;
     private Double totalCompra;
-
-    @Temporal(TemporalType.DATE)
-    private Date fechaCompra;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaRegistro;
+    private LocalDate fechaCompra;
+    private LocalDateTime fechaRegistro;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_proveedor")
@@ -43,9 +42,18 @@ public class Compra implements Serializable {
     @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
     private List<DetalleCompra> items;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Usuario usuario;
+
+    public Compra() {
+        this.items = new ArrayList<>();
+    }
+
     @PrePersist
     public void prepersist() {
-        this.fechaRegistro = new Date();
+        this.fechaRegistro = LocalDateTime.now();
     }
 
     public Integer getIdCompra() {
@@ -56,11 +64,11 @@ public class Compra implements Serializable {
         this.idCompra = idCompra;
     }
 
-    public Date getFechaCompra() {
+    public LocalDate getFechaCompra() {
         return fechaCompra;
     }
 
-    public void setFechaCompra(Date fechaCompra) {
+    public void setFechaCompra(LocalDate fechaCompra) {
         this.fechaCompra = fechaCompra;
     }
 
@@ -88,11 +96,11 @@ public class Compra implements Serializable {
         this.totalCompra = totalCompra;
     }
 
-    public Date getFechaRegistro() {
+    public LocalDateTime getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(Date fechaRegistro) {
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
@@ -126,6 +134,14 @@ public class Compra implements Serializable {
 
     public void setTipoComprobante(TipoComprobante tipoComprobante) {
         this.tipoComprobante = tipoComprobante;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override

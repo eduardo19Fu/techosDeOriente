@@ -383,7 +383,7 @@ public class FacturaApiController {
 									Producto producto = item.getProducto();
 									movimientoProducto = new MovimientoProducto();
 
-									movimientoProducto.setTipoMovimiento("VENTA");
+									movimientoProducto.setTipoMovimiento(serviceMovimiento.findTipoMovimiento("VENTA"));
 									movimientoProducto.setUsuario(factura.getUsuario());
 									movimientoProducto.setProducto(producto);
 									movimientoProducto.setStockInicial(producto.getStock());
@@ -630,7 +630,7 @@ public class FacturaApiController {
 								Producto producto = linea.getProducto();
 								movimientoProducto = new MovimientoProducto();
 
-								movimientoProducto.setTipoMovimiento("ANULACION FACTURA");
+								movimientoProducto.setTipoMovimiento(serviceMovimiento.findTipoMovimiento("ANULACION FACTURA"));
 								movimientoProducto.setUsuario(usuario);
 
 								movimientoProducto.setProducto(producto);
