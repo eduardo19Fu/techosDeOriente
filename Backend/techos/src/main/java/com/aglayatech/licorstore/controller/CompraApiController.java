@@ -154,6 +154,7 @@ public class CompraApiController {
         return this.compraService.getTipos();
     }
 
+    /******** METODOS DE ACTUALIZACION DE EXISTENCIAS Y REGISTRO DE MOVIMIENTO DE PRODUCTOS *******/
     public void updateExistencias(Producto producto, int cantidad) {
         Producto productoUpdated = new Producto();
         producto.setStock(producto.getStock() + cantidad);

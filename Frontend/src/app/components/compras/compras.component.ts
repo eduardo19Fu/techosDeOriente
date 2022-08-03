@@ -5,6 +5,7 @@ import { Compra } from '../../models/compra';
 
 import { JqueryConfigs } from '../../utils/jquery/jquery-utils';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-compras',
@@ -21,27 +22,25 @@ export class ComprasComponent implements OnInit {
   jqueryConfigs: JqueryConfigs;
 
   constructor(
-    private compraService: CompraService
-  ) 
-  {
+    private compraService: CompraService,
+    public authService: AuthService
+  ) {
     this.title = 'Compras Realizadas';
     this.jqueryConfigs = new JqueryConfigs();
   }
 
-  ngOnInit(): void 
-  {
+  ngOnInit(): void {
     this.getCompras();
   }
 
-  getCompras(): void 
-  {
-    this.compraService.getCompras().subscribe(compras => 
-      {
-        this.compras = compras;
-        this.jqueryConfigs.configDataTable('compras');
-      });
+  getCompras(): void {
+    this.compraService.getCompras().subscribe(compras => {
+      this.compras = compras;
+      console.log(this.compras);
+      this.jqueryConfigs.configDataTable('compras');
+    });
   }
 
-  anularCompra(): void {}
+  anularCompra(): void { }
 
 }

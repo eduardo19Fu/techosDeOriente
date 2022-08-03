@@ -7,6 +7,7 @@ import { Compra } from 'src/app/models/compra';
 import { global } from '../global';
 
 import Swal from 'sweetalert2';
+import { TipoComprobante } from '../../models/tipo-comprobante';
 
 
 @Injectable({
@@ -60,5 +61,10 @@ export class CompraService {
           return throwError(e);
         })
     );
+  }
+
+  getTiposComprobante(): Observable<TipoComprobante[]> 
+  {
+    return this.httpClient.get<TipoComprobante[]>(`${this.url}/compras/tipos-comprobante/get`);
   }
 }
