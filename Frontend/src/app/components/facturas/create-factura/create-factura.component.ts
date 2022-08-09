@@ -232,7 +232,6 @@ export class CreateFacturaComponent implements OnInit {
     this.factura.serie = this.correlativo.serie;
     this.factura.cliente = this.cliente;
     this.factura.usuario = this.usuario;
-    console.log(this.factura.itemsFactura);
     this.factura.total = this.factura.calcularTotal();
 
     this.facturaService.create(this.factura).subscribe(
@@ -246,29 +245,32 @@ export class CreateFacturaComponent implements OnInit {
         this.cambio = 0;
         (document.getElementById('efectivo') as HTMLInputElement).value = '';
 
+        this.facturaService.getBillPDF(response.factura.idFactura).subscribe(res => {
+          const url = window.URL.createObjectURL(res.data);
+          const a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.setAttribute('target', 'blank');
+          a.href = url;
+          /*
+            opcion para pedir descarga de la respuesta obtenida
+            a.download = response.filename;
+          */
+          window.open(a.toString(), '_blank');
+          window.URL.revokeObjectURL(url);
+          a.remove();
+        },
+          error => {
+            swal.fire(`Error al crear factura para imprimir.`, error.message, 'error');
+          });
+        
+        /*
+        ------- Código para abrir una url en caso de tener activado FEL ---------
         const url = 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid=' + response.factura.certificacionSat;
 
         const a = document.createElement('a');
-        window.open(url, '_blank').focus();
+        window.open(url, '_blank').focus(); */
 
-        // this.facturaService.getBillPDF(response.factura.idFactura).subscribe(res => {
-        //   const url = window.URL.createObjectURL(res.data);
-        //   const a = document.createElement('a');
-        //   document.body.appendChild(a);
-        //   a.setAttribute('style', 'display: none');
-        //   a.setAttribute('target', 'blank');
-        //   a.href = url;
-        //   /*
-        //     opcion para pedir descarga de la respuesta obtenida
-        //     a.download = response.filename;
-        //   */
-        //   window.open(a.toString(), '_blank');
-        //   window.URL.revokeObjectURL(url);
-        //   a.remove();
-        // },
-        //   error => {
-        //     console.log(error);
-        //   });
       }
     );
   }
