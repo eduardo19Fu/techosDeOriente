@@ -147,7 +147,7 @@ public class FacturaApiController {
 
                     if (correlativo.getCorrelativoActual() > correlativo.getCorrelativoFinal()) {
                         correlativo.setEstado(estadoCorrFinalizado);
-                        serviceCorrelativo.save();
+                        correlativo.setCorrelativoActual(correlativo.getCorrelativoFinal());
                     }
 
                     serviceCorrelativo.save(correlativo);
