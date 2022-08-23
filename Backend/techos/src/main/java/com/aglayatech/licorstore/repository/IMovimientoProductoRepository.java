@@ -24,4 +24,7 @@ public interface IMovimientoProductoRepository extends JpaRepository<MovimientoP
 	@Query(value = "Select tm from TipoMovimiento tm where tm.tipoMovimiento = :nombre")
 	Optional<TipoMovimiento> findTipoMovimientoByNombre(@Param("nombre") String nombre);
 
+	@Query(value = "Select tm from TipoMovimiento tm")
+	List<TipoMovimiento> findTiposMovimiento();
+
 }

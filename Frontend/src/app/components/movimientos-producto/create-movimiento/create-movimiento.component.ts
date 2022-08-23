@@ -10,14 +10,10 @@ import { UsuarioService } from '../../../services/usuarios/usuario.service';
 import { Producto } from 'src/app/models/producto';
 import { MovimientoProducto } from '../../../models/movimiento-producto';
 import { UsuarioAuxiliar } from 'src/app/models/auxiliar/usuario-auxiliar';
+import { TipoMovimiento } from 'src/app/models/tipo-movimiento';
 
 import { JqueryConfigs } from '../../../utils/jquery/jquery-utils';
 import Swal from 'sweetalert2';
-
-declare const $;
-
-// tslint:disable-next-line: no-string-literal
-window['$'] = window['jQuery'] = $;
 
 @Component({
   selector: 'app-create-movimiento',
@@ -32,8 +28,10 @@ export class CreateMovimientoComponent implements OnInit, AfterViewInit {
   usuario: UsuarioAuxiliar;
   movimientoProducto: MovimientoProducto;
   producto: Producto;
-  productos: Producto[];
   modalForm: FormGroup;
+
+  productos: Producto[];
+  tiposMovimiento: TipoMovimiento[];
 
   constructor(
     private movimientoProductoService: MovimientosProductoService,
@@ -53,6 +51,7 @@ export class CreateMovimientoComponent implements OnInit, AfterViewInit {
       usuario => {
         this.usuario = usuario;
         this.movimientoProducto.usuario = this.usuario;
+        this.loadTiposMovimiento();
       },
       error => {
         Swal.fire(`Error: ${error.status}`, '', 'error');
@@ -61,7 +60,6 @@ export class CreateMovimientoComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.jQueryConfigs.configSelect();
     this.jQueryConfigs.hideModal();
     this.producto = new Producto();
   }
@@ -70,19 +68,16 @@ export class CreateMovimientoComponent implements OnInit, AfterViewInit {
     this.movimientoProducto.producto = this.producto;
     this.movimientoProducto.usuario = this.usuario;
     if (this.movimientoProducto.producto) {
-      // tslint:disable-next-line: max-line-length
-      if (this.movimientoProducto.producto.stock >= this.movimientoProducto.cantidad || this.movimientoProducto.tipoMovimiento === 'ENTRADA') {
+      
+      if (this.movimientoProducto.producto.stock >= this.movimientoProducto.cantidad 
+            || this.movimientoProducto.tipoMovimiento.tipoMovimiento === 'ENTRADA') {
 
         this.movimientoProductoService.create(this.movimientoProducto).subscribe(
           response => {
             this.router.navigate(['/productos/inventario/index']);
             Swal.fire('Movimiento creado con éxito', `El movimiento ${response.movimientoProducto.idMovimiento} ha sido creada con éxito!`, 'success');
-            // (document.getElementById('cerrar-modal')).click();
-            // this.producto = new Producto();
-            // this.movimientoProducto = new MovimientoProducto();
           },
           error => {
-            // (document.getElementById('cerrar-modal')).click();
             Swal.fire('Error', error.error, 'error');
           }
         );
@@ -122,4 +117,15 @@ export class CreateMovimientoComponent implements OnInit, AfterViewInit {
     (document.getElementById('button-x')).click();
     this.buscarProducto();
   }
+
+  loadTiposMovimiento(): void {
+    this.movimientoProductoService.getTiposMovimiento().subscribe(
+      tiposMovimiento => {
+        this.tiposMovimiento = tiposMovimiento.filter(tipoMovimiento => tipoMovimiento.tipoMovimiento === 'ENTRADA' || tipoMovimiento.tipoMovimiento === 'SALIDA');
+
+      }
+    );
+  }
+
+
 }

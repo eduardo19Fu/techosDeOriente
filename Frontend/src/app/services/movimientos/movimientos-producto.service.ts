@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, filter } from 'rxjs/operators';
 
 import { MovimientoProducto } from 'src/app/models/movimiento-producto';
 
 import { global } from '../global';
 import Swal from 'sweetalert2';
+import { TipoMovimiento } from 'src/app/models/tipo-movimiento';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,10 @@ export class MovimientosProductoService {
         return response;
       })
     );
+  }
+
+  getTiposMovimiento(): Observable<TipoMovimiento[]> {
+    return this.http.get<TipoMovimiento[]>(`${this.url}/movimientos/tipos-movimiento/get`);
   }
 
   create(movimientoProducto: MovimientoProducto): Observable<any> {

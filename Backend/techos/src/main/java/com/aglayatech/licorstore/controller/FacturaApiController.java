@@ -105,6 +105,7 @@ public class FacturaApiController {
         }
 
         return new ResponseEntity<Factura>(factura, HttpStatus.OK);
+
     }
 
     @Secured(value = {"ROLE_ADMIN", "ROLE_COBRADOR"})

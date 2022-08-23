@@ -59,6 +59,11 @@ public class MovimientoProductoServiceImpl implements IMovimientoProductoService
 	}
 
 	@Override
+	public List<TipoMovimiento> getTiposMovimiento() {
+		return this.repoMovimiento.findTiposMovimiento();
+	}
+
+	@Override
 	public List<MovimientoProducto> findByFecha(Date fechaIni, Date fechaFin) {
 		return repoMovimiento.findByFechaMovimientoBetween(fechaIni, fechaFin);
 	}

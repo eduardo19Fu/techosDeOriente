@@ -25,6 +25,8 @@ public interface IMovimientoProductoService {
 	public Page<MovimientoProducto> findProductoMoves(Producto producto, Pageable pageable);
 	
 	public MovimientoProducto save(MovimientoProducto movimientoProducto);
+
+	public List<TipoMovimiento> getTiposMovimiento();
 	
 	/********* PDF REPORTS SERVICES ***********/
 	

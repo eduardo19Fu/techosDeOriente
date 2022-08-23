@@ -64,9 +64,11 @@
                     <td>{{movimiento.fechaMovimiento | date: 'dd/MM/yyyy - HH:mm'}}</td>
                     <td>
                         <span class="badge"
-                            [ngClass]="{'badge-warning': movimiento.tipoMovimiento === 'ENTRADA', 'badge-danger' : movimiento.tipoMovimiento === 'SALIDA',
-                                        'badge-dark':movimiento.tipoMovimiento === 'ANULACION FACTURA', 'badge-info': movimiento.tipoMovimiento === 'VENTA'}">
-                            {{movimiento.tipoMovimiento}}
+                            [ngClass]="{'badge-warning': movimiento.tipoMovimiento.tipoMovimiento === 'ENTRADA', 
+                                        'badge-danger' : movimiento.tipoMovimiento.tipoMovimiento === 'SALIDA',
+                                        'badge-dark':movimiento.tipoMovimiento.tipoMovimiento === 'ANULACION FACTURA', 
+                                        'badge-info': movimiento.tipoMovimiento.tipoMovimiento === 'VENTA'}">
+                            {{movimiento.tipoMovimiento.tipoMovimiento}}
                         </span>
                     </td>
                     <td>{{movimiento.producto.nombre}}</td>
