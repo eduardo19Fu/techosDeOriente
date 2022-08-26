@@ -48,6 +48,7 @@ import { CreateProveedorComponent } from './components/proveedores/create-provee
 import { CreatePaisComponent } from './components/paises/create-pais/create-pais.component';
 import { ComprasComponent } from './components/compras/compras.component';
 import { CreateCompraComponent } from './components/compras/create-compra/create-compra.component';
+import { ModalDetalleCompraComponent } from './components/compras/modal-detalle-compra/modal-detalle-compra.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { CreateCompraComponent } from './components/compras/create-compra/create
     CreateProveedorComponent,
     CreatePaisComponent,
     ComprasComponent,
-    CreateCompraComponent
+    CreateCompraComponent,
+    ModalDetalleCompraComponent
   ],
   imports: [
     BrowserModule,

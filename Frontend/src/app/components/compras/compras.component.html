@@ -1,3 +1,6 @@
+<!-- MODAL DE DETALLE PARA COMPRA SELECCIONADA -->
+<app-modal-detalle-compra *ngIf="compraSeleccionada" [compra]="compraSeleccionada"></app-modal-detalle-compra>
+
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -70,8 +73,9 @@
                     <td>{{compra.fechaRegistro | date: 'dd/MM/yyyy - hh:mm:ss'}}</td>
                     <td *ngIf="authService.hasRole('ROLE_ADMIN')">
                         <!-- Aquí val el botón de detalle de compra -->
-                        <button class="btn bg-gradient-success">
-
+                        <button class="btn bg-gradient-success margin"
+                            (click)="abrirDetalle(compra)">
+                            <i class="fas fa-asterisk"></i>
                         </button>
                         <!-- Aquí va el botón de eliminar -->
                         <button class="btn bg-gradient-danger margin" name="delete"
