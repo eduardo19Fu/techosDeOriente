@@ -140,6 +140,7 @@
                     </div>
                 </div>
 
+                <!-- LISTADO DE PRODUCTOS AGREGADOS -->
                 <div class="card-body table-responsive">
                     <table class="table table-hover table-sm">
                         <thead>
@@ -175,7 +176,6 @@
                                     {{item.calcularPrecioDescuento() | currency: "Q" : "symbol"}}
                                 </td>
 
-                                <!-- <td>{{item.calcularImporte() | currency: "Q" : "symbol"}}</td> -->
                                 <td>{{item.subTotalDescuento | currency: "Q" : "symbol"}}</td>
                                 <td>
                                     <button type="button" class="btn bg-gradient-danger" (click)="eliminarItem(i)">
@@ -186,18 +186,9 @@
                         </tbody>
                     </table>
                     <br>
-                    <!-- <h5 class="float-right">
-                        Total: <span>{{factura.calcularTotal() | currency: "Q": "symbol"}}</span>
-                    </h5> -->
-                </div>
-                <!-- /.card-body -->
-                <!-- <div class="card-footer">
-                    <input type="submit" role="button" class="btn btn-primary" value="Guardar"
-                        [disabled]="!cliente.idCliente || (factura.itemsFactura.length <= 0)" (click)="createFactura()">
-                </div> -->
+                </div>  
             </form>
         </div>
-        <!-- /.card -->
     </div>
 
     <div class="col-md-3">

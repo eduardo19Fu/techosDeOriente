@@ -13,10 +13,10 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin(value = {"http://localhost:4200"})
@@ -89,21 +89,21 @@ public class CompraApiController {
         {
             estado = this.estadoService.findByEstado("ACTIVO");
             compra.setEstado(estado);
-            newCompra = this.compraService.save(compra);
 
-            if (newCompra != null) {
-
-                for(DetalleCompra item : compra.getItems()) {
+            // Recorrer item por item para validr si los productos existen o no.
+            for(DetalleCompra item : compra.getItems()) {
+                if (this.crearProducto(item, compra.getFechaCompra())) {
                     this.movimiento(item.getProducto(), compra, item.getCantidad());
-                    this.updateExistencias(item.getProducto(), item.getCantidad());
                 }
-
             }
+
+            newCompra = this.compraService.save(compra);
 
         } catch (DataAccessException e)
         {
             response.put("mensaje", "¡Ha ocurrido un error en la Base de Datos!");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            e.printStackTrace();
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -148,23 +148,38 @@ public class CompraApiController {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
-    // Endpoint para tipos de comprobante
+    /**
+     * Endpoint que devuelve los tipos de comprobante registrados en la base de datos.
+     * */
     @GetMapping("/compras/tipos-comprobante/get")
     public List<TipoComprobante> tiposComprobante() {
         return this.compraService.getTipos();
     }
 
-    /******** METODOS DE ACTUALIZACION DE EXISTENCIAS Y REGISTRO DE MOVIMIENTO DE PRODUCTOS *******/
+
+    /**
+     * Función encargado de la actualización de existencias
+     * <p>Este se encarga de determinar la cantidad de existencias del  producto recién ingresado
+     * para poder actualizar su stock de forma adecuada según los items recibidos.</p>
+     * */
     public void updateExistencias(Producto producto, int cantidad) {
         Producto productoUpdated = new Producto();
         producto.setStock(producto.getStock() + cantidad);
         productoUpdated = productoService.save(producto);
     }
 
+    /**
+     * Función que opera las existencias en los movimientos de producto para inventario.
+     *
+     * @param producto Recibe el producto como parámetro para se operado.
+     * @param compra Recibe la compra generada para ser operada.
+     * @param cantidad Recibe la cantidad de producto a operar
+     *
+     * */
     public void movimiento(Producto producto, Compra compra, int cantidad) {
         MovimientoProducto movimiento = new MovimientoProducto();
 
-        movimiento.setTipoMovimiento(movimientoProductoService.findTipoMovimiento("INGRESO"));
+        movimiento.setTipoMovimiento(movimientoProductoService.findTipoMovimiento("COMPRA"));
         movimiento.setUsuario(compra.getUsuario());
         movimiento.setProducto(producto);
         movimiento.setStockInicial(producto.getStock());
@@ -172,5 +187,40 @@ public class CompraApiController {
         movimiento.calcularStock();
 
         movimientoProductoService.save(movimiento);
+    }
+
+    /**
+     * Método que recibe un producto que no existe y lo registra.
+     *
+     * @param item Recibe el item a analizar.
+     * @param fechaIngreso Fecha de ingreso para el producto misma que la compra realizada
+     * @return boolean Devuelve un valor booleano analizando si se llevo a cabo el registro con éxito o no.
+     * @exception DataAccessException Lanza una posible excepcion en caso de ocurrir un problema a nivel de base de datos del tipo
+     *
+     * */
+    private boolean crearProducto(DetalleCompra item, LocalDate fechaIngreso) {
+        Producto producto = null;
+        Estado estadoProductoNuevo = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            estadoProductoNuevo = this.estadoService.findByEstado("activo".toUpperCase());
+            producto = this.productoService.findByCodigo(item.getProducto().getCodProducto());
+
+            if(producto != null) {
+                this.updateExistencias(producto, item.getCantidad());
+            } else if (producto == null) {
+                producto = item.getProducto();
+                producto.setEstado(estadoProductoNuevo);
+                producto.setFechaIngreso(simpleDateFormat.parse(fechaIngreso.toString()));
+                producto.setStock(item.getCantidad());
+            }
+
+            this.productoService.save(producto);
+            return true;
+        } catch(DataAccessException | ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

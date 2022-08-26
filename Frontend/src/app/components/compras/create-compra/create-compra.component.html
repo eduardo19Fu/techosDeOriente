@@ -1,22 +1,23 @@
+<!-- MODAL PARA BUSCAR PRODUCTOS -->
+<app-modal-buscar-producto (producto)="loadProducto($event)"></app-modal-buscar-producto>
+
 <div class="container">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0 text-dark">{{title}}</h1>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="col-md-12">
-        <!-- general form elements -->
+        
         <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">Ingrese los datos</h3>
             </div>
-            <!-- /.card-header -->
-            <!-- form start -->
             <form #compraForm="ngForm">
                 <div class="card-body">
 
@@ -49,32 +50,6 @@
 
                     <div class="row">
                         <div class="form-group col">
-                            <label for="total-compra">Total</label>
-                            <input type="number" name="total-compra" class="form-control" [(ngModel)]="compra.totalCompra"
-                                required placeholder="Ingrese total de la compra" #totalCompra="ngModel">
-
-                            <div *ngIf="totalCompra.invalid && (totalCompra.touched || totalCompra.dirty)">
-                                <span class="requerido">
-                                    Ingrese un valor v&aacute;lido.
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="form-group col">
-                            <label for="iva">IVA</label>
-                            <input type="number" name="iva" id="iva" class="form-control" [(ngModel)]="compra.iva"
-                                required placeholder="Ingrese IVA de la compra." #iva="ngModel">
-
-                            <div *ngIf="iva.invalid && (iva.touched || iva.dirty)">
-                                <span class="requerido">
-                                    Ingrese un valor v&aacute;lido.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col">
                             <label for="proveedor">Proveedor</label>
                             <select name="proveedor" id="proveedor" [(ngModel)]="compra.proveedor" class="form-control">
                                 <option [ngValue]="undefined">Elija un Proveedor</option>
@@ -93,9 +68,182 @@
                                 </option>
                             </select>
                         </div>
+
+                        
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="total-compra">Total</label>
+                            <input type="number" name="total-compra" class="form-control" [(ngModel)]="compra.totalCompra"
+                                required placeholder="Ingrese total de la compra" #totalCompra="ngModel">
+
+                            <div *ngIf="totalCompra.invalid && (totalCompra.touched || totalCompra.dirty)">
+                                <span class="requerido">
+                                    Ingrese un valor v&aacute;lido.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col">
+                            <label for="iva">IVA</label>
+                            <input type="number" name="iva" id="iva" class="form-control" [(ngModel)]="compra.iva"
+                                placeholder="Ingrese IVA de la compra." #iva="ngModel"
+                                [required]="compra.tipoComprobante && compra.tipoComprobante.tipoComprobante === 'FACTURA'"
+                                [disabled]="compra.tipoComprobante && compra.tipoComprobante.tipoComprobante === 'RECIBO'">
+
+                            <div *ngIf="iva.invalid && (iva.touched || iva.dirty)">
+                                <span class="requerido">
+                                    Ingrese un valor v&aacute;lido.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-auto">
+                            <div class="form-group">
+                                <label for="codigo" style="display: block;">Codigo</label>
+                                <input type="text" class="form-control" name="codigo" id="codigo"
+                                    [(ngModel)]="producto.codProducto" style="width: 70%; display: inline; margin-right: 10px;">
+
+                                <button type="button" class="btn bg-gradient-fuchsia" data-toggle="modal"
+                                    data-target="#modal-buscar-producto">
+                                    <i class="fas fa-search"></i>
+                                </button>
+
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="precio-compra">Precio Compra</label>
+                                <input type="number" class="form-control" name="precio-compra" 
+                                    [(ngModel)]="producto.precioCompra" #precioCompra="ngModel"
+                                    [required]="!producto.precioCompra && compra.items.length <= 0">
+
+                                <div *ngIf="precioCompra.invalid && (precioCompra.touched || precioCompra.dirty)">
+                                    <span class="requerido">
+                                        Ingrese un valor válido.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="porcentaje-ganancia">% Ganancia</label>
+                                <input type="number" class="form-control" name="porcentaje-ganancia"
+                                    [(ngModel)]="producto.porcentajeGanancia" #porcentajeGanancia="ngModel"
+                                    [required]="!producto.porcentajeGanancia && compra.items.length <= 0"
+                                    (blur)="mostrarPrecioVenta()">
+                                    
+                                <div *ngIf="porcentajeGanancia.invalid && (porcentajeGanancia.touched || porcentajeGanancia.dirty)">
+                                    <span class="requerido">
+                                        Ingrese un valor válido.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="precio-venta">Precio Venta</label>
+                                <input type="number" name="precio-venta" id="precio-venta" class="form-control"
+                                    [(ngModel)]="producto.precioVenta" (blur)="mostrarPrecioVenta()" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="marca">Marcas Producto</label>
+                                <select [(ngModel)]="producto.marcaProducto" name="marca" id="marca" class="form-control">
+                                    <option [ngValue]="undefined">Elija una marca</option>
+                                    <option *ngFor="let marca of marcasProducto" [ngValue]="marca">
+                                        {{marca.marca}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="tipo-producto">Tipo Producto</label>
+                                <select name="tipo-producto" id="tipo-producto" [(ngModel)]="producto.tipoProducto" class="form-control">
+                                    <option [ngValue]="undefined">Elija un tipo</option>
+                                    <option *ngFor="let tipo of tiposProducto" [ngValue]="tipo">
+                                        {{tipo.tipoProducto}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="nombre">Producto</label>
+                                <input type="text" class="form-control" name="nombre"
+                                    [(ngModel)]="producto.nombre" placeholder="Ingrese nombre del producto."
+                                    [required]="!producto.nombre && compra.items.length <= 0"
+                                    #nombre="ngModel">
+
+                                    <div *ngIf="nombre.invalid && (nombre.touched || nombre.dirty)">
+                                        <span class="requerido">
+                                            Ingrese un nombre para el producto.
+                                        </span>
+                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="cantidad" style="display: block;">Cantidad</label>
+                                <input type="number" name="cantidad" id="cantidad" class="form-control"
+                                    style="width: 65%; display: inline; margin-right: 10px;" value="0"
+                                    (keyup.enter)="agregarLinea()" autofocus>
+
+                                <button type="button" class="btn bg-gradient-cyan" (click)="agregarLinea()">
+                                    <i class="fas fa-plus-square"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- /.card-body -->
+            
+
+                <div class="card-body table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Codigo</th>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let item of compra.items; let i = index">
+                                <td>{{item.producto.codProducto}}</td>
+                                <td>{{item.producto.nombre}}</td>
+                                <td>{{item.producto.precioCompra | currency: "Q" : "symbol"}}</td>
+                                <td>{{item.cantidad}}</td>
+                                <td>{{item.calcularSubTotal() | currency: "Q" : "symbol"}}</td>
+                                <td>
+                                    <button type="button" class="btn bg-gradient-danger" (click)="eliminarItem(i)">
+                                        X
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div class="card-footer">
                     <button type="submit" role="button" class="btn btn-primary" (click)="create()" [disabled]="!compraForm.form.valid">

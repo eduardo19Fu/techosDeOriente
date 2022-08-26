@@ -1,20 +1,12 @@
-<!-- MODAL CREATE MOVIMIENTO -->
-<!-- <app-create-movimiento></app-create-movimiento> -->
-
 <!-- CREAR INVENTARIO -->
 <app-busqueda-movimientos></app-busqueda-movimientos>
 
-<!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1>{{title}}</h1>
                 <br>
-                <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-movimiento">
-                    <i class="fas fa-plus-circle"></i>
-                    Nuevo
-                </button>&nbsp; -->
 
                 <button type="button" class="btn bg-gradient-success" [routerLink]="['/productos/inventario/create']">
                     <i class="fas fa-plus-circle"></i>
@@ -27,7 +19,7 @@
                 </button>
             </div>
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
 </section>
 
 <div class="card">
@@ -67,7 +59,8 @@
                             [ngClass]="{'badge-warning': movimiento.tipoMovimiento.tipoMovimiento === 'ENTRADA', 
                                         'badge-danger' : movimiento.tipoMovimiento.tipoMovimiento === 'SALIDA',
                                         'badge-dark':movimiento.tipoMovimiento.tipoMovimiento === 'ANULACION FACTURA', 
-                                        'badge-info': movimiento.tipoMovimiento.tipoMovimiento === 'VENTA'}">
+                                        'badge-info': movimiento.tipoMovimiento.tipoMovimiento === 'VENTA',
+                                        'badge-success': movimiento.tipoMovimiento.tipoMovimiento === 'COMPRA'}">
                             {{movimiento.tipoMovimiento.tipoMovimiento}}
                         </span>
                     </td>
