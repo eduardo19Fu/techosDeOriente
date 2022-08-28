@@ -67,6 +67,11 @@ public class ProductoServiceImpl implements IProductoService {
 		repoProducto.deleteById(idproducto);
 	}
 
+	@Override
+	public Integer getMaxProductos() {
+		return repoProducto.getMaxProductos();
+	}
+
 	// Implementaciones para busqueda desde el frontend
 	@Override
 	public List<Producto> findByName(String name) {

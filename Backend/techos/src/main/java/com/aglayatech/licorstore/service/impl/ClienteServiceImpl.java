@@ -53,4 +53,9 @@ public class ClienteServiceImpl implements IClienteService {
 		repoCliente.deleteById(idcliente);
 	}
 
+	@Override
+	public Integer getMaxClientes() {
+		return repoCliente.getMaxClientes();
+	}
+
 }

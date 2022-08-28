@@ -25,6 +25,8 @@ public interface IProductoService {
 	public Producto save(Producto producto);
 	
 	public void delete(Integer idproducto);
+
+	public Integer getMaxProductos();
 	
 	// Busqueda de Productos desde el frontend
 	public List<Producto> findByName(String name);

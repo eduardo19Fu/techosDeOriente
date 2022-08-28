@@ -18,6 +18,9 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
 	
 	@Query("from Role r")
 	public List<Role> findRoles();
+
+	@Query(value = "Select get_cant_usuarios()", nativeQuery = true)
+	Integer getMaxUsuarios();
 	
 	@Query(value = "select u.*\r\n"
 					+ "from usuarios as u\r\n"

@@ -66,6 +66,15 @@ export class ProductoService {
     return this.http.get<Producto[]>(`${this.url}/productos/name/${nombre}`);
   }
 
+  getMaxProductos(): Observable<any> {
+    return this.http.get<any>(`${this.url}/productos/max-productos/get`).pipe(
+      catchError(e => {
+        swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
+
   create(producto: Producto): Observable<any> {
     return this.http.post<any>(`${this.url}/productos`, producto).pipe(
       catchError(e => {

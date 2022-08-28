@@ -92,4 +92,9 @@ public class UsuarioServiceImpl implements UserDetailsService, IUsuarioService {
 		return repoUsuario.findByRole();
 	}
 
+	@Override
+	public Integer getMaxUsuarios() {
+		return repoUsuario.getMaxUsuarios();
+	}
+
 }

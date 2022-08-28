@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.aglayatech.licorstore.generics.Excepcion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
@@ -68,6 +69,20 @@ public class ProductoApiController {
 	public List<Producto> findAll(){
 		Estado estado = serviceEstado.findById(1);
 		return serviceProducto.findAllByEstado(estado);
+	}
+
+	@GetMapping("/productos/max-productos/get")
+	public ResponseEntity<?> getMaxProductosController() {
+		Integer maxProductos = 0;
+		Map<String, Object> response = new HashMap<>();
+
+		try {
+			maxProductos = serviceProducto.getMaxProductos();
+		} catch(DataAccessException e) {
+			return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return new ResponseEntity<Integer>(maxProductos, HttpStatus.OK);
 	}
 
 	@Secured({ "ROLE_ADMIN", "ROLE_COBRADOR", "ROLE_INVENTARIO" })

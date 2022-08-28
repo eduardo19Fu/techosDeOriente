@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.aglayatech.licorstore.generics.Excepcion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,20 @@ public class ClienteApiController {
 	@GetMapping(value = "/clientes/nombre/{name}")
 	public List<Cliente> findByName(@PathVariable("name") String name) {
 		return serviceCliente.findByName(name);
+	}
+
+	@GetMapping("/clientes/max-clientes/get")
+	public ResponseEntity<?> getMaxClientesController() {
+		Integer maxClientes = 0;
+		Map<String, Object> response = new HashMap<>();
+
+		try {
+			maxClientes = serviceCliente.getMaxClientes();
+		} catch(DataAccessException e) {
+			return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return new ResponseEntity<Integer>(maxClientes, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/clientes/nit/{nit}")

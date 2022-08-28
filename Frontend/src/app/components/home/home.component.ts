@@ -34,7 +34,6 @@ export class HomeComponent implements OnInit {
   constructor(
     private serviceProducto: ProductoService,
     private serviceCliente: ClienteService,
-    private serviceMarca: MarcaProductoService,
     private serviceUsuario: UsuarioService,
     private serviceFactura: FacturaService,
     public auth: AuthService
@@ -45,29 +44,26 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.getProductos();
     this.getClientes();
-    this.getMarcas();
     this.getUsuarios();
     this.getFacturas();
   }
 
   getProductos(): void {
-    this.serviceProducto.getProductos().subscribe(productos => this.totalProductos = productos.length);
+    this.serviceProducto.getMaxProductos().subscribe(totalProductos => this.totalProductos = totalProductos);
   }
 
   getClientes(): void {
-    this.serviceCliente.getClientes().subscribe(clientes => this.totalClientes = clientes.length);
-  }
-
-  getMarcas(): void {
-    this.serviceMarca.getMarcas().subscribe(marcas => this.totalMarcas = marcas.length);
+    this.serviceCliente.getMaxClientes().subscribe(totalClientes => this.totalClientes = totalClientes);
   }
 
   getUsuarios(): void {
-    this.serviceUsuario.getUsuarios().subscribe(usuarios => this.totalUsuarios = usuarios.length);
+    this.serviceUsuario.getMaxUsuarios().subscribe(totalUsuarios => this.totalUsuarios = totalUsuarios);
   }
 
   getFacturas(): void {
-    this.serviceFactura.getFacturas().subscribe(facturas => this.totalFacturas = facturas.length);
+    this.serviceFactura.getMaxVentas().subscribe(
+      totalFacturas => this.totalFacturas = totalFacturas
+    );
   }
 
 }

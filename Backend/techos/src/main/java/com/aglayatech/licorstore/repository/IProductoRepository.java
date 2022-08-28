@@ -25,6 +25,9 @@ public interface IProductoRepository extends JpaRepository<Producto, Integer> {
 	
 	@Query(value = "select p from Producto p where p.fechaVencimiento <= :fecha")
 	List<Producto> findCaducados(@Param("fecha") Date fecha);
+
+	@Query(value = "Select get_cant_productos()", nativeQuery = true)
+	Integer getMaxProductos();
 	
 	@Query(value = "SELECT p.id_producto, p.cod_producto, p.nombre,tp.tipo_producto,mar.marca, p.fecha_vencimiento, p.precio_venta, e.estado\r\n"
 			+ "FROM productos AS p\r\n"

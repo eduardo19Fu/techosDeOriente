@@ -55,6 +55,15 @@ export class UsuarioService {
     );
   }
 
+  getMaxUsuarios(): Observable<any> {
+    return this.http.get<any>(`${this.url}/usuarios/max-usuarios/get`).pipe(
+      catchError(e => {
+        swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
+
   create(usuario: UsuarioAuxiliar): Observable<any> {
     return this.http.post<any>(`${this.url}/usuarios`, usuario).pipe(
       catchError(e => {

@@ -46,6 +46,15 @@ export class FacturaService {
     );
   }
 
+  getMaxVentas(): Observable<any> {
+    return this.http.get<any>(`${this.url}/facturas/max-ventas/get`).pipe(
+      catchError(e => {
+        swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
+
   cancel(id: number, idusuario: number): Observable<any>{
     return this.http.delete<any>(`${this.url}/facturas/cancel/${id}/${idusuario}`).pipe(
       catchError(e => {

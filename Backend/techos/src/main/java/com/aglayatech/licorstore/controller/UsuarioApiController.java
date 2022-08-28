@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.aglayatech.licorstore.generics.ErroresHandler;
+import com.aglayatech.licorstore.generics.Excepcion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -55,6 +56,20 @@ public class UsuarioApiController {
 	@GetMapping(value = "/usuarios/page/{page}")
 	public Page<Usuario> index(@PathVariable("page") Integer page){
 		return this.serviceUsuario.findAll(PageRequest.of(page, 5));
+	}
+
+	@GetMapping("/usuarios/max-usuarios/get")
+	public ResponseEntity<?> getMaxUsuariosController() {
+		Integer maxUsuarios = 0;
+		Map<String, Object> response = new HashMap<>();
+
+		try {
+			maxUsuarios = serviceUsuario.getMaxUsuarios();
+		} catch(DataAccessException e) {
+			return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return new ResponseEntity<Integer>(maxUsuarios, HttpStatus.OK);
 	}
 	
 	@Secured(value = {"ROLE_ADMIN", "ROLE_COBRADOR", "ROLE_INVENTARIO"})

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.aglayatech.licorstore.generics.Excepcion;
 import com.aglayatech.licorstore.model.*;
 import com.aglayatech.licorstore.service.*;
 import com.fel.firma.emisor.FirmaEmisor;
@@ -250,6 +251,20 @@ public class FacturaApiController {
         response.put("mensaje", "¡Factura Anulada!");
         response.put("factura", cancelFactura);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/facturas/max-ventas/get")
+    public ResponseEntity<?> getMaxVentasController() {
+        Integer maxVentas = 0;
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            maxVentas = serviceFactura.getMaxVentas();
+        } catch(DataAccessException e) {
+            return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<Integer>(maxVentas, HttpStatus.OK);
     }
 
     /*************** PDF REPORTS CONTROLLERS ********************/

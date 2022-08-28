@@ -54,6 +54,15 @@ export class ClienteService {
     return this.http.get<Cliente>(`${this.url}/clientes/nit/${nit}`);
   }
 
+  getMaxClientes(): Observable<any> {
+    return this.http.get<any>(`${this.url}/clientes/max-clientes/get`).pipe(
+      catchError(e => {
+        swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
+
   create(cliente: Cliente): Observable<any> {
     return this.http.post<any>(`${this.url}/clientes`, cliente).pipe(
       catchError(e => {
