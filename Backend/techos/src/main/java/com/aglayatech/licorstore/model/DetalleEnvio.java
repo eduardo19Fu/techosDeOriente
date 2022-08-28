@@ -17,7 +17,7 @@ public class DetalleEnvio implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto")
-    @JsonIgnoreProperties(value = {"movimientos","hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties(value = {"movimientos", "hibernateLazyInitializer", "handler"})
     private Producto producto;
 
     public Integer getIdDetalleEnvio() {

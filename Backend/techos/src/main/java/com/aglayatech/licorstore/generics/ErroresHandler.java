@@ -9,6 +9,12 @@ import java.util.stream.Collectors;
 
 public class ErroresHandler {
 
+
+    /**
+     * Función que evalúa los errores obtenidos por validación del lado del backend
+     * @param result Parámetro que tiene los resultados de la validación.
+     * @return Devuelve un Map con los resultados obtenidos.
+     * */
     public static Map<String, Object> bingingResultErrorsHandler(BindingResult result) {
         Map<String, Object> response = new HashMap<>();
 

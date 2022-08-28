@@ -1,5 +1,6 @@
 package com.aglayatech.licorstore.controller;
 
+import com.aglayatech.licorstore.generics.ErroresHandler;
 import com.aglayatech.licorstore.model.*;
 import com.aglayatech.licorstore.service.ICompraService;
 import com.aglayatech.licorstore.service.IEstadoService;
@@ -77,12 +78,7 @@ public class CompraApiController {
 
         if(result.hasErrors())
         {
-            List<String> errors = result.getFieldErrors().stream()
-                    .map(err -> "El campo '".concat(err.getField().concat("' ")).concat(err.getDefaultMessage()))
-                    .collect(Collectors.toList());
-
-            response.put("errors", errors);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map<String, Object>>(ErroresHandler.bingingResultErrorsHandler(result), HttpStatus.BAD_REQUEST);
         }
 
         try

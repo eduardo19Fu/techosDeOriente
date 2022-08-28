@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.aglayatech.licorstore.generics.ErroresHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -90,12 +91,7 @@ public class UsuarioApiController {
 		
 		if(result.hasErrors()) {
 			// tratamiento de errores
-			List<String> errors = result.getFieldErrors().stream()
-					.map(err -> "El campo '".concat(err.getField().concat("' ")).concat(err.getDefaultMessage()))
-					.collect(Collectors.toList());
-
-			response.put("errors", errors);
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Map<String, Object>>(ErroresHandler.bingingResultErrorsHandler(result), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {

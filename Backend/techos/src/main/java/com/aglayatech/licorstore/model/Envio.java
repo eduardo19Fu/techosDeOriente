@@ -19,6 +19,7 @@ public class Envio implements Serializable {
     private Integer idEnvio;
     private LocalDate fechaPedido;
     private String telefonoReferencia;
+    private Double totalEnvio;
     private Double abono;
     private Double saldoPendiente;
     private LocalDateTime fechaRegistro;
@@ -37,16 +38,11 @@ public class Envio implements Serializable {
     @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
     private List<DetalleEnvio> itemsEnvio;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable (
-            name = "estados_envio",
-            joinColumns = @JoinColumn(name = "id_envio"),
-            inverseJoinColumns = @JoinColumn(name = "id_estado")
-    )
-    private List<Estado> estados;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_estado")
+    private Estado estado;
 
     public Envio() {
-        this.itemsEnvio = new ArrayList<>();
     }
 
     @PrePersist
@@ -76,6 +72,14 @@ public class Envio implements Serializable {
 
     public void setTelefonoReferencia(String telefonoReferencia) {
         this.telefonoReferencia = telefonoReferencia;
+    }
+
+    public Double getTotalEnvio() {
+        return totalEnvio;
+    }
+
+    public void setTotalEnvio(Double totalEnvio) {
+        this.totalEnvio = totalEnvio;
     }
 
     public Double getAbono() {
@@ -134,16 +138,12 @@ public class Envio implements Serializable {
         this.itemsEnvio = itemsEnvio;
     }
 
-    public List<Estado> getEstados() {
-        return estados;
+    public Estado getEstado() {
+        return estado;
     }
 
-    public void setEstados(List<Estado> estados) {
-        this.estados = estados;
-    }
-
-    public void setEstados(Estado estado) {
-        this.estados.add(estado);
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
     @Override
@@ -152,6 +152,7 @@ public class Envio implements Serializable {
                 "idEnvio=" + idEnvio +
                 ", fechaPedido=" + fechaPedido +
                 ", telefonoReferencia='" + telefonoReferencia + '\'' +
+                ", totalEnvio=" + totalEnvio +
                 ", abono=" + abono +
                 ", saldoPendiente=" + saldoPendiente +
                 ", fechaRegistro=" + fechaRegistro +
@@ -159,7 +160,7 @@ public class Envio implements Serializable {
                 ", cliente=" + cliente +
                 ", usuario=" + usuario +
                 ", itemsEnvio=" + itemsEnvio +
-                ", estados=" + estados +
+                ", estados=" + estado +
                 '}';
     }
 

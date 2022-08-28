@@ -118,14 +118,6 @@ public class Usuario implements Serializable {
 		this.fechaRegistro = fechaRegistro;
 	}
 
-	/*public List<Correlativo> getCorrelativos() {
-		return correlativos;
-	}
-
-	public void setCorrelativos(List<Correlativo> correlativos) {
-		this.correlativos = correlativos;
-	}*/
-
 	@Override
 	public String toString() {
 		return "Usuario [idUsuario=" + idUsuario + ", usuario=" + usuario + ", password=" + password + ", primerNombre="

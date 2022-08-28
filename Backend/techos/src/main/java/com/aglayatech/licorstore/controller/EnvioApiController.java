@@ -14,6 +14,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,7 @@ public class EnvioApiController {
 
         Envio newEnvio = null;
         Estado estadoInicial = null;
+
         Map<String, Object> response = new HashMap<>();
 
         if (result.hasErrors()) {
@@ -68,7 +70,8 @@ public class EnvioApiController {
 
         try {
             estadoInicial = estadoService.findByEstado("Pendiente".toUpperCase());
-            envio.setEstados(estadoInicial);
+            envio.setEstado(estadoInicial);
+
             newEnvio = envioService.save(envio);
         } catch (DataAccessException e) {
             return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -84,9 +87,34 @@ public class EnvioApiController {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
+
+    /**
+     * Método controlador encargado de llevar a cabo el alta de un envío
+     * @param id Recibe como parámetro de la petición el id del envío.
+     * @return ResponseEntity Devuelve una respuesta en formato json con los resultados obtenidos durante la operación.
+     * */
+
     @Secured(value = {"ROLE_ADMIN", "ROLE_INVENTARIO"})
     @PutMapping("/envios/cancel/{id}")
-    public ResponseEntity<?> cancel(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> movimientoEnvio(@PathVariable("id") Integer id,
+                                             @RequestParam(name = "movimiento", required = false) String movimiento) {
+
+        Envio envioToChange = null;
+        Envio envioCanceled = null;
+        Estado estadoCancelado = null;
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            estadoCancelado = estadoService.findByEstado("Cancelado".toUpperCase());
+            envioToChange = envioService.getEnvio(id);
+
+            if (envioToChange != null) {
+                
+            }
+        } catch (DataAccessException e) {
+            return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         return null;
     }
 }
