@@ -38,11 +38,12 @@ public class Envio implements Serializable {
     @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
     private List<DetalleEnvio> itemsEnvio;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_estado")
-    private Estado estado;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "estados_envio", joinColumns = @JoinColumn(name = "id_envio"), inverseJoinColumns = @JoinColumn(name = "id_estado"))
+    private List<Estado> estados;
 
     public Envio() {
+        this.estados = new ArrayList<>();
     }
 
     @PrePersist
@@ -138,12 +139,38 @@ public class Envio implements Serializable {
         this.itemsEnvio = itemsEnvio;
     }
 
-    public Estado getEstado() {
-        return estado;
+    public List<Estado> getEstados() {
+        return estados;
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
+    public void setEstados(List<Estado> estados) {
+        this.estados = estados;
+    }
+
+    /**
+     * Función que determina el tipo de estados a asignar cuando se crear un nuevo envío o se genera un movimiento
+     * sobre el mismo.
+     * @param estados Listado de estados disponibles en la base de datos para poder asignar
+     * @return Devuelve el listado de estados para asignar al envío analizado.
+     * */
+    public List<Estado> determinarEstadosEnvio(List<Estado> estados) {
+        List<Estado> newEstados = new ArrayList<>();
+
+        if (abono <= 0 && totalEnvio > 0.0) {
+            for(Estado estado : estados) {
+                if (estado.getEstado().equals("pendiente".toUpperCase()) || estado.getEstado().equals("pagado".toUpperCase())) {
+                    newEstados.add(estado);
+                }
+            }
+        } else if (abono > 0.0) {
+            for (Estado estado : estados) {
+                if (estado.getEstado().equals("pendiente".toUpperCase()) || estado.getEstado().equals("no pagado".toUpperCase())) {
+                    newEstados.add(estado);
+                }
+            }
+        }
+
+        return newEstados;
     }
 
     @Override
@@ -160,7 +187,7 @@ public class Envio implements Serializable {
                 ", cliente=" + cliente +
                 ", usuario=" + usuario +
                 ", itemsEnvio=" + itemsEnvio +
-                ", estados=" + estado +
+                ", estados=" + estados +
                 '}';
     }
 

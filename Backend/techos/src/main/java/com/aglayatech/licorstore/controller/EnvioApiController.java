@@ -2,10 +2,11 @@ package com.aglayatech.licorstore.controller;
 
 import com.aglayatech.licorstore.generics.ErroresHandler;
 import com.aglayatech.licorstore.generics.Excepcion;
-import com.aglayatech.licorstore.model.Envio;
-import com.aglayatech.licorstore.model.Estado;
+import com.aglayatech.licorstore.model.*;
 import com.aglayatech.licorstore.service.IEnvioService;
 import com.aglayatech.licorstore.service.IEstadoService;
+import com.aglayatech.licorstore.service.IMovimientoProductoService;
+import com.aglayatech.licorstore.service.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,12 @@ public class EnvioApiController {
 
     @Autowired
     private IEstadoService estadoService;
+
+    @Autowired
+    private IProductoService productoService;
+
+    @Autowired
+    private IMovimientoProductoService movimientoProductoService;
 
     @GetMapping("/envios")
     public List<Envio> index() {
@@ -60,8 +67,6 @@ public class EnvioApiController {
     public ResponseEntity<?> create(@RequestBody Envio envio, BindingResult result) {
 
         Envio newEnvio = null;
-        Estado estadoInicial = null;
-
         Map<String, Object> response = new HashMap<>();
 
         if (result.hasErrors()) {
@@ -69,10 +74,14 @@ public class EnvioApiController {
         }
 
         try {
-            estadoInicial = estadoService.findByEstado("Pendiente".toUpperCase());
-            envio.setEstado(estadoInicial);
-
+            envio.setEstados(envio.determinarEstadosEnvio(estadoService.findAll()));
             newEnvio = envioService.save(envio);
+
+            if (newEnvio != null) {
+                for (DetalleEnvio item: newEnvio.getItemsEnvio()) {
+                    updateExistencias(item.getProducto(), item.getCantidad());
+                }
+            }
         } catch (DataAccessException e) {
             return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -109,12 +118,48 @@ public class EnvioApiController {
             envioToChange = envioService.getEnvio(id);
 
             if (envioToChange != null) {
-                
+
             }
         } catch (DataAccessException e) {
             return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return null;
+    }
+
+    /**
+     * Función encargado de la actualización de existencias
+     * <p>Este se encarga de determinar la cantidad de existencias del  producto recién ingresado
+     * para poder actualizar su stock de forma adecuada según los items recibidos.</p>
+     * */
+    public void updateExistencias(Producto producto, int cantidad) {
+        Producto productoUpdated = new Producto();
+        producto.setStock(producto.getStock() - cantidad);
+        productoUpdated = productoService.save(producto);
+    }
+
+    /**
+     * Función que opera las existencias en los movimientos de producto para inventario.
+     *
+     * @param producto Recibe el producto como parámetro para se operado.
+     * @param compra Recibe la compra generada para ser operada.
+     * @param cantidad Recibe la cantidad de producto a operar
+     *
+     * */
+    public void movimiento(Producto producto, Compra compra, int cantidad) {
+        MovimientoProducto movimiento = new MovimientoProducto();
+
+        try {
+            movimiento.setTipoMovimiento(movimientoProductoService.findTipoMovimiento("envio".toUpperCase()));
+            movimiento.setUsuario(compra.getUsuario());
+            movimiento.setProducto(producto);
+            movimiento.setStockInicial(producto.getStock());
+            movimiento.setCantidad(cantidad);
+            movimiento.calcularStock();
+
+            movimientoProductoService.save(movimiento);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
