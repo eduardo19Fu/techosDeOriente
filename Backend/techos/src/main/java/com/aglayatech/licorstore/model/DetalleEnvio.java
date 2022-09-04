@@ -3,6 +3,7 @@ package com.aglayatech.licorstore.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -13,7 +14,10 @@ public class DetalleEnvio implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idDetalleEnvio;
     private double subTotal;
+    @NotNull(message = "Cantidad no puede ser 0.")
     private int cantidad;
+    private float descuento;
+    private double subTotalDescuento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto")
@@ -44,6 +48,22 @@ public class DetalleEnvio implements Serializable {
         this.cantidad = cantidad;
     }
 
+    public float getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(float descuento) {
+        this.descuento = descuento;
+    }
+
+    public double getSubTotalDescuento() {
+        return subTotalDescuento;
+    }
+
+    public void setSubTotalDescuento(double subTotalDescuento) {
+        this.subTotalDescuento = subTotalDescuento;
+    }
+
     public Producto getProducto() {
         return producto;
     }
@@ -54,12 +74,15 @@ public class DetalleEnvio implements Serializable {
 
     @Override
     public String toString() {
-        return "DetalleEnvio{" +
-                "idDetalleEnvio=" + idDetalleEnvio +
-                ", subTotal=" + subTotal +
-                ", cantidad=" + cantidad +
-                ", producto=" + producto +
-                '}';
+        final StringBuilder sb = new StringBuilder("DetalleEnvio{");
+        sb.append("idDetalleEnvio=").append(idDetalleEnvio);
+        sb.append(", subTotal=").append(subTotal);
+        sb.append(", cantidad=").append(cantidad);
+        sb.append(", descuento=").append(descuento);
+        sb.append(", subTotalDescuento=").append(subTotalDescuento);
+        sb.append(", producto=").append(producto);
+        sb.append('}');
+        return sb.toString();
     }
 
     private static final long serialVersionUID = 1L;
