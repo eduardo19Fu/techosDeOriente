@@ -49,6 +49,9 @@ import { CreatePaisComponent } from './components/paises/create-pais/create-pais
 import { ComprasComponent } from './components/compras/compras.component';
 import { CreateCompraComponent } from './components/compras/create-compra/create-compra.component';
 import { ModalDetalleCompraComponent } from './components/compras/modal-detalle-compra/modal-detalle-compra.component';
+import { EnviosComponent } from './components/envios/envios.component';
+import { CreateEnvioComponent } from './components/envios/create-envio/create-envio.component';
+import { DetailEnvioComponent } from './components/envios/detail-envio/detail-envio.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +96,10 @@ import { ModalDetalleCompraComponent } from './components/compras/modal-detalle-
     CreatePaisComponent,
     ComprasComponent,
     CreateCompraComponent,
-    ModalDetalleCompraComponent
+    ModalDetalleCompraComponent,
+    EnviosComponent,
+    CreateEnvioComponent,
+    DetailEnvioComponent
   ],
   imports: [
     BrowserModule,

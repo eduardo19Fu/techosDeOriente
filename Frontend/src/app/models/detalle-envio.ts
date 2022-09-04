@@ -10,4 +10,8 @@ export class DetalleEnvio {
     calcularTotalEnvio(): number {
         return 0;
     }
+
+    calcularImporte(): number {
+        return 0;
+    }
 }

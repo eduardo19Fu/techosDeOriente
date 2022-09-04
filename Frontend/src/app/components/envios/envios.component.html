@@ -1,0 +1,78 @@
+<app-detail-envio *ngIf="envioSeleccionado" [envio]="envioSeleccionado"></app-detail-envio>
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{title}}</h1>
+                <br>
+                <a [routerLink]="['/envios/create']" class="btn bg-gradient-success">
+                    <i class="fas fa-plus-circle"></i>
+                    Nuevo
+                </a>&nbsp;
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="card">
+    <div class="card-header">
+        Listado de Tipos de Identificación
+    </div>
+    <div class="card-body table-responsive">
+
+        <div *ngIf="envios?.length == 0" class="alert alert-info alert-dismissible">
+            <h5>
+                <i class="icon fas fa-info"></i>
+                Atención!
+            </h5>
+
+            No existe ninguna factura registrada en la base de datos!
+        </div>
+
+        <table id="envios" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm"
+            role="grid" *ngIf="envios?.length > 0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Abono</th>
+                    <th>Saldo Pendiente</th>
+                    <th *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')">Opciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let envio of envios">
+                    <td>{{envio.idEnvio}}</td>
+                    <td>{{envio.cliente.nombre}}</td>
+                    <td>{{envio.fechaPedido | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{envio.totalEnvio | currency: 'Q' : 'symbol'}}</td>
+                    <td>{{envio.abono}}</td>
+                    <td>{{envio.saldoPendiente | currency: 'Q' : 'symbol'}}</td>
+                    <td class="center-options" *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')">
+
+                        <button class="btn bg-gradient-success margin" name="detail" type="button"
+                            (click)="abrirDetalle(envio)">
+                            <i class="fas fa-asterisk"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>No. Factura</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Emisor</th>
+                    <th *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')">Opciones</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

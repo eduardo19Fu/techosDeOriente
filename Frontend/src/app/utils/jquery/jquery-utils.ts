@@ -5,7 +5,7 @@ window['$'] = window['jQuery'] = $;
 export class JqueryConfigs {
     constructor() { }
 
-    // MÉTODO DE INICIALIZACIÓN DE DATATABLE ADMILTE
+    // MÉTODO DE INICIALIZACIÓN DE DATATABLE ADMINLTE
     configDataTable(nombreTabla: string): void {
         $(() => {
             $(`#${nombreTabla}`).DataTable({

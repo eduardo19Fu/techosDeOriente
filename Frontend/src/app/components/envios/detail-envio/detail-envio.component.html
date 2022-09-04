@@ -1,0 +1,106 @@
+<div *ngIf="detailService.modal" class="abrir-modal animacion fadeIn">
+    <div class="modal" tabindex="-1" style="display: block; overflow-y: scroll;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{title}}</h5>
+                    <button (click)="cerrarModal()" id="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white;">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <h4>Datos Generales</h4>
+                        <div class="row">
+                            <div class="col-sm">
+
+                                <ul *ngIf="envio" class="list-group mb-3">
+                                    <li class="list-group-item">
+                                        <strong>ID Env&iacute;o: </strong>
+                                        {{envio.idEnvio}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>CLIENTE: </strong>
+                                        {{envio.cliente.nombre | uppercase}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>FECHA DE PEDIDO:</strong>
+                                        {{envio.fechaPedido | date: 'dd/MM/YYYY'}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>REFERENCIA:</strong>
+                                        {{envio.referencia | uppercase}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>TEL&Eacute;FONO DE REFERENCIA:</strong>
+                                        {{envio.telefonoReferencia}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>TOTAL EV&Iacute;O: </strong>
+                                        {{envio.totalEnvio | currency: 'Q' : 'symbol'}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>ABONO:</strong>
+                                        {{envio.abono | currency: 'Q' : 'symbol'}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>SALDO PENDIENTE:</strong>
+                                        {{envio.saldoPendiente | currency: 'Q' : 'symbol'}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>FECHA DE REGISTRO:</strong>
+                                        {{envio.fechaRegistro | date: 'dd/MM/yyyy HH:mm:ss'}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>ESTADO:</strong>
+                                        <ul *ngFor="let estado of envio.estados" class="list-group-flush list-group">
+                                            <li class="list-group-item" 
+                                                [ngClass]="{'list-group-item-success' : estado.estado === 'PAGADO' || estado.estado === 'DESPACHADO',
+                                                            'list-group-item-danger' : estado.estado === 'CANCELADO' || estado.estado === 'CANCELADO',
+                                                            'list-group-item-warning' : estado.estado === 'PENDIENTE',
+                                                            'list-group-item-secondary' : estado.estado === 'NO PAGADO'}">
+                                                {{estado.estado}}
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </div>
+
+
+                        </div>
+                        <hr>
+                        <div class="row table-responsive">
+                            <h4>Detalle de Env&iacute;o</h4>&nbsp;
+                            <table class="table table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Fila</th>
+                                        <th>Env&iacute;o #</th>
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>SubTotal</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr class="" *ngFor="let item of envio.itemsEnvio; let i = index">
+                                        <td>{{'#' + (i + 1)}}</td>
+                                        <td>{{item.idDetalleEnvio}}</td>
+                                        <td>{{item.producto.nombre}}</td>
+                                        <td>{{item.cantidad}}</td>
+                                        <td>{{item.subTotal | currency : "Q" : "symbol"}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button (click)="cerrarModal()" type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -28,9 +28,11 @@ public class Envio implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente")
+    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
     private Cliente cliente;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
+    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
     private Usuario usuario;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

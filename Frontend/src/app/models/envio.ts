@@ -1,6 +1,7 @@
 import { Cliente } from './cliente';
 import { UsuarioAuxiliar } from './auxiliar/usuario-auxiliar';
 import { DetalleEnvio } from './detalle-envio';
+import { Usuario } from './usuario';
 
 export class Envio {
     idEnvio: number;
@@ -12,6 +13,6 @@ export class Envio {
     referencia: string;
 
     cliente: Cliente;
-    usuario: UsuarioAuxiliar;
+    usuario: Usuario;
     itemsEnvio: DetalleEnvio[] = [];
 }

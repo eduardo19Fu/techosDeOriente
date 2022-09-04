@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 import { UsuarioAuxiliar } from 'src/app/models/auxiliar/usuario-auxiliar';
 import { Cliente } from 'src/app/models/cliente';
@@ -25,6 +25,9 @@ import { ModalCambioService } from '../../../services/facturas/modal-cambio.serv
 })
 export class CreateFacturaComponent implements OnInit {
 
+  @ViewChild('mybuscar') myBuscarTexto: ElementRef;
+  @ViewChild('myEfectivo') myEfectivoRef: ElementRef;
+
   title: string;
   nitIngresado: string;
   pagar = false;
@@ -44,7 +47,6 @@ export class CreateFacturaComponent implements OnInit {
     private clienteService: ClienteService,
     private usuarioService: UsuarioService,
     private clienteCreateService: ClienteCreateService,
-    private modalCambioService: ModalCambioService,
     private correlativoService: CorrelativoService,
     public authService: AuthService
   ) {
@@ -66,7 +68,8 @@ export class CreateFacturaComponent implements OnInit {
   }
 
   buscarCliente(): void {
-    const nit = ((document.getElementById('buscar') as HTMLInputElement)).value;
+    // const nit = ((document.getElementById('buscar') as HTMLInputElement)).value;
+    const nit = this.myBuscarTexto.nativeElement.value;
 
     if (nit) {
       this.clienteService.getClienteByNit(nit).subscribe(
@@ -239,11 +242,14 @@ export class CreateFacturaComponent implements OnInit {
         this.cliente = new Cliente();
         this.factura = new Factura();
         this.cargarCorrelativo();
-        (document.getElementById('buscar') as HTMLInputElement).value = '';
+        // (document.getElementById('buscar') as HTMLInputElement).value = '';
+        this.myBuscarTexto.nativeElement.value = '';
         swal.fire('Venta Realizada', `Factura No. ${response.factura.noFactura} creada con éxito!`, 'success');
-        (document.getElementById('buscar') as HTMLInputElement).focus();
+        // (document.getElementById('buscar') as HTMLInputElement).focus();
+        this.myBuscarTexto.nativeElement.focus();
         this.cambio = 0;
-        (document.getElementById('efectivo') as HTMLInputElement).value = '';
+        // (document.getElementById('efectivo') as HTMLInputElement).value = '';
+        this.myEfectivoRef.nativeElement.value = '';
 
         this.facturaService.getBillPDF(response.factura.idFactura).subscribe(res => {
           const url = window.URL.createObjectURL(res.data);
@@ -291,7 +297,6 @@ export class CreateFacturaComponent implements OnInit {
   }
 
   loadCliente(event): void {
-    console.log(event);
     (document.getElementById('buscar') as HTMLInputElement).value = event.nit;
     (document.getElementById('button-2x')).click();
     this.buscarCliente();
