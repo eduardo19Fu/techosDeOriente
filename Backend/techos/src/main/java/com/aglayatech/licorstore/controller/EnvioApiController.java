@@ -77,11 +77,11 @@ public class EnvioApiController {
             envio.setEstados(envio.determinarEstadosEnvio(estadoService.findAll()));
             newEnvio = envioService.save(envio);
 
-            if (newEnvio != null) {
-                for (DetalleEnvio item: newEnvio.getItemsEnvio()) {
-                    updateExistencias(item.getProducto(), item.getCantidad());
-                }
-            }
+//            if (newEnvio != null) {
+//                for (DetalleEnvio item: newEnvio.getItemsEnvio()) {
+//                    updateExistencias(item.getProducto(), item.getCantidad());
+//                }
+//            }
         } catch (DataAccessException e) {
             return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }

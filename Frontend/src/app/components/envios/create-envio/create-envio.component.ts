@@ -25,19 +25,22 @@ import { Usuario } from '../../../models/usuario';
 export class CreateEnvioComponent implements OnInit {
 
   @ViewChild('mybuscar') myBuscarTexto: ElementRef;
-  @ViewChild('myEfectivo') myEfectivoRef: ElementRef;
+  @ViewChild('myAbono') myAbonoRef: ElementRef;
   @ViewChild('myCodProductoChild') myCodProdRef: ElementRef;
   @ViewChild('myCantidadChild') myCantidadRef: ElementRef;
   @ViewChild('myButtonXChild') myButtonXRef: ElementRef;
   @ViewChild('myButton2XChild') myButton2XRef: ElementRef;
+  @ViewChild('mySaldoChild') mySaldoRef: ElementRef;
 
   title: string;
   nitIngresado: string;
+  abono: number;
+  saldoRestante = 0.00;
 
   envio: Envio;
   producto: Producto;
   cliente: Cliente;
-  usuario: Usuario;
+  usuario: UsuarioAuxiliar;
 
   constructor (
     private envioService: EnvioService,
@@ -51,7 +54,7 @@ export class CreateEnvioComponent implements OnInit {
     this.title = 'Crear Nuevo Envío';
     this.producto = new Producto();
     this.cliente = new Cliente();
-    this.usuario = new Usuario();
+    this.usuario = new UsuarioAuxiliar();
     this.envio = new Envio();
   }
 
@@ -60,7 +63,10 @@ export class CreateEnvioComponent implements OnInit {
   }
 
   cargarVendedor(): void {
-    this.usuario = this.authService.usuario;
+    this.usuario.idUsuario = this.authService.usuario.idUsuario;
+    this.usuario.primerNombre = this.authService.usuario.primerNombre;
+    this.usuario.apellido = this.authService.usuario.apellido;
+    this.usuario.usuario = this.authService.usuario.usuario;
   }
 
   buscarCliente(): void {
@@ -69,7 +75,6 @@ export class CreateEnvioComponent implements OnInit {
       this.clienteService.getClienteByNit(nit).subscribe(
         cliente => {
           this.cliente = cliente;
-          // (document.getElementById('codigo')).focus();
           this.myCodProdRef.nativeElement.focus();
         },
         error => {
@@ -92,14 +97,12 @@ export class CreateEnvioComponent implements OnInit {
   }
 
   buscarProducto(): void {
-    // const codigo = ((document.getElementById('codigo') as HTMLInputElement)).value;
     const codigo = this.myCodProdRef.nativeElement.value;
 
     if (codigo) {
       this.productoService.getProductoByCode(codigo).subscribe(
         producto => {
           this.producto = producto;
-          // (document.getElementById('cantidad') as HTMLInputElement).focus();
           this.myCantidadRef.nativeElement.focus();
         },
         error => {
@@ -119,13 +122,12 @@ export class CreateEnvioComponent implements OnInit {
 
   agregarLinea(): void {
     if (!this.cliente) { // Comprueba que el cliente exista
-      swal.fire('Ha ocurrido un Problema', 'Por favor, elija un cliente antes de llevar a cabo la venta.', 'error');
+      swal.fire('Ha ocurrido un Problema', 'Por favor, elija un cliente antes de llevar a cabo el envío.', 'error');
     } else {
       if (this.producto) { // comprueba que el producto exista
         const item = new DetalleEnvio();
-
-        // item.cantidad = +((document.getElementById('cantidad') as HTMLInputElement)).value;
         item.cantidad = +(this.myCantidadRef.nativeElement).value;
+        item.descuento = 0;
 
         if (item.cantidad > this.producto.stock) {
           swal.fire('Stock Insuficiente', 'No existen las suficientes existencias de este producto.', 'warning');
@@ -135,16 +137,15 @@ export class CreateEnvioComponent implements OnInit {
             if (this.existeItem(this.producto.idProducto)) {
               this.incrementaCantidad(this.producto.idProducto, item.cantidad);
               this.producto = new Producto();
-              // (document.getElementById('cantidad') as HTMLInputElement).value = '';
               this.myCantidadRef.nativeElement.value = '';
             } else {
               item.producto = this.producto;
+              item.subTotalDescuento = item.calcularImporte();
               item.subTotal = item.calcularImporte();
               this.envio.itemsEnvio.push(item);
               this.producto = new Producto();
 
-              // (document.getElementById('cantidad') as HTMLInputElement).value = '';
-              this.myCantidadRef.nativeElement
+              this.myCantidadRef.nativeElement.value = '';
             }
 
           } else if (item.cantidad === 0) {
@@ -155,6 +156,38 @@ export class CreateEnvioComponent implements OnInit {
         }
       }
     }
+  }
+
+  actualizarCantidad(idProducto: number, event: any): void {
+    const cantidad = event.target.value as number;
+
+    this.envio.itemsEnvio = this.envio.itemsEnvio.map((item: DetalleEnvio) => {
+      if (idProducto === item.producto.idProducto) {
+        if (cantidad > item.producto.stock) {
+          swal.fire('Stock Insuficiente', 'No existen las suficientes existencias de este producto.', 'warning');
+        } else {
+          item.cantidad = cantidad;
+          item.subTotal = item.calcularImporte();
+          item.subTotalDescuento = item.calcularImporteDescuento();
+        }
+      }
+
+      return item;
+    });
+  }
+
+  actualizarCantidadDescuento(idProducto: number, event: any): void {
+    const descuento = event.target.value as number;
+
+    this.envio.itemsEnvio = this.envio.itemsEnvio.map((item: DetalleEnvio) => {
+      if (idProducto === item.producto.idProducto) {
+        item.descuento = descuento;
+        item.subTotal = item.calcularImporte();
+        item.subTotalDescuento = item.calcularImporteDescuento();
+      }
+
+      return item;
+    });
   }
 
   existeItem(id: number): boolean {
@@ -172,6 +205,7 @@ export class CreateEnvioComponent implements OnInit {
       if (idProducto === item.producto.idProducto) {
         item.cantidad = item.cantidad + cantidad;
         item.subTotal = item.calcularImporte();
+        item.subTotalDescuento = item.calcularImporteDescuento();
       }
 
       return item;
@@ -182,23 +216,45 @@ export class CreateEnvioComponent implements OnInit {
     this.envio.itemsEnvio.splice(index, 1);
   }
 
-  create(): void {}
+  create(): void {
+    this.envio.cliente = this.cliente;
+    this.envio.usuario = this.usuario;
+    this.envio.abono = this.abono;
+    this.envio.saldoPendiente = this.saldoRestante;
+    this.envio.totalEnvio = this.envio.calcularTotal();
+    console.log(this.envio);
+
+    this.envioService.create(this.envio).subscribe(response => {
+      this.cliente = new Cliente();
+      this.envio = new Envio();
+      this.myBuscarTexto.nativeElement.value = '';
+      this.router.navigate(['/envios/index']);
+      swal.fire('Pedido Realizado', `Pedido No. ${response.envio.idEnvio} creado satisfactoriamente.`, 'success');
+      this.myBuscarTexto.nativeElement.focus();
+
+      // AQÍ VA EL CÓDIGO PARA GENERAR EL PDF
+      
+    });
+  }
 
   loadProducto(event): void {
-    // (document.getElementById('codigo') as HTMLInputElement).value = event.codProducto;
-    // this.myButtonXRef.nativeElement.click();
-    // (document.getElementById('cantidad') as HTMLInputElement).focus();
     this.myCodProdRef.nativeElement.value = event.codProducto;
-    (document.getElementById('button-x')).click();
+    (document.getElementById ('button-x')).click(); // No se utilizó el nativeElement ya que no reconocia el botón para cerrar el modal
     this.buscarProducto();
     this.myCantidadRef.nativeElement.focus();
   }
 
   loadCliente(event): void {
-    // (document.getElementById('buscar') as HTMLInputElement).value = event.nit;
-    // this.myButton2XRef.nativeElement.click();    
     this.myBuscarTexto.nativeElement.value = event.nit;
-    (document.getElementById('button-2x')).click();
+    (document.getElementById('button-2x')).click(); // No se utilizó el nativeElement ya que no reconocia el botón para cerrar el modal
     this.buscarCliente();
+  }
+
+  calcularSaldo(event): void {
+    if (this.abono) {
+      this.saldoRestante = this.envio.calcularTotal() - this.abono;
+    } else {
+      this.saldoRestante = 0.00
+    }
   }
 }

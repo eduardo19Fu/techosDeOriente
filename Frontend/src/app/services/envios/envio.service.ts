@@ -35,7 +35,7 @@ export class EnvioService {
   }
 
   create(envio: Envio): Observable<any> {
-    return this.httpClient.post<any>(`${this.url}/evios`, envio).pipe(
+    return this.httpClient.post<any>(`${this.url}/envios`, envio).pipe(
       catchError(e => {
         Swal.fire(e.error.mensaje, e.error.error, 'error');
         return throwError(e);
