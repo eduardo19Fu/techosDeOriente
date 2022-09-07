@@ -39,7 +39,6 @@ export class FacturasComponent implements OnInit, AfterViewInit {
   constructor(
     private detailService: DetailService,
     private facturaService: FacturaService,
-    private activatedRoute: ActivatedRoute,
     public auth: AuthService
   ) {
     this.title = 'Facturas';
@@ -109,28 +108,28 @@ export class FacturasComponent implements OnInit, AfterViewInit {
     const id = factura.idFactura;
 
     /************ REGIMEN FEL *************/
-    const url = 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid=' + factura.certificacionSat;
-    window.open(url, '_blank').focus();
+    // const url = 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid=' + factura.certificacionSat;
+    // window.open(url, '_blank').focus();
 
     /************* FACTURA PDF ***************/
 
-    // this.facturaService.getBillPDF(id).subscribe(res => {
-    //   const url = window.URL.createObjectURL(res.data);
-    //   const a = document.createElement('a');
-    //   document.body.appendChild(a);
-    //   a.setAttribute('style', 'display: none');
-    //   a.setAttribute('target', 'blank');
-    //   a.href = url;
-    //   /*
-    //     opcion para pedir descarga de la respuesta obtenida
-    //     a.download = response.filename;
-    //   */
-    //   window.open(a.toString(), '_blank');
-    //   window.URL.revokeObjectURL(url);
-    //   a.remove();
-    // },
-    //   error => {
-    //     console.log(error);
-    //   });
+    this.facturaService.getBillPDF(id).subscribe(res => {
+      const url = window.URL.createObjectURL(res.data);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.setAttribute('target', 'blank');
+      a.href = url;
+      /*
+        opcion para pedir descarga de la respuesta obtenida
+        a.download = response.filename;
+      */
+      window.open(a.toString(), '_blank');
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    },
+      error => {
+        console.log(error);
+      });
   }
 }

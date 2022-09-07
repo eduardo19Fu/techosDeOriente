@@ -53,6 +53,7 @@ const appRoutes: Routes = [
     /****** MENUS DE FACTURAS ******/
     {path: 'facturas/index', component: FacturasComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_COBRADOR']}},
     {path: 'facturas/create', component: CreateFacturaComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_COBRADOR']}},
+    {path: 'facturas/create/:envio', component: CreateFacturaComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_COBRADOR']}},
     {path: 'facturas/correlativos/index', component: CorrelativosComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN']}},
     {path: 'facturas/correlativos/create', component: CreateCorrelativoComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN']}},
     {path: 'facturas/correlativos/create/:id', component: CreateCorrelativoComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN']}},

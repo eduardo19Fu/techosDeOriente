@@ -17,6 +17,10 @@ import { UsuarioService } from 'src/app/services/usuarios/usuario.service';
 
 import swal from 'sweetalert2';
 import { ModalCambioService } from '../../../services/facturas/modal-cambio.service';
+import { EnvioService } from '../../../services/envios/envio.service';
+import { Envio } from '../../../models/envio';
+import { ActivatedRoute } from '@angular/router';
+import { DetalleEnvio } from '../../../models/detalle-envio';
 
 @Component({
   selector: 'app-create-factura',
@@ -37,6 +41,7 @@ export class CreateFacturaComponent implements OnInit {
   usuario: UsuarioAuxiliar;
   factura: Factura;
   correlativo: Correlativo;
+  envio: Envio;
 
   efectivo: number;
   cambio = 0.00;
@@ -48,6 +53,8 @@ export class CreateFacturaComponent implements OnInit {
     private usuarioService: UsuarioService,
     private clienteCreateService: ClienteCreateService,
     private correlativoService: CorrelativoService,
+    private envioService: EnvioService,
+    private activatedRoute: ActivatedRoute,
     public authService: AuthService
   ) {
     this.title = 'Crear Factura';
@@ -59,6 +66,11 @@ export class CreateFacturaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadUsuario();
+    this.loadEnvio();
+  }
+
+  loadUsuario(): void {
     this.usuarioService.getUsuario(this.authService.usuario.idUsuario).subscribe(
       usuario => {
         this.usuario = usuario;
@@ -300,6 +312,50 @@ export class CreateFacturaComponent implements OnInit {
     (document.getElementById('buscar') as HTMLInputElement).value = event.nit;
     (document.getElementById('button-2x')).click();
     this.buscarCliente();
+  }
+
+  /**
+   * Función que evalúa si el parámetro que permite la carga del envío viene incluido en la ruta.
+   * 
+   */
+
+   loadEnvio(): void {
+    this.activatedRoute.params.subscribe(param => {
+      const idenvio = param.envio;
+
+      if (idenvio) {
+        this.envioService.getEnvio(idenvio).subscribe(
+          envio => {
+            this.envio = envio;
+            if (this.envio) {
+              this.loadEnvioToBilling(envio);
+            }
+          }
+        );
+      }
+    });
+  }
+
+  /**
+   * Carga el envio recibido por ruta para poderse llevar a cabo la facturación.
+   * @param envio Parámetro que sirve para realizar la busqueda del envío deseado por medio de su ID.
+   */
+
+  loadEnvioToBilling(envio: Envio): void {
+    let itemFactura: DetalleFactura;
+    this.cliente = envio.cliente;
+
+    envio.itemsEnvio.forEach((env: DetalleEnvio) => {
+      itemFactura = new DetalleFactura();
+      
+      itemFactura.producto = env.producto;
+      itemFactura.cantidad = env.cantidad;
+      itemFactura.subTotal = env.subTotal;
+      itemFactura.descuento = env.descuento;
+      itemFactura.subTotalDescuento = env.subTotalDescuento;
+      
+      this.factura.itemsFactura.push(itemFactura);
+    });
   }
 
 }

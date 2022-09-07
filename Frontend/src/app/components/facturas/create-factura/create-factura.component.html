@@ -25,7 +25,7 @@
 <div class="row">
 
     <div class="col-md-9">
-        <div class="card card-primary">
+        <div class="card card-red">
             <div class="card-header">
                 <h3 class="card-title">Ingrese los datos</h3>
             </div>
@@ -199,8 +199,32 @@
             </div>
             <div class="card-body">
                 <h4>
-                    Total: <span><strong>{{factura.calcularTotal() | currency: "Q": "symbol"}}</strong></span>
+                    Total: 
+                    <span>
+                        <strong>
+                            {{envio ? (envio.totalEnvio | currency: "Q" : "symbol") 
+                                    : (factura.calcularTotal() | currency: "Q": "symbol")}}
+                        </strong>
+                    </span>
                 </h4>
+                <hr>
+                <h5 *ngIf="envio">
+                    Abonado:
+                    <span>
+                        <strong>
+                            {{envio ? (envio.abono | currency: "Q" : "symbol") : ''}}
+                        </strong>
+                    </span>
+                </h5>
+                <h5 *ngIf="envio">
+                    Saldo Pendiente:
+                    <span>
+                        <strong>
+                            {{envio ? (envio.saldoPendiente | currency: "Q" : "symbol") : ''}}
+                        </strong>
+                    </span>
+                </h5>
+                <hr *ngIf="envio">
                 <form action="">
                     <div class="form-group">
                         <label for="efectivo">Efectivo:</label>

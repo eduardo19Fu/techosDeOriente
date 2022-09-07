@@ -58,6 +58,11 @@
                             (click)="abrirDetalle(envio)">
                             <i class="fas fa-asterisk"></i>
                         </button>
+
+                        <button type="button" class="btn bg-gradient-warning margin" name="billing"
+                            [routerLink]="['/facturas/create', envio.idEnvio]">
+                            <i class="fas fa-file-invoice"></i>
+                        </button>
                     </td>
                 </tr>
             </tbody>
