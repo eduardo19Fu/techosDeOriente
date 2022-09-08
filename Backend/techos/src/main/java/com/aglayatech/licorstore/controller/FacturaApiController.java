@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.aglayatech.licorstore.generics.ErroresHandler;
 import com.aglayatech.licorstore.generics.Excepcion;
 import com.aglayatech.licorstore.model.*;
 import com.aglayatech.licorstore.service.*;
@@ -74,6 +75,9 @@ public class FacturaApiController {
     @Autowired
     private ITipoFacturaService serviceTipoFactura;
 
+    @Autowired
+    private IEnvioService serviceEnvio;
+
     @Secured(value = {"ROLE_ADMIN", "ROLE_COBRADOR"})
     @GetMapping(value = "/facturas")
     public List<Factura> index() {
@@ -114,33 +118,27 @@ public class FacturaApiController {
     public ResponseEntity<?> create(@RequestBody Factura factura, BindingResult result) {
 
         Factura newFactura = null;
+        Envio envio = null;
+
         Estado estado = serviceEstado.findByEstado("PAGADO");
         Estado estadoCorr = serviceEstado.findByEstado("ACTIVO");
         Estado estadoCorrFinalizado = serviceEstado.findByEstado("FINALIZADO");
         TipoFactura tipoFactura = serviceTipoFactura.getTipoFactura(1);
-
-        Emisor emisor = null;
-        Certificador certificador = null;
-        MovimientoProducto movimientoProducto = null;
         Correlativo correlativo = serviceCorrelativo.findByUsuario(factura.getUsuario(), estadoCorr);
 
+        List<Estado> estados = new ArrayList<>();
         Map<String, Object> response = new HashMap<>();
 
         if (result.hasErrors()) {
-            // tratamiento de errores
-            List<String> errors = result.getFieldErrors().stream()
-                    .map(err -> "El campo '".concat(err.getField().concat("' ")).concat(err.getDefaultMessage()))
-                    .collect(Collectors.toList());
-
-            response.put("errors", errors);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map<String, Object>>(ErroresHandler.bingingResultErrorsHandler(result), HttpStatus.BAD_REQUEST);
         }
 
         try {
 
             /******************* PROCEDIMIENTO SIN REGIMEN FEL ******************/
             factura.setEstado(estado);
-            factura.setTipoFactura(tipoFactura);
+            estados = serviceEstado.findAll();
+
             if (correlativo != null) {
                 newFactura = serviceFactura.save(factura);
 
@@ -153,28 +151,29 @@ public class FacturaApiController {
                     }
 
                     serviceCorrelativo.save(correlativo);
+
                     // Actualiza el stock de los productos que forman parte de cada una de las lineas de la factura
                     for (DetalleFactura item : newFactura.getItemsFactura()) {
-                        Producto producto = item.getProducto();
-                        movimientoProducto = new MovimientoProducto();
-
-                        movimientoProducto.setTipoMovimiento(serviceMovimiento.findTipoMovimiento("VENTA"));
-                        movimientoProducto.setUsuario(factura.getUsuario());
-                        movimientoProducto.setProducto(producto);
-                        movimientoProducto.setStockInicial(producto.getStock());
-                        movimientoProducto.setCantidad(item.getCantidad());
-                        movimientoProducto.calcularStock();
-
-                        serviceMovimiento.save(movimientoProducto);
-                        serviceProducto.save(producto);
+                        if (this.updateExistencias(item.getProducto(), item.getCantidad(), "venta".toUpperCase())){
+                            this.movimiento(item.getProducto(), newFactura, item.getCantidad(), "venta".toUpperCase());
+                        }
                     }
                 } else {
-                    response.put("mensaje", "Factura se encuentra vacía.");
+                    response.put("mensaje", "Factura no pudo ser registrada..");
                     return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
                 }
             } else {
                 response.put("mensaje", "No existe correlativo activo para este usuario.");
                 return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+            }
+
+            // ACTUALIZAR LOS ESTADOS Y LA FACTURA DEL ENVIO
+            if (factura.getTipoFactura().getIdTipoFactura() == 3) {
+                envio = factura.getEnvio();
+                envio.setEstados(Envio.determinarEstadosEnvio(2, estados));
+                envio.setFactura(newFactura);
+
+                serviceEnvio.save(envio);
             }
 
 
@@ -218,20 +217,9 @@ public class FacturaApiController {
 
                 // Recorre el listado de items de la factura y retorna al stock la cantidad comprada
                 for (DetalleFactura linea : cancelFactura.getItemsFactura()) {
-
-                    Producto producto = linea.getProducto();
-                    movimientoProducto = new MovimientoProducto();
-
-                    movimientoProducto.setTipoMovimiento(serviceMovimiento.findTipoMovimiento("ANULACION FACTURA"));
-                    movimientoProducto.setUsuario(usuario);
-
-                    movimientoProducto.setProducto(producto);
-                    movimientoProducto.setCantidad(linea.getCantidad());
-                    movimientoProducto.calcularStock();
-
-                    serviceMovimiento.save(movimientoProducto);
-                    serviceProducto.save(producto);
-
+                    if (this.updateExistencias(linea.getProducto(), linea.getCantidad(), "anulacion factura".toUpperCase())) {
+                        this.movimiento(linea.getProducto(), cancelFactura, linea.getCantidad(), "anulacion factura".toUpperCase());
+                    }
                 }
 
                 serviceFactura.save(cancelFactura);
@@ -260,7 +248,7 @@ public class FacturaApiController {
 
         try {
             maxVentas = serviceFactura.getMaxVentas();
-        } catch(DataAccessException e) {
+        } catch (DataAccessException e) {
             return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -324,4 +312,28 @@ public class FacturaApiController {
 
     }
 
+    private boolean updateExistencias(Producto producto, int cantidad, String tipoMovimiento) {
+        Producto productoUpdated = new Producto();
+
+        if (tipoMovimiento.equals("venta".toUpperCase())) {
+            producto.setStock(producto.getStock() - cantidad);
+        } else if (tipoMovimiento.equals("anulacion factura".toUpperCase())) {
+            producto.setStock(producto.getStock() + cantidad);
+        }
+
+        productoUpdated = serviceProducto.save(producto);
+        return (productoUpdated != null ? true : false);
+    }
+
+    private void movimiento(Producto producto, Factura factura, int cantidad, String tipoMovimiento) {
+        MovimientoProducto movimiento = new MovimientoProducto();
+
+        movimiento.setTipoMovimiento(serviceMovimiento.findTipoMovimiento(tipoMovimiento));
+        movimiento.setUsuario(factura.getUsuario());
+        movimiento.setProducto(producto);
+        movimiento.setStockInicial(producto.getStock());
+        movimiento.setCantidad(cantidad);
+
+        serviceMovimiento.save(movimiento);
+    }
 }

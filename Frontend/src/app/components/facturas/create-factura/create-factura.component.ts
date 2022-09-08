@@ -21,6 +21,7 @@ import { EnvioService } from '../../../services/envios/envio.service';
 import { Envio } from '../../../models/envio';
 import { ActivatedRoute } from '@angular/router';
 import { DetalleEnvio } from '../../../models/detalle-envio';
+import { TipoFactura } from '../../../models/tipo-factura';
 
 @Component({
   selector: 'app-create-factura',
@@ -242,25 +243,32 @@ export class CreateFacturaComponent implements OnInit {
     this.factura.itemsFactura.splice(index, 1);
   }
 
+  validarTipoFactura(): TipoFactura {
+    let tipoFactura: TipoFactura = new TipoFactura();
+
+    // Retornamos el valor asignado a tipo factura determinando si existe o no el envío pasado por url.
+    return (!this.envio ? tipoFactura = {idTipoFactura: 1, tipoFactura: "NORMAL"} : tipoFactura = {idTipoFactura: 3, tipoFactura: "PAGO_ENVIO"});
+
+  }
+
   createFactura(): void {
     this.factura.noFactura = this.correlativo.correlativoActual;
     this.factura.serie = this.correlativo.serie;
     this.factura.cliente = this.cliente;
     this.factura.usuario = this.usuario;
+    this.factura.envio = this.envio;
     this.factura.total = this.factura.calcularTotal();
+    this.factura.tipoFactura = this.validarTipoFactura();
 
     this.facturaService.create(this.factura).subscribe(
       response => {
         this.cliente = new Cliente();
         this.factura = new Factura();
         this.cargarCorrelativo();
-        // (document.getElementById('buscar') as HTMLInputElement).value = '';
         this.myBuscarTexto.nativeElement.value = '';
         swal.fire('Venta Realizada', `Factura No. ${response.factura.noFactura} creada con éxito!`, 'success');
-        // (document.getElementById('buscar') as HTMLInputElement).focus();
         this.myBuscarTexto.nativeElement.focus();
         this.cambio = 0;
-        // (document.getElementById('efectivo') as HTMLInputElement).value = '';
         this.myEfectivoRef.nativeElement.value = '';
 
         this.facturaService.getBillPDF(response.factura.idFactura).subscribe(res => {
@@ -333,6 +341,8 @@ export class CreateFacturaComponent implements OnInit {
           }
         );
       }
+    }, error => {
+      console.log(error);
     });
   }
 

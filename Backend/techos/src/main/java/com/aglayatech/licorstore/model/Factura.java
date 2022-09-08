@@ -8,20 +8,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -51,7 +40,7 @@ public class Factura implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario")
-	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	@JsonIgnoreProperties({ "password", "hibernateLazyInitializer", "handler" })
 	private Usuario usuario;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -68,6 +57,10 @@ public class Factura implements Serializable {
 	@JoinColumn(name = "id_tipo_factura")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private TipoFactura tipoFactura;
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "factura")
+	@JsonIgnoreProperties(value = {"factura", "hibernateLazyInitializer", "handler" }, allowSetters = true)
+	private Envio envio;
 
 	public Factura() {
 		itemsFactura = new ArrayList<>();
@@ -204,6 +197,14 @@ public class Factura implements Serializable {
 
 	public void setTipoFactura(TipoFactura tipoFactura) {
 		this.tipoFactura = tipoFactura;
+	}
+
+	public Envio getEnvio() {
+		return envio;
+	}
+
+	public void setEnvio(Envio envio) {
+		this.envio = envio;
 	}
 
 	public Double calcularTotal() {

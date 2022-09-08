@@ -1,5 +1,6 @@
 package com.aglayatech.licorstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "envios")
@@ -35,6 +37,11 @@ public class Envio implements Serializable {
     @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
     private Usuario usuario;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_factura")
+    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+    private Factura factura;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_envio")
     @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
@@ -42,6 +49,7 @@ public class Envio implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "estados_envio", joinColumns = @JoinColumn(name = "id_envio"), inverseJoinColumns = @JoinColumn(name = "id_estado"))
+    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
     private List<Estado> estados;
 
     public Envio() {
@@ -133,6 +141,14 @@ public class Envio implements Serializable {
         this.usuario = usuario;
     }
 
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
+    }
+
     public List<DetalleEnvio> getItemsEnvio() {
         return itemsEnvio;
     }
@@ -175,22 +191,48 @@ public class Envio implements Serializable {
         return newEstados;
     }
 
+    public static List<Estado> determinarEstadosEnvio(int movimiento, List<Estado> estados) {
+        // movimiento 1 = DESPACHAR SOLO SI YA ESTA PAGADO O ABONO ES MAYOR QUE CERO
+        // movimiento 2 = COMPLETAR PAGO SI ABONO ES MAYOR A CERO Y DESPACHAR
+
+        List<Estado> newEstados = new ArrayList<>();
+
+        switch (movimiento) {
+            case 1:
+                newEstados = estados.stream().filter((estado -> estado.getEstado().equals("despachado".toUpperCase()) || estado.getEstado().equals("no pagado".toUpperCase())))
+                        .map(estado -> estado)
+                        .collect(Collectors.toList());
+                break;
+            case 2:
+                newEstados = estados.stream().filter((estado -> estado.getEstado().equals("despachado".toUpperCase()) || estado.getEstado().equals("pagado".toUpperCase())))
+                        .map(estado -> estado)
+                        .collect(Collectors.toList());
+                break;
+            default:
+                break;
+        }
+
+        return newEstados;
+    }
+
     @Override
     public String toString() {
-        return "Envio{" +
-                "idEnvio=" + idEnvio +
-                ", fechaPedido=" + fechaPedido +
-                ", telefonoReferencia='" + telefonoReferencia + '\'' +
-                ", totalEnvio=" + totalEnvio +
-                ", abono=" + abono +
-                ", saldoPendiente=" + saldoPendiente +
-                ", fechaRegistro=" + fechaRegistro +
-                ", referencia='" + referencia + '\'' +
-                ", cliente=" + cliente +
-                ", usuario=" + usuario +
-                ", itemsEnvio=" + itemsEnvio +
-                ", estados=" + estados +
-                '}';
+        final StringBuilder sb = new StringBuilder("Envio{");
+        sb.append("idEnvio=").append(idEnvio);
+        sb.append(", fechaPedido=").append(fechaPedido);
+        sb.append(", telefonoReferencia='").append(telefonoReferencia).append('\'');
+        sb.append(", totalEnvio=").append(totalEnvio);
+        sb.append(", abono=").append(abono);
+        sb.append(", saldoPendiente=").append(saldoPendiente);
+        sb.append(", fechaRegistro=").append(fechaRegistro);
+        sb.append(", referencia='").append(referencia).append('\'');
+        sb.append(", cliente=").append(cliente);
+        sb.append(", usuario=").append(usuario);
+        sb.append(", itemsEnvio=").append(itemsEnvio);
+        sb.append(", estados=").append(estados);
+        sb.append(", factura=").append(factura);
+        sb.append('}');
+        return sb.toString();
     }
 
     private final static long serialVersionUID = 1L;

@@ -1,7 +1,7 @@
 import { Cliente } from './cliente';
 import { UsuarioAuxiliar } from './auxiliar/usuario-auxiliar';
 import { DetalleEnvio } from './detalle-envio';
-import { Usuario } from './usuario';
+import { Factura } from './factura';
 
 export class Envio {
     idEnvio: number;
@@ -15,6 +15,7 @@ export class Envio {
 
     cliente: Cliente;
     usuario: UsuarioAuxiliar;
+    factura: Factura;
     itemsEnvio: DetalleEnvio[] = [];
 
     calcularTotal(): number {

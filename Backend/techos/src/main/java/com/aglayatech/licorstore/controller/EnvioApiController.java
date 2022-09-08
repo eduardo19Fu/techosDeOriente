@@ -74,6 +74,7 @@ public class EnvioApiController {
         }
 
         try {
+
             envio.setEstados(envio.determinarEstadosEnvio(estadoService.findAll()));
             newEnvio = envioService.save(envio);
 

@@ -60,7 +60,7 @@
                         </button>
 
                         <button type="button" class="btn bg-gradient-warning margin" name="billing"
-                            [routerLink]="['/facturas/create', envio.idEnvio]">
+                            [routerLink]="['/facturas/create', envio.idEnvio]" [disabled]="envio.factura">
                             <i class="fas fa-file-invoice"></i>
                         </button>
                     </td>
