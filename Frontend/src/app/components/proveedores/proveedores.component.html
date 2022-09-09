@@ -61,12 +61,13 @@
                         </span>
                     </td>
                     <td class="center-options">
-                        <button class="btn bg-gradient-info margin"
-                            [routerLink]="['/proveedor/create', proveedor.idProveedor]" *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
+                        <button class="btn bg-gradient-info margin" placement="top" ngbTooltip="Editar"
+                            [routerLink]="['/proveedor/create', proveedor.idProveedor]" 
+                            *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
                             <i class="fas fa-edit"></i>
                         </button>
 
-                        <button class="btn bg-gradient-danger margin"
+                        <button class="btn bg-gradient-danger margin" placement="top" ngbTooltip="Eliminar"
                             *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
                             <i class="fas fa-trash-alt"></i>
                         </button>

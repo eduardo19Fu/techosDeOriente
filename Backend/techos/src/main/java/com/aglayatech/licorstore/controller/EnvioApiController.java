@@ -100,32 +100,38 @@ public class EnvioApiController {
 
     /**
      * Método controlador encargado de llevar a cabo el alta de un envío
-     * @param id Recibe como parámetro de la petición el id del envío.
+     * @param envio Recibe como parámetro de la petición el envío que se desea despachar.
      * @return ResponseEntity Devuelve una respuesta en formato json con los resultados obtenidos durante la operación.
      * */
 
     @Secured(value = {"ROLE_ADMIN", "ROLE_INVENTARIO"})
-    @PutMapping("/envios/cancel/{id}")
-    public ResponseEntity<?> movimientoEnvio(@PathVariable("id") Integer id,
-                                             @RequestParam(name = "movimiento", required = false) String movimiento) {
+    @PutMapping("/envios/despachar")
+    public ResponseEntity<?> despachar(@RequestBody Envio envio) {
 
-        Envio envioToChange = null;
-        Envio envioCanceled = null;
-        Estado estadoCancelado = null;
+        Envio envioToDispatch = null;
+        Envio envioDispatched = null;
+
+        List<Estado> estados = null;
         Map<String, Object> response = new HashMap<>();
 
         try {
-            estadoCancelado = estadoService.findByEstado("Cancelado".toUpperCase());
-            envioToChange = envioService.getEnvio(id);
+            envioToDispatch = envioService.getEnvio(envio.getIdEnvio());
+            estados = estadoService.findAll();
 
-            if (envioToChange != null) {
-
+            if (envioToDispatch != null) {
+                envioToDispatch.setEstados(Envio.determinarEstadosEnvio(1, estados));
+                envioDispatched = envioService.save(envioToDispatch);
+            } else {
+                response.put("mensaje", "El envio que desea despachar no se encuentra registrado en la base de datos.");
+                return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
             }
         } catch (DataAccessException e) {
             return new ResponseEntity<Map<String, Object>>(Excepcion.dataAccessExceptionHandler(e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return null;
+        response.put("mensaje", "Envío despachado con éxito.");
+        response.put("envio", envioDispatched);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
     /**

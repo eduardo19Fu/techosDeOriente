@@ -73,12 +73,12 @@
                     <td>{{compra.fechaRegistro | date: 'dd/MM/yyyy - hh:mm:ss'}}</td>
                     <td *ngIf="authService.hasRole('ROLE_ADMIN')">
                         <!-- Aquí val el botón de detalle de compra -->
-                        <button class="btn bg-gradient-success margin"
+                        <button class="btn bg-gradient-success margin" placement="top" ngbTooltip="Detalle Compra"
                             (click)="abrirDetalle(compra)">
                             <i class="fas fa-asterisk"></i>
                         </button>
                         <!-- Aquí va el botón de eliminar -->
-                        <button class="btn bg-gradient-danger margin" name="delete"
+                        <button class="btn bg-gradient-danger margin" name="delete" placement="top" ngbTooltip="Eliminar Compra"
                             type="button" (click)="anularCompra(compra)">
                             <i class="fas fa-ban"></i>
                         </button>

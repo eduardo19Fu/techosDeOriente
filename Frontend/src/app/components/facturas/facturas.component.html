@@ -69,18 +69,18 @@
                     <td>{{factura.usuario.usuario}}</td>
                     <td class="center-options" *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')">
 
-                        <button class="btn bg-gradient-success margin" name="detail" type="button"
+                        <button class="btn bg-gradient-success margin" name="detail" type="button" placement="top" ngbTooltip="Detalle"
                             (click)="abrirDetalle(factura)">
                             <i class="fas fa-asterisk"></i>
                         </button>
 
-                        <button class="btn bg-gradient-warning margin" name="print" type="button"
+                        <button class="btn bg-gradient-warning margin" name="print" type="button" placement="top" ngbTooltip="Imprimir Comprobante"
                             (click)="printBill(factura)" [disabled]="factura.estado.idEstado === 4">
                             <i class="fas fa-print"></i>
                         </button>
 
                         <!-- Aquí va el botón de eliminar -->
-                        <button class="btn bg-gradient-danger margin" name="cancel" type="button"
+                        <button class="btn bg-gradient-danger margin" name="cancel" type="button" placement="top" ngbTooltip="Anular Factura"
                             (click)="cancel(factura)" *ngIf="auth.hasRole('ROLE_ADMIN')"
                             [disabled]="factura.estado.idEstado === 4">
                             <i class="fas fa-ban"></i>

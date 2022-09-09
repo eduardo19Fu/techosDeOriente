@@ -49,15 +49,14 @@
                     <td>{{tipo.usuario.usuario}}</td>
                     <td class="center-options" *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
 
-                        <button class="btn bg-gradient-info margin" type="button" name="edit" 
-                            data-toggle="tooltip" data-placement="top" title="Editar"
+                        <button class="btn bg-gradient-info margin" type="button" name="edit" placement="top" ngbTooltip="Editar"
                             [routerLink]="['/productos/categorias/create', tipo.idTipoProducto]">
 
                             <i class="fas fa-edit"></i>
                         </button>&nbsp;
 
-                        <button class="btn bg-gradient-danger margin" type="button" name="delete" (click)="delete(tipo)"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                        <button class="btn bg-gradient-danger margin" type="button" name="delete" placement="top" ngbTooltip="Eliminar"
+                            (click)="delete(tipo)">
 
                             <i class="fas fa-trash-alt"></i>
                         </button>

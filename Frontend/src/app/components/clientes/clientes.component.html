@@ -56,14 +56,14 @@
                     <td *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')" class="center-options">
 
                         <button class="btn bg-gradient-info margin" type="button" name="edit" 
-                            data-toggle="tooltip" data-placement="top" title="Editar"
+                            placement="top" ngbTooltip="Editar Cliente" title="Editar"
                             [routerLink]="['/clientes/create', cliente.idCliente]">
 
                             <i class="fas fa-edit"></i>
                         </button>&nbsp;
 
                         <button class="btn bg-gradient-danger margin" type="button" name="delete" (click)="delete(cliente)"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                        placement="top" ngbTooltip="Eliminar Cliente" title="Eliminar">
 
                             <i class="fas fa-trash-alt"></i>
                         </button>
