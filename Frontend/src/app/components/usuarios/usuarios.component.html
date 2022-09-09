@@ -55,17 +55,19 @@
                     <td>{{usuario.fechaRegistro | date: 'dd/MM/yyyy - hh:mm'}}</td>
                     <td class="center-options">
 
-                        <button class="btn bg-gradient-info" name="edit" type="button"
+                        <button type="button" class="btn bg-gradient-info" name="edit" placement="top" ngbTooltip="Editar Usuario"
                             [routerLink]="['/usuarios/create', usuario.idUsuario]">
                             <i class="fas fa-edit"></i>
                         </button>&nbsp;
 
-                        <button class="btn bg-gradient-success" type="button" (click)="abrirDetalle(usuario)">
+                        <button type="button" class="btn bg-gradient-success" placement="top" ngbTooltip="Detalle del Usuario"
+                            (click)="abrirDetalle(usuario)">
                             <i class="fas fa-asterisk"></i>
                         </button>&nbsp;
 
                         <!-- Aquí va el botón de eliminar -->
-                        <button class="btn bg-gradient-danger" name="delete" type="button" (click)="delete(usuario)">
+                        <button type="button" class="btn bg-gradient-danger" name="delete" placement="top" ngbTooltip="Eliminar Usuario"
+                            (click)="delete(usuario)">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>

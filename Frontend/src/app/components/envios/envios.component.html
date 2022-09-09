@@ -54,14 +54,19 @@
                     <td>{{envio.saldoPendiente | currency: 'Q' : 'symbol'}}</td>
                     <td class="center-options" *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_COBRADOR')">
 
-                        <button class="btn bg-gradient-success margin" name="detail" type="button"
+                        <button type="button" class="btn bg-gradient-success margin" name="detail" placement="top" ngbTooltip="Detalle de Envío"
                             (click)="abrirDetalle(envio)">
                             <i class="fas fa-asterisk"></i>
                         </button>
 
-                        <button type="button" class="btn bg-gradient-warning margin" name="billing"
+                        <button type="button" class="btn bg-gradient-warning margin" name="billing" placement="top" ngbTooltip="Facturar Envío"
                             [routerLink]="['/facturas/create', envio.idEnvio]" [disabled]="envio.factura">
                             <i class="fas fa-file-invoice"></i>
+                        </button>
+
+                        <button type="button" class="btn bg-gradient-secondary margin" name="despachar" placement="top" ngbTooltip="Despachar Envío"
+                            (click)="despachar(envio)" [disabled]="envio.factura || despachado(envio.estados)">
+                            <i class="fas fa-truck"></i>
                         </button>
                     </td>
                 </tr>

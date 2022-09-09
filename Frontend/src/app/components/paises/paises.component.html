@@ -43,17 +43,14 @@
                     <td>{{pais.idPais}}</td>
                     <td>{{pais.nombre}}</td>
                     <td class="center-options">
-                        <button class="btn bg-gradient-success" data-toggle="modal" (click)="abrirModal(producto)">
-                            <i class="fa fa-asterisk"></i>
-                        </button>
 
-                        <button class="btn bg-gradient-info margin"
+                        <button class="btn bg-gradient-info margin" placement="top" ngbTooltip="Editar"
                             [routerLink]="['/paises/create', pais.idPais]"
                             *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
                             <i class="fas fa-edit"></i>
                         </button>
 
-                        <button class="btn bg-gradient-danger margin"
+                        <button class="btn bg-gradient-danger margin" placement="top" ngbTooltip="Eliminar"
                             *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
                             <i class="fas fa-trash-alt"></i>
                         </button>

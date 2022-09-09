@@ -43,6 +43,15 @@ export class EnvioService {
     );
   }
 
+  dispatch(envio: Envio): Observable<any> {
+    return this.httpClient.put<any>(`${this.url}/envios/despachar`, envio).pipe(
+      catchError(e => {
+        Swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
+
   delete(id: number): Observable<any> {
     return this.httpClient.delete<any>(`${this.url}/envios/${id}`).pipe(
       catchError(e => {

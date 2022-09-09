@@ -52,6 +52,7 @@ import { ModalDetalleCompraComponent } from './components/compras/modal-detalle-
 import { EnviosComponent } from './components/envios/envios.component';
 import { CreateEnvioComponent } from './components/envios/create-envio/create-envio.component';
 import { DetailEnvioComponent } from './components/envios/detail-envio/detail-envio.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import { DetailEnvioComponent } from './components/envios/detail-envio/detail-en
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    routing
+    routing,
+    NgbModule
   ],
   providers: [
     appRoutingProviders,

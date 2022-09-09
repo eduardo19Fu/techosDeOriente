@@ -199,12 +199,22 @@ public class Envio implements Serializable {
 
         switch (movimiento) {
             case 1:
-                newEstados = estados.stream().filter((estado -> estado.getEstado().equals("despachado".toUpperCase()) || estado.getEstado().equals("no pagado".toUpperCase())))
-                        .map(estado -> estado)
-                        .collect(Collectors.toList());
+                newEstados = estados.stream()
+                                .filter((estado -> estado.getEstado().equals("despachado".toUpperCase()) || estado.getEstado().equals("no pagado".toUpperCase())))
+                                .map(estado -> estado)
+                                .collect(Collectors.toList());
                 break;
             case 2:
-                newEstados = estados.stream().filter((estado -> estado.getEstado().equals("despachado".toUpperCase()) || estado.getEstado().equals("pagado".toUpperCase())))
+                newEstados = estados
+                                .stream()
+                                .filter((estado -> estado.getEstado().equals("despachado".toUpperCase()) || estado.getEstado().equals("pagado".toUpperCase())))
+                                .map(estado -> estado)
+                                .collect(Collectors.toList());
+                break;
+            case 3:
+                newEstados = estados
+                        .stream()
+                        .filter((estado -> estado.getEstado().equals("cancelado".toUpperCase()) || estado.getEstado().equals("no pagado".toUpperCase())))
                         .map(estado -> estado)
                         .collect(Collectors.toList());
                 break;

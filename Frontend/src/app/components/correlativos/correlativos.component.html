@@ -68,13 +68,13 @@
                     </td>
                     <td *ngIf="authService.hasRole('ROLE_ADMIN')">
 
-                        <button class="btn bg-gradient-info margin" name="edit" type="button"
+                        <button class="btn bg-gradient-info margin" name="edit" type="button" placement="top" ngbTooltip="Editar"
                             [routerLink]="['/facturas/correlativos/create', correlativo.idCorrelativo]">
                             <i class="fas fa-edit"></i>
                         </button>
 
                         <!-- Aquí va el botón de eliminar -->
-                        <button class="btn bg-gradient-danger margin" name="delete"
+                        <button class="btn bg-gradient-danger margin" name="delete" placement="top" ngbTooltip="Anular"
                             type="button" (click)="anularCorrelativo(correlativo)">
                             <i class="fas fa-ban"></i>
                         </button>
