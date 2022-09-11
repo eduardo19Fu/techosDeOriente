@@ -259,6 +259,14 @@
                     </ul>
                 </li> <!-- MENU DE USUARIOS FINAL -->
 
+                <li class="nav-header">M&oacute;dulo de Reportes</li>
+                <li class="nav-item">
+                    <a [routerLink]="['/reportes/main']" class="nav-link" [ngClass]="{'active': router.url === '/reportes/main'}">
+                        <i class="far fa-newspaper nav-icon"></i>
+                        <p>Reportes</p>
+                    </a>
+                </li>
+
                 <li class="nav-header">Sesión</li>
                 <li class="nav-item">
                     <a [routerLink]="['/login']" class="nav-link">
