@@ -104,11 +104,14 @@ public class MovimientoProductoApiController {
 		return lista;
 	}
 
-	/************ REPORTS CONTROLLERS 
-	 * @throws ParseException 
+	/** REPORTS CONTROLLERS
+	 *
+	 * @throws ParseException
 	 * @throws SQLException 
 	 * @throws JRException 
-	 * @throws FileNotFoundException *****************/
+	 * @throws FileNotFoundException
+	 *
+	 * *****************/
 	
 	@PostMapping(value = "/movimientos/inventario")
 	public void inventario(@RequestParam("fechaIni") String paramFechaIni, @RequestParam("fechaFin") String paramFechaFin, 

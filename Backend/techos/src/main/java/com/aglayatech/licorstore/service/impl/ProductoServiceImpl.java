@@ -1,9 +1,13 @@
 package com.aglayatech.licorstore.service.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +15,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +40,8 @@ import net.sf.jasperreports.engine.JasperReport;
 @SuppressWarnings("unused")
 @Service
 public class ProductoServiceImpl implements IProductoService {
+
+	private final static Logger LOGGER = LoggerFactory.getLogger(ProductoServiceImpl.class);
 
 	@Autowired
 	private IProductoRepository repoProducto;
@@ -111,4 +119,30 @@ public class ProductoServiceImpl implements IProductoService {
 		return "Reporte Creado";
 	}
 
+	@Override
+	public byte[] reportInventory(String fecha) throws JRException, FileNotFoundException, SQLException, ParseException {
+
+		Date parametroFecha = null;
+		final Connection connection = localDataSource.getConnection();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Map<String, Object> params = new HashMap<>();
+
+		parametroFecha = format.parse(fecha);
+		params.put("pFecha", parametroFecha);
+		LOGGER.debug("Parámetro fecha mapeado: {}", params.get("pFecha").toString());
+		InputStream file = getClass().getResourceAsStream("/reports/rpt_inventario.jrxml");
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, connection);
+		ByteArrayOutputStream byteArrayOutputStream = getByteArrayOutputStream(jasperPrint);
+		connection.close();
+
+		return byteArrayOutputStream.toByteArray();
+	}
+
+	protected ByteArrayOutputStream getByteArrayOutputStream(JasperPrint jasperPrint) throws JRException {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream);
+		return byteArrayOutputStream;
+	}
 }
