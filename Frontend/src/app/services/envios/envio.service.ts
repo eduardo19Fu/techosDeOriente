@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import { Envio } from 'src/app/models/envio';
 
@@ -59,5 +59,26 @@ export class EnvioService {
         return throwError(e);
       })
     );
-  } 
+  }
+
+  /**
+   * Función que permite la comunicación necesaria para generar el reporte cuando un envío
+   * es creado.
+   * @param idenvio
+   */
+
+  getEnvioPdf(idenvio: number): Observable<any> {
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/pdf');
+    const requestOptions: any = { headers, responseType: 'blob' };
+
+    return this.httpClient.get<any>(`${this.url}/envios/generate/${idenvio}`, requestOptions).pipe(
+      map((response: any) => {
+        return {
+          filename: 'envio.pdf',
+          data: new Blob([response], {type: 'application/pdf'})
+        };
+      })
+    );
+  }
 }

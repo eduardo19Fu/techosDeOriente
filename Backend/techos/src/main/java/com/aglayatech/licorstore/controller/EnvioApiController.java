@@ -7,6 +7,7 @@ import com.aglayatech.licorstore.service.IEnvioService;
 import com.aglayatech.licorstore.service.IEstadoService;
 import com.aglayatech.licorstore.service.IMovimientoProductoService;
 import com.aglayatech.licorstore.service.IProductoService;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -132,6 +138,33 @@ public class EnvioApiController {
         response.put("mensaje", "Envío despachado con éxito.");
         response.put("envio", envioDispatched);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+    }
+
+    // APARTADO DE REPORTES
+    @GetMapping("/envios/generate/{id}")
+    public void getReporteEnvio(@PathVariable("id") Integer idenvio, HttpServletResponse httpServletResponse) {
+
+        try {
+            byte[] bytesEnvio = envioService.showPedido(idenvio);
+            ByteArrayOutputStream output = new ByteArrayOutputStream(bytesEnvio.length);
+            output.write(bytesEnvio, 0, bytesEnvio.length);
+
+            httpServletResponse.setContentType("application/pdf");
+            httpServletResponse.addHeader("Content-Disposition", "inline; filename=bill-" + idenvio + ".pdf");
+
+            OutputStream os;
+
+            os = httpServletResponse.getOutputStream();
+            output.writeTo(os);
+            os.flush();
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JRException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

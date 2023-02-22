@@ -59,9 +59,14 @@
                             <i class="fas fa-asterisk"></i>
                         </button>
 
-                        <button type="button" class="btn bg-gradient-warning margin" name="billing" placement="top" ngbTooltip="Facturar Envío"
+                        <button type="button" class="btn bg-gradient-primary margin" name="billing" placement="top" ngbTooltip="Facturar Envío"
                             [routerLink]="['/facturas/create', envio.idEnvio]" [disabled]="envio.factura">
                             <i class="fas fa-file-invoice"></i>
+                        </button>
+
+                        <button type="button" class="btn bg-gradient-warning margin" name="print" placement="top" ngbTooltip="Imprimir Envío"
+                            (click)="print(envio)">
+                            <i class="fas fa-print"></i>
                         </button>
 
                         <button type="button" class="btn bg-gradient-secondary margin" name="despachar" placement="top" ngbTooltip="Despachar Envío"

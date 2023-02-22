@@ -31,6 +31,7 @@ import { ComprasComponent } from './components/compras/compras.component';
 import { CreateCompraComponent } from './components/compras/create-compra/create-compra.component';
 import { EnviosComponent } from './components/envios/envios.component';
 import { CreateEnvioComponent } from './components/envios/create-envio/create-envio.component';
+import { ReportesComponent } from './components/reportes/reportes.component';
 
 const appRoutes: Routes = [
     {path: '', component: LoginComponent},
@@ -87,6 +88,9 @@ const appRoutes: Routes = [
     {path: 'usuarios/index', component: UsuariosComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN']}},
     {path: 'usuarios/create', component: CreateUsuarioComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN']}},
     {path: 'usuarios/create/:id', component: CreateUsuarioComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN']}},
+
+    /****** MENU DE REPORTES ******/
+    {path: 'reportes/main', component: ReportesComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN']}},
 
     {path: '**', component: ErrorComponent}
 ];

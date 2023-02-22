@@ -53,6 +53,11 @@ import { EnviosComponent } from './components/envios/envios.component';
 import { CreateEnvioComponent } from './components/envios/create-envio/create-envio.component';
 import { DetailEnvioComponent } from './components/envios/detail-envio/detail-envio.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ReportesComponent } from './components/reportes/reportes.component';
+import { ModalVentasMensualesComponent } from './components/reportes/modales/modal-ventas-mensuales/modal-ventas-mensuales.component';
+import { ModalVentasDiariasComponent } from './components/reportes/modales/modal-ventas-diarias/modal-ventas-diarias.component';
+import { ModalEnviosRealizadosComponent } from './components/reportes/modales/modal-envios-realizados/modal-envios-realizados.component';
+import { ModalProductosInventarioComponent } from './components/reportes/modales/modal-productos-inventario/modal-productos-inventario.component';
 
 @NgModule({
   declarations: [
@@ -100,7 +105,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ModalDetalleCompraComponent,
     EnviosComponent,
     CreateEnvioComponent,
-    DetailEnvioComponent
+    DetailEnvioComponent,
+    ReportesComponent,
+    ModalVentasMensualesComponent,
+    ModalVentasDiariasComponent,
+    ModalEnviosRealizadosComponent,
+    ModalProductosInventarioComponent
   ],
   imports: [
     BrowserModule,

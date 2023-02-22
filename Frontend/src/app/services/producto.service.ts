@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -121,6 +121,26 @@ export class ProductoService {
   }
 
   /******** SERVICIO DE REPORTES **********/
+
+  printInventarioReport(fecha: Date): Observable<any> {
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/pdf');
+    const requestOptions: any = {headers, responseType: 'blob'};
+
+    return this.http.get<any>(`${this.url}/productos/reports/inventario?fecha=${fecha.toString()}`, requestOptions).pipe(
+      map((response: any) => {
+        return {
+          filename: 'inventario.pdf',
+          data: new Blob([response], {type: 'application/pdf'})
+        };
+      }),
+      catchError(e => {
+        swal.fire('Error al Imprimir', 'Error al generar el inventario en formato PDF', 'error');
+        console.log(e);
+        return throwError(e);
+      })
+    );
+  }
 
 
   // Código original de subida de imagenes para productos

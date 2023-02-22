@@ -2,6 +2,7 @@ package com.aglayatech.licorstore.service;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -38,5 +39,7 @@ public interface IProductoService {
 	
 	// SERVICIOS DE REPORTES
 	public String reportExpired() throws JRException, FileNotFoundException, SQLException;
+
+	public byte[] reportInventory(String fecha) throws JRException, FileNotFoundException, SQLException, ParseException;
 
 }

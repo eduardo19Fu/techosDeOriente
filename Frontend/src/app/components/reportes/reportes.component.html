@@ -1,0 +1,78 @@
+<!-- MODAL PARA GENERAR INFORME DE VENTAS MENSUALES -->
+<app-modal-ventas-mensuales></app-modal-ventas-mensuales>
+
+<!-- MODAL PARA GENERAR INFORME DE VENTAS DIARIAS -->
+<app-modal-ventas-diarias></app-modal-ventas-diarias>
+
+<!-- MODAL PARA GENERAR INFORME DE ENVIOS REALIZADOS -->
+<app-modal-envios-realizados></app-modal-envios-realizados>
+
+<!-- MODAL PARA GENERAR INFORME DE INVENTARIO -->
+<app-modal-productos-inventario></app-modal-productos-inventario>
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{title}}</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-success">
+                <i class="fas fa-calendar-alt"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text">Ventas Mensuales</span>
+                <button type="button" class="btn btn-outline-info" placement="top" ngbTooltip="Generar Informe"
+                    data-toggle="modal" data-target="#modal-ventas-mensuales">
+                    <i class="far fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Ventas Diarias</span>
+                <button type="button" class="btn btn-outline-info" placement="top" ngbTooltip="Generar Informe"
+                    data-toggle="modal" data-target="#modal-ventas-diarias">
+                    <i class="far fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Envíos Realizados</span>
+                <button type="button" class="btn btn-outline-info" placement="top" ngbTooltip="Generar Informe"
+                    data-toggle="modal" data-target="#modal-envios-realizados">
+                    <i class="far fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Inventario</span>
+                <button type="button" class="btn btn-outline-info" placement="top" ngbTooltip="Generar Informe"
+                    data-toggle="modal" data-target="#modal-productos-inventario">
+                    <i class="far fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

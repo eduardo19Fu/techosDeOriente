@@ -1,15 +1,21 @@
 package com.aglayatech.licorstore.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.aglayatech.licorstore.generics.Excepcion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
@@ -41,10 +47,14 @@ import com.aglayatech.licorstore.service.IUploadFileService;
 
 import net.sf.jasperreports.engine.JRException;
 
+import javax.servlet.http.HttpServletResponse;
+
 @CrossOrigin(origins = { "http://localhost:4200", "https://dtodojalapa.xyz", "http://dtodojalapa.xyz" })
 @RestController
 @RequestMapping(value = "/api")
 public class ProductoApiController {
+
+	private final static Logger logger = LoggerFactory.getLogger(ProductoApiController.class);
 
 	@Autowired
 	private IProductoService serviceProducto;
@@ -295,10 +305,29 @@ public class ProductoApiController {
 	
 	/*************** PDF REPORTS CONTROLLERS *****************/
 
-	@GetMapping(value = "/productos/expired")	// REPORTE DE PRODUCTOS CADUCADOS
-	public String expired() throws FileNotFoundException, JRException, SQLException{
-		
-		return serviceProducto.reportExpired();
+	@GetMapping(value = "/productos/reports/inventario")	// REPORTE DE PRODUCTOS CADUCADOS
+	public void rptInventario(@RequestParam("fecha") String fecha, HttpServletResponse httpServletResponse)
+			throws FileNotFoundException, JRException, SQLException, ParseException {
+
+		byte[] bytesInventoryReport = serviceProducto.reportInventory(fecha);
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(bytesInventoryReport.length);
+		outputStream.write(bytesInventoryReport, 0, bytesInventoryReport.length);
+
+		logger.info("Enviando Reporte con fecha {}", fecha);
+		httpServletResponse.setContentType("application/pdf");
+		httpServletResponse.addHeader("Content-Disposition", "inline; filename=inventory.pdf");
+
+		OutputStream os;
+		try {
+			os = httpServletResponse.getOutputStream();
+			outputStream.writeTo(os);
+			os.flush();
+			os.close();
+		} catch(IOException e) {
+			logger.error("Error ocurrido {}", e.getMessage());
+			e.printStackTrace();
+		}
+
 	}
 
 }
