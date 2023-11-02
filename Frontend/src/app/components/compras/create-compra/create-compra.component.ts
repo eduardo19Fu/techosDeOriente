@@ -68,35 +68,19 @@ export class CreateCompraComponent implements OnInit {
    * 
    */
   create(): void {
-    let bandera = false;
     this.usuarioService.getUsuario(this.authService.usuario.idUsuario).subscribe(
       response => {
         this.compra.usuario = response;
 
         if (this.compra.usuario) {
-          this.compra.items.forEach(item => {
-            if (item.producto.nombre.length === 0) {
-              Swal.fire('');
-              bandera = false;
-              return;
-            } else {
-              bandera = !bandera;
-              return;
+          this.compraService.create(this.compra).subscribe(
+            response => {
+              this.router.navigate(['/compras/index']);
+              Swal.fire(response.mensaje, `La compra: ${response.compra.noComprobante} fue guardada con éxito.`, 'success');
             }
-          });
-
-          if (bandera) {
-
-            this.compraService.create(this.compra).subscribe(
-              response => {
-                this.router.navigate(['/compras/index']);
-                Swal.fire(response.mensaje, `La compra: ${response.compra.noComprobante} fue guardada con éxito.`, 'success');
-              }
-            );
-
-          }
-
+          );
         }
+
       }
     );
   }
@@ -149,24 +133,34 @@ export class CreateCompraComponent implements OnInit {
 
         this.producto.precioVenta = +(document.getElementById('precio-venta') as HTMLInputElement).value;
 
-        item.producto = this.producto;
-        item.subTotal = item.calcularSubTotal();
-        item.precioUnitario = item.producto.precioCompra;
+        if(this.producto.nombre && this.producto.nombre.length !== 0) {
 
-        if (item.producto.precioCompra && item.producto.porcentajeGanancia) {
+        
+          item.producto = this.producto;
+          item.subTotal = item.calcularSubTotal();
+          item.precioUnitario = item.producto.precioCompra;
 
-          if (item.producto.nombre) {
-            this.compra.items.push(item);
-            this.producto = new Producto();
-            console.log(item.producto);
-  
-            (document.getElementById('cantidad') as HTMLInputElement).value = '';
-          } else {
-            Swal.fire('Advertencia', 'No se puede agregar un nuevo producto sin un nombre válido.', 'warning');
+          if (!item.producto.porcentajeGanancia || item.producto.porcentajeGanancia <= 0) {
+            item.producto.porcentajeGanancia = item.producto.calcularPorcentajeGanancia(item.producto.precioCompra, this.producto.precioVenta);
           }
 
+          if (item.producto.precioCompra && item.producto.porcentajeGanancia) {
+
+            if (item.producto.nombre) {
+              this.compra.items.push(item);
+              this.producto = new Producto();
+              console.log(item.producto);
+    
+              (document.getElementById('cantidad') as HTMLInputElement).value = '';
+            } else {
+              Swal.fire('Advertencia', 'No se puede agregar un nuevo producto sin un nombre válido.', 'warning');
+            }
+
+          } else {
+            Swal.fire('Adevertencia', 'No se puede agregar una linea nueva sin los valores de precio compra y porcentaje ganancia.', 'warning');
+          }
         } else {
-          Swal.fire('Adevertencia', 'No se puede agregar una linea nueva sin los valores de precio compra y porcentaje ganancia.', 'warning');
+          Swal.fire('Nombre Vacío', 'No se puede agregar un producto sin nombre a la lista de productos comprados.', 'warning');
         }
 
       } else if (item.cantidad === 0) {
@@ -235,5 +229,20 @@ export class CreateCompraComponent implements OnInit {
   mostrarPrecioVenta(): void {
     (document.getElementById('precio-venta') as HTMLInputElement).value
       = this.producto.calcularPrecioVenta(this.producto.precioCompra, this.producto.porcentajeGanancia).toString();
+  }
+
+  // Comparar para reemplazar el valor en el select del formulario en caso de existir
+  compararMarca(o1: MarcaProducto, o2: MarcaProducto): boolean {
+    if (o1 === undefined && o2 === undefined) {
+      return true;
+    }
+    return o1 === null || o2 === null || o1 === undefined || o2 === undefined ? false : o1.idMarcaProducto === o2.idMarcaProducto;
+  }
+
+  compararTipo(o1: TipoProducto, o2: TipoProducto): boolean {
+    if (o1 === undefined && o2 === undefined) {
+      return true;
+    }
+    return o1 == null || o2 == null || o1 === undefined || o2 === undefined ? false : o1.idTipoProducto === o2.idTipoProducto;
   }
 }

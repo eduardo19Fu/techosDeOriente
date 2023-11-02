@@ -171,6 +171,9 @@ public class EnvioApiController {
      * Función encargado de la actualización de existencias
      * <p>Este se encarga de determinar la cantidad de existencias del  producto recién ingresado
      * para poder actualizar su stock de forma adecuada según los items recibidos.</p>
+     * @param producto Producto a operar existencias
+     * @param cantidad Cantidad de existencias a operar para la actualizacion
+     *
      * */
     public void updateExistencias(Producto producto, int cantidad) {
         Producto productoUpdated = new Producto();

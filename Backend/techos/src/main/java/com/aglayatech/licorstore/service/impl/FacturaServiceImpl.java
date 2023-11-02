@@ -15,6 +15,8 @@ import javax.sql.DataSource;
 
 import com.aglayatech.licorstore.model.TipoFactura;
 import com.aglayatech.licorstore.repository.ITipoFacturaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +38,8 @@ import net.sf.jasperreports.engine.JasperReport;
 
 @Service
 public class FacturaServiceImpl implements IFacturaService {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(FacturaServiceImpl.class);
 
 	@Autowired
 	private IFacturaRepository repoFactura;
@@ -87,7 +91,8 @@ public class FacturaServiceImpl implements IFacturaService {
 		Map<String, Object> params = new HashMap<>();
 		InputStream file = getClass().getResourceAsStream("/reports/poliza.jrxml");
 		params.put("usuario", usuario);
-		params.put("fecha", fecha);
+		params.put("fechaIni", fecha);
+		LOGGER.info("Fecha para poliza => " + params.get(fecha));
 
 		JasperReport jasperReport = JasperCompileManager.compileReport(file);
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, con);
@@ -125,6 +130,22 @@ public class FacturaServiceImpl implements IFacturaService {
 		Map<String, Object> params = new HashMap<>();
 		params.put("idfactura", idfactura);
 		InputStream file = getClass().getResourceAsStream("/reports/factura_2.jrxml");
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, con);
+
+		ByteArrayOutputStream byteArrayOutputStream = getByteArrayOutputStream(jasperPrint);
+
+		con.close();
+		return byteArrayOutputStream.toByteArray();
+	}
+
+	@Override
+	public byte[] reportMonthlySales(Integer year) throws JRException, FileNotFoundException, SQLException {
+		Connection con = localDataSource.getConnection(); // Obtiene la conexión actual a la base de datos
+		Map<String, Object> params = new HashMap<>();
+		InputStream file = getClass().getResourceAsStream("/reports/rpt_ventas_mensuales.jrxml");
+		params.put("pYear", year);
 
 		JasperReport jasperReport = JasperCompileManager.compileReport(file);
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, con);
