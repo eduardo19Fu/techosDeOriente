@@ -103,4 +103,18 @@ export class FacturaService {
       })
     );
   }
+
+  getMonthlySellsReportPDF(year: number): Observable<any> {
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/pdf');
+    const requestOptions: any = {headers, responseType: 'blob'};
+    return this.http.get<any>(`${this.url}/facturas/monthly-sales?year=${year}`, requestOptions).pipe(
+      map((response: any) => {
+        return {
+          filename: 'ventas-mensuales.pdf',
+          data: new Blob([response], {type: 'application/pdf'})
+        };
+      })
+    );
+  }
 }

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -167,10 +168,34 @@ public class EnvioApiController {
         }
     }
 
+    @GetMapping("/envios/realizados")
+    public void getReporteEnviosRealizados(@RequestParam("fecha") String fecha, HttpServletResponse httpServletResponse) {
+        try {
+            byte[] bytesEnvio = envioService.rptEnviosRealizados(fecha);
+            ByteArrayOutputStream output = new ByteArrayOutputStream(bytesEnvio.length);
+            output.write(bytesEnvio, 0, bytesEnvio.length);
+
+            httpServletResponse.setContentType("application/pdf");
+            httpServletResponse.addHeader("Content-Disposition", "inline; filename=reporte-envios.pdf");
+
+            OutputStream os;
+
+            os = httpServletResponse.getOutputStream();
+            output.writeTo(os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Función encargado de la actualización de existencias
      * <p>Este se encarga de determinar la cantidad de existencias del  producto recién ingresado
      * para poder actualizar su stock de forma adecuada según los items recibidos.</p>
+     * @param producto Producto a operar existencias
+     * @param cantidad Cantidad de existencias a operar para la actualizacion
+     *
      * */
     public void updateExistencias(Producto producto, int cantidad) {
         Producto productoUpdated = new Producto();

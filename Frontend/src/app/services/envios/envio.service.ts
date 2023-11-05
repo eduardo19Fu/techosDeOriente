@@ -81,4 +81,24 @@ export class EnvioService {
       })
     );
   }
+
+  /**
+   * función que permite llevar a cabo la creación del reporte de envios realizados según la fecha dada
+   * @param fecha Permite filtrar los envios realizados por fecha
+   * 
+   */
+  getEnviosRealizadosPdf(fecha: Date): Observable<any> {
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/pdf');
+    const requestOptions: any = { headers, responseType: 'blob' };
+
+    return this.httpClient.get<any>(`${this.url}/envios/realizados?fecha=${fecha.toString()}`, requestOptions).pipe(
+      map((response: any) => {
+        return {
+          filename: 'reporte-envios.pdf',
+          data: new Blob([response], {type: 'application/pdf'})
+        };
+      })
+    );
+  }
 }

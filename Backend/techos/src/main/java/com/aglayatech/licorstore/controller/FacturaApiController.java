@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +20,8 @@ import com.aglayatech.licorstore.service.*;
 import com.fel.firma.emisor.FirmaEmisor;
 import com.fel.firma.emisor.RespuestaServicioFirma;
 import com.fel.validaciones.documento.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,8 @@ import net.sf.jasperreports.engine.JRException;
 @RestController
 @RequestMapping(value = {"/api"})
 public class FacturaApiController {
+
+    private static final Logger log = LoggerFactory.getLogger(FacturaApiController.class);
 
     @Autowired
     private IFacturaService serviceFactura;
@@ -288,11 +291,12 @@ public class FacturaApiController {
     public void dailySales(@RequestParam("usuario") String usuario, @RequestParam("fecha") String fecha, HttpServletResponse httpServletResponse)
             throws FileNotFoundException, JRException, SQLException, ParseException {
 
-        Date fechaBusqueda;
+        Date fechaBusqueda = null;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         fechaBusqueda = format.parse(fecha);
         Integer idusuario = Integer.parseInt(usuario);
 
+        log.info("Fecha de Buscqueda para la poliza de usuario: " + fechaBusqueda.toString());
         byte[] bytesDailySalesReport = serviceFactura.resportDailySales(idusuario, fechaBusqueda);
         ByteArrayOutputStream out = new ByteArrayOutputStream(bytesDailySalesReport.length);
         out.write(bytesDailySalesReport, 0, bytesDailySalesReport.length);
@@ -309,9 +313,38 @@ public class FacturaApiController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
+    @GetMapping(value = "/facturas/monthly-sales")
+    public void dailySales(@RequestParam("year") String year, HttpServletResponse httpServletResponse) throws JRException, SQLException, FileNotFoundException {
+        Integer anho = Integer.parseInt(year);
+
+        byte[] bytesMonthlySalesReport = serviceFactura.reportMonthlySales(anho);
+        ByteArrayOutputStream out = new ByteArrayOutputStream(bytesMonthlySalesReport.length);
+        out.write(bytesMonthlySalesReport, 0, bytesMonthlySalesReport.length);
+
+        httpServletResponse.setContentType("application/pdf");
+        httpServletResponse.addHeader("Content-Disposition", "inline; filename=monthly-sales.pdf");
+
+        OutputStream os;
+        try {
+            os = httpServletResponse.getOutputStream();
+            out.writeTo(os);
+            os.flush();
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    /**
+     * metodo que actualiza las existencias según el tipo de movimiento que se este registrando
+     * @param producto
+     * @param cantidad
+     * @param tipoMovimiento
+     * */
     private boolean updateExistencias(Producto producto, int cantidad, String tipoMovimiento) {
         Producto productoUpdated = new Producto();
 

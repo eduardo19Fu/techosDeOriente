@@ -209,7 +209,7 @@ public class CompraApiController {
                 producto = item.getProducto();
                 producto.setEstado(estadoProductoNuevo);
                 producto.setFechaIngreso(simpleDateFormat.parse(fechaIngreso.toString()));
-                producto.setStock(item.getCantidad());
+                // producto.stock() debe ir a cero para evitar que el movimiento del producto sume exitencias
             }
 
             this.productoService.save(producto);

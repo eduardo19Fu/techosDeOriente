@@ -35,4 +35,6 @@ public interface IFacturaService {
 
 	public byte[] showBill2(Long idfactura) throws JRException, FileNotFoundException, SQLException;
 
+	public byte[] reportMonthlySales(Integer year) throws JRException, FileNotFoundException, SQLException;
+
 }

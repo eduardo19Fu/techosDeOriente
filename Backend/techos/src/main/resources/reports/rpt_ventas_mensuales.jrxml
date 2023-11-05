@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_ventas_mensuales" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7df6a1ca-4ebd-4ab2-9664-eb54330a930c">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+    <parameter name="pYear" class="java.lang.Integer"/>
+    <queryString>
+        <![CDATA[CALL PR_VENTAS_MENSUALES( $P{pYear} );]]>
+    </queryString>
+    <field name="MES" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="MES"/>
+        <property name="com.jaspersoft.studio.field.label" value="MES"/>
+    </field>
+    <field name="TOTAL" class="java.math.BigDecimal">
+        <property name="com.jaspersoft.studio.field.name" value="TOTAL"/>
+        <property name="com.jaspersoft.studio.field.label" value="TOTAL"/>
+    </field>
+    <variable name="VENTA_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+    </variable>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="95" splitType="Stretch">
+            <staticText>
+                <reportElement x="1" y="5" width="750" height="60" uuid="97521811-8478-4fc4-a502-9eb7ecbd1029"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <text><![CDATA[TECHOS DE ORIENTE]]></text>
+            </staticText>
+            <image scaleImage="FillFrame">
+                <reportElement x="80" y="2" width="83" height="87" uuid="9ccbdfee-9df2-49cc-b2ba-42e26558d5c8"/>
+                <imageExpression><![CDATA[this.getClass().getResourceAsStream("/static/images/reports-image/techos-logo.jpeg")]]></imageExpression>
+            </image>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="53" splitType="Stretch">
+            <staticText>
+                <reportElement x="0" y="2" width="750" height="30" uuid="3ad59834-634b-4d28-9f56-3dc9f4f27e38"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="13" isBold="true"/>
+                </textElement>
+                <text><![CDATA[REPORTE DE VENTAS MENSUAL]]></text>
+            </staticText>
+            <textField pattern="MMMMM dd, yyyy">
+                <reportElement x="649" y="33" width="100" height="16" uuid="7fbf8c47-50da-4fa0-8877-05cf5e5fc342"/>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="544" y="33" width="100" height="16" uuid="75799d32-2206-44fe-a382-0a98146e6be4"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Fecha de Impresión:]]></text>
+            </staticText>
+            <line>
+                <reportElement x="1" y="-1" width="750" height="1" uuid="022276a3-7225-4f79-a4e9-5d7dbbf513ab"/>
+                <graphicElement>
+                    <pen lineWidth="3.0" lineColor="#FC8421"/>
+                </graphicElement>
+            </line>
+        </band>
+    </pageHeader>
+    <columnHeader>
+        <band height="33" splitType="Stretch">
+            <staticText>
+                <reportElement x="0" y="1" width="100" height="30" uuid="d82f78fa-cc54-4b5a-b369-8771b10db6b2">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="55cd9f21-ec40-4ca4-8335-ede9c566ff53"/>
+                </reportElement>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[MES]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="130" y="1" width="100" height="30" uuid="2d51d477-c248-4902-b0a3-ada7fdc9f6e1">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="17a621cd-41dc-482a-bfc4-5d44b53eb83b"/>
+                </reportElement>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[TOTAL]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="24" splitType="Stretch">
+            <textField>
+                <reportElement x="0" y="2" width="100" height="17" uuid="6594985d-5e82-4a79-a12c-209d06302360">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="55cd9f21-ec40-4ca4-8335-ede9c566ff53"/>
+                </reportElement>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{MES}]]></textFieldExpression>
+            </textField>
+            <textField pattern="Q#,##0.00;¤-#,##0.00">
+                <reportElement x="129" y="1" width="100" height="18" uuid="831cd85e-b743-45f6-bf11-99cc19661016">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="17a621cd-41dc-482a-bfc4-5d44b53eb83b"/>
+                </reportElement>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="1" y="-33" width="750" height="1" uuid="896ada01-516c-4db6-a43e-bf93a58113c8"/>
+                <graphicElement>
+                    <pen lineWidth="3.0" lineColor="#FC8421"/>
+                </graphicElement>
+            </line>
+        </band>
+    </detail>
+    <pageFooter>
+        <band height="97" splitType="Stretch">
+            <rectangle radius="15">
+                <reportElement x="440" y="0" width="311" height="90" uuid="fad3414c-eff4-4a17-8bf7-7bf007eeefb7"/>
+                <graphicElement>
+                    <pen lineWidth="3.0" lineStyle="Solid" lineColor="#FC8421"/>
+                </graphicElement>
+            </rectangle>
+            <textField>
+                <reportElement x="474" y="4" width="250" height="30" uuid="4d2efd73-55f9-41ac-8ce0-1f6ca5db1742"/>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Ventas totales del año " + $P{pYear}]]></textFieldExpression>
+            </textField>
+            <textField pattern="Q#,##0.00;¤-#,##0.00">
+                <reportElement x="474" y="54" width="251" height="30" uuid="4a762d97-6866-4e1b-b151-6b9ee1d00a8d"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{VENTA_TOTAL}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    <summary>
+        <band height="42" splitType="Stretch"/>
+    </summary>
+</jasperReport>

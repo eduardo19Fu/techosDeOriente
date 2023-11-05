@@ -20,6 +20,26 @@ export class ModalEnviosRealizadosComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit(): void {}
+  onSubmit(): void {
+    this.generarInformeEnviosRealizados();
+  }
+
+  generarInformeEnviosRealizados(): void {
+    this.envioService.getEnviosRealizadosPdf(this.fecha).subscribe(response => {
+      const url = window.URL.createObjectURL(response.data);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.setAttribute('target', 'blank');
+      a.href = url;
+
+      window.open(a.toString(), '_blank');
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    },
+      error => {
+        console.log(error);
+    });
+  }
 
 }

@@ -129,7 +129,7 @@ public class ProductoServiceImpl implements IProductoService {
 
 		parametroFecha = format.parse(fecha);
 		params.put("pFecha", parametroFecha);
-		LOGGER.debug("Parámetro fecha mapeado: {}", params.get("pFecha").toString());
+		LOGGER.info("Parámetro fecha mapeado: {}", params.get("pFecha").toString());
 		InputStream file = getClass().getResourceAsStream("/reports/rpt_inventario.jrxml");
 
 		JasperReport jasperReport = JasperCompileManager.compileReport(file);

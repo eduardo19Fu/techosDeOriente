@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_envios_realizados" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a608c8bc-03fb-49e8-bb91-ef4ee04949e4">
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="TechosDataAdapter.jrdax"/>
+    <parameter name="fechaPedido" class="java.util.Date"/>
+    <queryString language="SQL">
+        <![CDATA[SELECT env.id_envio, env.total_envio, cl.nombre as nombre_cliente, pr.nombre as nombre_producto, pr.precio_venta, de.descuento
+FROM envios env
+INNER JOIN clientes cl ON cl.id_cliente = env.id_cliente
+INNER JOIN detalle_envio de ON env.id_envio = de.id_envio
+INNER JOIN productos pr ON de.id_producto = pr.id_producto
+WHERE DATE(env.fecha_pedido) =  $P{fechaPedido}
+]]>
+    </queryString>
+    <field name="id_envio" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.name" value="id_envio"/>
+        <property name="com.jaspersoft.studio.field.label" value="id_envio"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="envios"/>
+    </field>
+    <field name="total_envio" class="java.math.BigDecimal">
+        <property name="com.jaspersoft.studio.field.name" value="total_envio"/>
+        <property name="com.jaspersoft.studio.field.label" value="total_envio"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="envios"/>
+    </field>
+    <field name="nombre_cliente" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="nombre"/>
+        <property name="com.jaspersoft.studio.field.label" value="nombre_cliente"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="clientes"/>
+    </field>
+    <field name="nombre_producto" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="nombre"/>
+        <property name="com.jaspersoft.studio.field.label" value="nombre_producto"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="productos"/>
+    </field>
+    <field name="precio_venta" class="java.math.BigDecimal">
+        <property name="com.jaspersoft.studio.field.name" value="precio_venta"/>
+        <property name="com.jaspersoft.studio.field.label" value="precio_venta"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="productos"/>
+    </field>
+    <field name="descuento" class="java.lang.Float">
+        <property name="com.jaspersoft.studio.field.name" value="descuento"/>
+        <property name="com.jaspersoft.studio.field.label" value="descuento"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="detalle_envio"/>
+    </field>
+    <group name="Group1">
+        <groupExpression><![CDATA[$F{id_envio}]]></groupExpression>
+        <groupHeader>
+            <band height="24">
+                <rectangle>
+                    <reportElement x="0" y="-1" width="570" height="21" backcolor="#FF8B3D" uuid="9301220c-cd7a-4003-9b84-635edeb3d675"/>
+                </rectangle>
+                <textField>
+                    <reportElement x="9" y="2" width="120" height="16" uuid="053b3219-7350-459e-8b46-e10f914d5c60"/>
+                    <textElement>
+                        <font size="10" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA["Envío No.: " + $F{id_envio}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="StretchHeight">
+                    <reportElement x="150" y="2" width="280" height="16" uuid="c63e155b-9449-478b-babf-7dfc32b8dda2"/>
+                    <textElement markup="none">
+                        <font size="10" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA["Cliente: " + $F{nombre_cliente}]]></textFieldExpression>
+                </textField>
+                <textField pattern="Q#,##0.00;Q-#,##0.00">
+                    <reportElement x="440" y="2" width="123" height="16" uuid="f5a067b8-933a-4ccf-9bee-5534d882355c"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="10" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{total_envio}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupHeader>
+        <groupFooter>
+            <band/>
+        </groupFooter>
+    </group>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="79" splitType="Stretch">
+            <textField pattern="dd-MM-yyyy">
+                <reportElement x="100" y="0" width="470" height="79" uuid="47204894-fb67-44ec-be5e-e19ba597b058"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["ENVIOS REALIZADOS CON FECHA: " + new SimpleDateFormat("dd-MM-yyyy").format($P{fechaPedido})]]></textFieldExpression>
+            </textField>
+            <image>
+                <reportElement x="0" y="0" width="130" height="79" uuid="3cfe100c-6705-40c4-9656-edd8f9ebaaaf"/>
+                <imageExpression><![CDATA[this.getClass().getResourceAsStream("/static/images/reports-image/techos-logo.jpeg")]]></imageExpression>
+            </image>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="23" splitType="Stretch">
+            <staticText>
+                <reportElement x="0" y="1" width="570" height="19" uuid="e3111dac-dece-4523-b179-79d020bd335a"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[DETALLES]]></text>
+            </staticText>
+        </band>
+    </pageHeader>
+    <columnHeader>
+        <band height="3" splitType="Stretch"/>
+    </columnHeader>
+    <detail>
+        <band height="30" splitType="Stretch">
+            <textField textAdjust="StretchHeight">
+                <reportElement x="42" y="0" width="258" height="20" uuid="cdb8c11b-b264-4d88-807b-de6d12b4b49b">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b0cb729c-d500-4640-bd8c-594b2fd6faa6"/>
+                </reportElement>
+                <textElement>
+                    <font size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{nombre_producto}]]></textFieldExpression>
+            </textField>
+            <textField pattern="Q#,##0.00;Q-#,##0.00">
+                <reportElement x="365" y="0" width="100" height="20" uuid="fd48576f-ba69-4a90-ab4b-17ff5a86e923">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="76d3d378-948e-44db-8dcd-d58ce2256852"/>
+                </reportElement>
+                <textElement textAlignment="Right">
+                    <font size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{precio_venta}]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="20" y="22" width="489" height="1" uuid="3525db40-ea15-4229-a0a9-57468055e0b4"/>
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#FC8421"/>
+                </graphicElement>
+            </line>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="5" splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="20" splitType="Stretch">
+            <textField>
+                <reportElement x="370" y="0" width="100" height="20" uuid="214851bd-96ad-4ee0-9a8b-65a2e50eccfb"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement x="470" y="0" width="100" height="20" uuid="29678cb2-d39f-468c-98f4-31a2a7a3091f"/>
+                <textElement textAlignment="Left"/>
+                <textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+</jasperReport>
