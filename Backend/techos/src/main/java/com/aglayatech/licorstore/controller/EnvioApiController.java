@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,6 +164,27 @@ public class EnvioApiController {
         } catch (JRException e) {
             e.printStackTrace();
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/envios/realizados")
+    public void getReporteEnviosRealizados(@RequestParam("fecha") String fecha, HttpServletResponse httpServletResponse) {
+        try {
+            byte[] bytesEnvio = envioService.rptEnviosRealizados(fecha);
+            ByteArrayOutputStream output = new ByteArrayOutputStream(bytesEnvio.length);
+            output.write(bytesEnvio, 0, bytesEnvio.length);
+
+            httpServletResponse.setContentType("application/pdf");
+            httpServletResponse.addHeader("Content-Disposition", "inline; filename=reporte-envios.pdf");
+
+            OutputStream os;
+
+            os = httpServletResponse.getOutputStream();
+            output.writeTo(os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

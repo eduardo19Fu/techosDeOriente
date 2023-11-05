@@ -13,6 +13,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +65,25 @@ public class EnvioServiceImpl implements IEnvioService {
         JasperReport jasperReport = JasperCompileManager.compileReport(file);
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, connection);
 
+        ByteArrayOutputStream byteArrayOutputStream = getByteArrayOutputStream(jasperPrint);
+
+        connection.close();
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    @Override
+    public byte[] rptEnviosRealizados(String fecha) throws SQLException, JRException, ParseException {
+        Date fechaFiltro = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Connection connection = localDataSource.getConnection();
+        Map params = new HashMap();
+
+        fechaFiltro = format.parse(fecha);
+        params.put("fechaPedido", fechaFiltro);
+
+        InputStream file = getClass().getResourceAsStream("/reports/rpt_envios_realizados.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, connection);
         ByteArrayOutputStream byteArrayOutputStream = getByteArrayOutputStream(jasperPrint);
 
         connection.close();
