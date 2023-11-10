@@ -117,4 +117,18 @@ export class FacturaService {
       })
     );
   }
+
+  getAllDailySales(fecha: Date): Observable<any> {
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/pdf');
+    const requestOptions: any = {headers, responseType: 'blob'};
+    return this.http.get<any>(`${this.url}/facturas/all-dailly-sales?fecha=${fecha.toString()}`, requestOptions).pipe(
+      map((response: any) => {
+        return {
+          filename: 'resumen-ventas-diarias.pdf',
+          data: new Blob([response], {type: 'application/pdf'})
+        };
+      })
+    );
+  }
 }

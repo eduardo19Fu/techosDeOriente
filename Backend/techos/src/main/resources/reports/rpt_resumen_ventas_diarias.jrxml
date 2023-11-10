@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_resumen_ventas_diarias" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e2f9c1c7-5da9-4c3d-a0e8-40344681147b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TechosDataAdapter.jrdax"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="pFecha" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[SELECT 	us.id_usuario,
+		concat(us.primer_nombre, ' ', us.apellido) as vendedor,
+        facs.total,
+        facs.fecha as fecha_emision,
+        facs.no_factura,
+        cl.nombre
+FROM facturas facs
+INNER JOIN clientes cl ON cl.id_cliente = facs.id_cliente
+INNER JOIN facturas_detalle fd ON fd.id_factura = facs.id_factura
+INNER JOIN productos pro ON pro.id_producto = fd.id_producto
+INNER JOIN usuarios us ON us.id_usuario = facs.id_usuario
+WHERE DATE(facs.fecha) =  $P{pFecha}
+GROUP BY facs.no_factura]]>
+	</queryString>
+	<field name="id_usuario" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id_usuario"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_usuario"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="usuarios"/>
+	</field>
+	<field name="vendedor" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="vendedor"/>
+		<property name="com.jaspersoft.studio.field.label" value="vendedor"/>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="total"/>
+		<property name="com.jaspersoft.studio.field.label" value="total"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="facturas"/>
+	</field>
+	<field name="fecha_emision" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_emision"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="facturas"/>
+	</field>
+	<field name="no_factura" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="no_factura"/>
+		<property name="com.jaspersoft.studio.field.label" value="no_factura"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="facturas"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="clientes"/>
+	</field>
+	<variable name="suma_cajero" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" incrementType="Group" incrementGroup="Group1" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<group name="Group1" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{id_usuario}]]></groupExpression>
+		<groupHeader>
+			<band height="23">
+				<rectangle>
+					<reportElement x="0" y="1" width="570" height="21" backcolor="#FF8B3D" uuid="c8f746f4-970a-4f0d-aa54-5dd4189d939c"/>
+				</rectangle>
+				<textField>
+					<reportElement x="150" y="2" width="240" height="16" uuid="9edd3a42-6230-4264-940f-02236addbf83"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Vendedor: " + $F{vendedor}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="6" y="2" width="84" height="16" uuid="f69c5a6c-bd51-4b03-acb3-185bab84b3fa"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Usuario ID: " + $F{id_usuario}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="6"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="82" splitType="Stretch">
+			<textField pattern="dd-MM-yyyy">
+				<reportElement x="100" y="0" width="470" height="69" uuid="8f69b6da-1eb1-4bd3-abb6-caa3dec9b3f0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["VENTAS REALIZADAS EL: " + new SimpleDateFormat("dd-MM-yyyy").format($P{pFecha})]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="130" height="79" uuid="9b79b9d4-c48a-4618-874a-89c1f5247695"/>
+				<imageExpression><![CDATA[this.getClass().getResourceAsStream("/static/images/reports-image/techos-logo.jpeg")]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="570" height="19" uuid="ad170f87-7426-4496-8077-c0e81ec17730"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLES]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="8" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="15" y="2" width="100" height="18" uuid="9d026cdb-b49e-4898-9719-be2d22fd7e54">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="58fcf58c-b14b-40f4-81b7-5ba902588bd5"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{no_factura}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="137" y="2" width="182" height="18" uuid="b0d5c8b3-8a5c-4d41-b311-06306925563d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6b2b4d29-e836-4807-b044-1a8c30144e82"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="Q#,##0.00;Q-#,##0.00">
+				<reportElement x="340" y="2" width="80" height="18" uuid="352ed062-47ed-43f5-8426-f7197d87d511">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ad015c1b-12a7-473b-9017-4017a6431e72"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField pattern="h:mm a">
+				<reportElement x="440" y="2" width="100" height="18" uuid="dfcf20cb-d10e-4173-a0d0-e1c7a420331b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3724b814-ba49-4c6a-a809-71bfda38548c"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="19" splitType="Stretch">
+			<textField>
+				<reportElement x="360" y="-1" width="100" height="20" uuid="3938693f-011a-4766-9a21-eb934c504cbe"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="460" y="-1" width="100" height="20" uuid="a45d4f0f-89ad-4d55-a1e5-22f94db68415"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

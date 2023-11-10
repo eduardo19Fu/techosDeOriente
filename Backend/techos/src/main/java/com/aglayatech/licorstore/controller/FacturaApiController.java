@@ -337,7 +337,28 @@ public class FacturaApiController {
         }
     }
 
+    @GetMapping(value = "/facturas/all-dailly-sales")
+    public void allDailySales(@RequestParam("fecha") String fecha, HttpServletResponse httpServletResponse)
+            throws JRException, SQLException, FileNotFoundException, ParseException
+    {
 
+        byte[] bytesAllDailySales = serviceFactura.reportAllDailySales(fecha);
+        ByteArrayOutputStream out = new ByteArrayOutputStream(bytesAllDailySales.length);
+        out.write(bytesAllDailySales, 0, bytesAllDailySales.length);
+
+        httpServletResponse.setContentType("application/pdf");
+        httpServletResponse.addHeader("Content-Disposition", "inline; filename=all-daily-sales.pdf");
+
+        OutputStream os;
+        try {
+            os = httpServletResponse.getOutputStream();
+            out.writeTo(os);
+            os.flush();
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * metodo que actualiza las existencias según el tipo de movimiento que se este registrando

@@ -2,6 +2,7 @@ package com.aglayatech.licorstore.service;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -36,5 +37,7 @@ public interface IFacturaService {
 	public byte[] showBill2(Long idfactura) throws JRException, FileNotFoundException, SQLException;
 
 	public byte[] reportMonthlySales(Integer year) throws JRException, FileNotFoundException, SQLException;
+
+	public byte[] reportAllDailySales(String fecha) throws JRException, FileNotFoundException, SQLException, ParseException;
 
 }

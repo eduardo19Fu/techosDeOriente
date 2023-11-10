@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -146,6 +148,24 @@ public class FacturaServiceImpl implements IFacturaService {
 		Map<String, Object> params = new HashMap<>();
 		InputStream file = getClass().getResourceAsStream("/reports/rpt_ventas_mensuales.jrxml");
 		params.put("pYear", year);
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, con);
+
+		ByteArrayOutputStream byteArrayOutputStream = getByteArrayOutputStream(jasperPrint);
+
+		con.close();
+		return byteArrayOutputStream.toByteArray();
+	}
+
+	@Override
+	public byte[] reportAllDailySales(String fecha) throws JRException, FileNotFoundException, SQLException, ParseException {
+		Connection con = localDataSource.getConnection();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date fechaFiltro = format.parse(fecha);
+		Map params = new HashMap();
+		InputStream file = getClass().getResourceAsStream("/reports/rpt_resumen_ventas_diarias.jrxml");
+		params.put("pFecha", fechaFiltro);
 
 		JasperReport jasperReport = JasperCompileManager.compileReport(file);
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, con);
