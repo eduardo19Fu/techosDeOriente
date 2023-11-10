@@ -298,7 +298,7 @@ Teléfono: 50112831 - 45545833]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00">
+			<textField textAdjust="ScaleFont" pattern="Q#,##0.00;Q-#,##0.00">
 				<reportElement x="219" y="0" width="60" height="14" uuid="dd1b1186-a4f3-4690-a8df-b5e4d6a9acbc">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f255c242-7dc9-4234-a21c-871251ae070e"/>
 				</reportElement>
@@ -316,7 +316,7 @@ Teléfono: 50112831 - 45545833]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00">
+			<textField textAdjust="ScaleFont" pattern="Q#,##0.00;Q-#,##0.00">
 				<reportElement x="380" y="0" width="60" height="14" uuid="d072b521-4d72-4dd7-95f2-cff3412b0afa">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="76996908-84a9-4b9f-b351-c91136021204"/>
 				</reportElement>
@@ -325,7 +325,7 @@ Teléfono: 50112831 - 45545833]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sub_total}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00;¤-#,##0.00">
+			<textField pattern="Q#,##0.00;Q-#,##0.00">
 				<reportElement x="460" y="0" width="90" height="14" uuid="4b772922-8b14-4f1f-a419-b7968c52f429">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f0ab0a7b-35d0-4cee-ad0a-b3d9a32d0051"/>
 				</reportElement>
@@ -344,7 +344,7 @@ Teléfono: 50112831 - 45545833]]></text>
 	</pageFooter>
 	<lastPageFooter>
 		<band height="69">
-			<textField pattern="¤#,##0.00;¤-#,##0.00">
+			<textField pattern="Q#,##0.00;Q-#,##0.00">
 				<reportElement x="440" y="35" width="130" height="18" uuid="7a4e6d70-bbbb-47be-9972-1227718cbd2c"/>
 				<textElement textAlignment="Center">
 					<font size="14"/>
