@@ -137,9 +137,74 @@
             <version>2.1.7.js6</version>
             <systemPath>${basedir}/src/main/resources/libs/itext-2.1.7.js6.jar</systemPath>
         </dependency>
-
-
     </dependencies>
+
+    <!-- Configuracion de perfiles predeterminados -->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <build.profile.id>dev</build.profile.id>
+                <profileActive>dev</profileActive>
+            </properties>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                        <excludes>
+                            <exclude>application-prod.properties</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <build.profile.id>prod</build.profile.id>
+                <profileActive>prod</profileActive>
+            </properties>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                        <excludes>
+                            <exclude>application-dev.properties</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <configuration>
+                            <encoding>utf-8</encoding>
+                            <useDefaultDelimiters>true</useDefaultDelimiters>
+                            <nonFilteredFileExtensions>
+                                <nonFilteredFileExtension>p12</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>cer</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>pem</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>jkx</nonFilteredFileExtension>
+                            </nonFilteredFileExtensions>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -150,7 +215,16 @@
                     <executable>true</executable>
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>
-            </plugin><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><configuration><source>8</source><target>8</target></configuration></plugin>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
