@@ -6,16 +6,17 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.3</version>
+        <version>2.5.15</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.aglayatech</groupId>
     <artifactId>techosoriente</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>techosoriente</name>
-    <description>Punto de venta e inventario para libreria DeTodo</description>
+    <description>Punto de venta e inventario para ferreteria Techos de Oriente</description>
     <properties>
         <java.version>1.8</java.version>
+        <project.build.sourceencoding>utf-8</project.build.sourceencoding>
     </properties>
     <repositories>
         <repository>
@@ -161,6 +162,31 @@
                         </excludes>
                     </resource>
                 </resources>
+
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <configuration>
+                            <nonFilteredFileExtensions>
+                                <nonFilteredFileExtension>p12</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>cer</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>pem</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>jkx</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>jar</nonFilteredFileExtension>
+                            </nonFilteredFileExtensions>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.shared</groupId>
+                                <artifactId>maven-filtering</artifactId>
+                                <version>3.1.0</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
         <profile>
@@ -188,18 +214,24 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-resources-plugin</artifactId>
-                        <version>3.2.0</version>
+                        <version>3.1.0</version>
                         <configuration>
-                            <encoding>utf-8</encoding>
-                            <useDefaultDelimiters>true</useDefaultDelimiters>
                             <nonFilteredFileExtensions>
                                 <nonFilteredFileExtension>p12</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>cer</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>pem</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>jkx</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>jar</nonFilteredFileExtension>
                             </nonFilteredFileExtensions>
                         </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.shared</groupId>
+                                <artifactId>maven-filtering</artifactId>
+                                <version>3.1.0</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>

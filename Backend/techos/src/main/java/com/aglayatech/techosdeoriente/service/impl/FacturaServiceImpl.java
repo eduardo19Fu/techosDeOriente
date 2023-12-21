@@ -92,7 +92,7 @@ public class FacturaServiceImpl implements IFacturaService {
 		InputStream file = getClass().getResourceAsStream("/reports/poliza.jrxml");
 		params.put("usuario", usuario);
 		params.put("fechaIni", fecha);
-		LOGGER.info("Fecha para poliza => " + params.get(fecha));
+		LOGGER.info("Fecha para poliza => " + params.get("fechaIni"));
 
 		JasperReport jasperReport = JasperCompileManager.compileReport(file);
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, con);
