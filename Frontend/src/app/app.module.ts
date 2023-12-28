@@ -58,6 +58,7 @@ import { ModalVentasMensualesComponent } from './components/reportes/modales/mod
 import { ModalVentasDiariasComponent } from './components/reportes/modales/modal-ventas-diarias/modal-ventas-diarias.component';
 import { ModalEnviosRealizadosComponent } from './components/reportes/modales/modal-envios-realizados/modal-envios-realizados.component';
 import { ModalProductosInventarioComponent } from './components/reportes/modales/modal-productos-inventario/modal-productos-inventario.component';
+import { ModalVentasCategoriaComponent } from './components/reportes/modales/modal-ventas-categoria/modal-ventas-categoria.component';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,8 @@ import { ModalProductosInventarioComponent } from './components/reportes/modales
     ModalVentasMensualesComponent,
     ModalVentasDiariasComponent,
     ModalEnviosRealizadosComponent,
-    ModalProductosInventarioComponent
+    ModalProductosInventarioComponent,
+    ModalVentasCategoriaComponent
   ],
   imports: [
     BrowserModule,
