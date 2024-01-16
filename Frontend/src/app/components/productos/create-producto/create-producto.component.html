@@ -37,6 +37,15 @@
                             </div>
 
                             <div class="col">
+                                <label for="serie">No. Serie</label>
+                                <input type="text" name="serie" id="serie" class="form-control" [(ngModel)]="producto.serie"
+                                    placeholder="No. de Serie del Producto">
+                            </div>
+                        </div>
+                        <br>
+                        
+                        <div class="row">
+                            <div class="col">
                                 <label for="nombre">Nombre</label>
                                 <input type="text" class="form-control" name="nombre" [(ngModel)]="producto.nombre"
                                     required #nombre="ngModel" placeholder="Ingrese nombre del producto">
@@ -138,6 +147,15 @@
                                     [(ngModel)]="producto.tipoProducto">
                                     <option [ngValue]="undefined">--- Seleccionar Tipo ----</option>
                                     <option *ngFor="let tipo of tipos" [ngValue]="tipo">{{tipo.tipoProducto}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col">
+                                <label for="proveedor">Proveedor</label>
+                                <select [compareWith]="compararProveedor" name="proveedor" id="proveedor" class="form-control"
+                                    [(ngModel)]="producto.proveedor">
+                                    <option [ngValue]="undefined">--- Seleccione un Proveedor ---</option>
+                                    <option *ngFor="let proveedor of proveedores" [ngValue]="proveedor">{{proveedor.nombre}}</option>
                                 </select>
                             </div>
 
