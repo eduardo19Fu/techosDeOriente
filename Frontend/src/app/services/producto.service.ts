@@ -61,6 +61,14 @@ export class ProductoService {
     );
   }
 
+  getProductoBySerie(serie: string): Observable<Producto> {
+    return this.http.get<Producto>(`${this.url}/productos/serie/${serie}`).pipe(
+      catchError(e => {
+        swal.fire('Error al consultar  el producto', e.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
 
   getProductosByNombre(nombre: string): Observable<Producto[]>{
     return this.http.get<Producto[]>(`${this.url}/productos/name/${nombre}`);

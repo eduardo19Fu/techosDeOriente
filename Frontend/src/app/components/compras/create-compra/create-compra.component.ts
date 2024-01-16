@@ -128,7 +128,11 @@ export class CreateCompraComponent implements OnInit {
         (document.getElementById('cantidad') as HTMLInputElement).value = '';
 
         if (!this.producto.codProducto || this.producto.codProducto.length === 0) {
-          this.producto.codProducto = this.producto.generarCodigo();
+          this.producto.codProducto = 'GENERADO-' + this.producto.generarCodigo();
+        }
+
+        if (!this.producto.serie || this.producto.serie.length === 0) {
+          this.producto.serie = 'GENERADO-SERIE-' + this.producto.generarCodigo();
         }
 
         this.producto.precioVenta = +(document.getElementById('precio-venta') as HTMLInputElement).value;

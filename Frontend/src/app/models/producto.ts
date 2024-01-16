@@ -1,10 +1,12 @@
 import { Estado } from './estado';
 import { MarcaProducto } from './marca-producto';
 import { TipoProducto } from './tipo-producto';
+import { Proveedor } from './proveedor';
 
 export class Producto {
     idProducto: number;
     codProducto: string;
+    serie: string;
     nombre: string;
     precioCompra: number;
     precioVenta: number;
@@ -20,6 +22,7 @@ export class Producto {
     tipoProducto: TipoProducto;
     marcaProducto: MarcaProducto;
     estado: Estado;
+    proveedor: Proveedor;
 
     /**
      * Método que genera un codigo aleatorio para un producto que no tenga código de barras predefinido.
@@ -28,8 +31,8 @@ export class Producto {
     generarCodigo(): string {
         var rand: number;
 
-        rand = Math.random() * (5000 - 1) + 1; // DEVUELVE UN VALOR ALEATORIO ENTRE 1 Y 5000
-        return (this.nombre ? rand + this.nombre.substring(0, 1) : rand.toString());
+        rand = Math.floor(Math.random() * 1000000) + 1; // DEVUELVE UN VALOR ALEATORIO ENTRE 1 Y 1000000
+        return (rand.toString());
     }
 
     /**

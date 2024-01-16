@@ -92,6 +92,11 @@ public class ProductoServiceImpl implements IProductoService {
 	}
 
 	@Override
+	public Producto findBySerie(String serie) {
+		return repoProducto.findBySerie(serie).orElse(null);
+	}
+
+	@Override
 	public List<Producto> findCaducados() {
 		return repoProducto.findCaducados(new Date());
 	}
