@@ -10,6 +10,8 @@ import { Producto } from 'src/app/models/producto';
 import { TipoProducto } from 'src/app/models/tipo-producto';
 
 import swal from 'sweetalert2';
+import { Proveedor } from 'src/app/models/proveedor';
+import { ProveedorService } from 'src/app/services/proveedores/proveedor.service';
 
 @Component({
   selector: 'app-create-producto',
@@ -24,11 +26,13 @@ export class CreateProductoComponent implements OnInit {
 
   tipos: TipoProducto[];
   marcas: MarcaProducto[];
+  proveedores: Proveedor[];
 
   constructor(
     private serviceMarca: MarcaProductoService,
     private serviceTipo: TipoProductoService,
     private serviceProducto: ProductoService,
+    private serviceProveedor: ProveedorService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {
@@ -37,13 +41,10 @@ export class CreateProductoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // tslint:disable-next-line: deprecation
     this.activatedRoute.params.subscribe(params => {
-      // tslint:disable-next-line: no-string-literal
       const id = params['id'];
 
       if (id) {
-        // tslint:disable-next-line: deprecation
         this.serviceProducto.getProducto(id).subscribe(
           producto => this.producto = producto
         );
@@ -51,16 +52,14 @@ export class CreateProductoComponent implements OnInit {
     });
     this.cargarMarcas();
     this.cargarTipos();
+    this.cargarProveedores();
   }
 
   cargarProducto(): void {
-    // tslint:disable-next-line: deprecation
     this.activatedRoute.params.subscribe(params => {
-      // tslint:disable-next-line: no-string-literal
       const id = params['id'];
 
       if (id) {
-        // tslint:disable-next-line: deprecation
         this.serviceProducto.getProducto(id).subscribe(
           producto => this.producto = producto
         );
@@ -69,34 +68,25 @@ export class CreateProductoComponent implements OnInit {
   }
 
   cargarMarcas(): void {
-    // tslint:disable-next-line: deprecation
     this.serviceMarca.getMarcas().subscribe(marcas => this.marcas = marcas);
   }
 
   cargarTipos(): void {
-    // tslint:disable-next-line: deprecation
     this.serviceTipo.getTiposProducto().subscribe(tipos => this.tipos = tipos);
   }
 
+  cargarProveedores(): void {
+    this.serviceProveedor.getProveedores().subscribe(proveedores => this.proveedores = proveedores);
+  }
+
   create(): void {
-    // this.producto.porcentajeGanancia = Number.parseFloat((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
     this.producto.precioVenta = Number.parseFloat((document.getElementById('precio-venta') as HTMLInputElement).value);
-    if (this.producto.codProducto) {
       this.serviceProducto.create(this.producto).subscribe(
         response => {
           this.router.navigate(['/productos/index']);
           swal.fire('Producto Guardado', `${response.mensaje}: ${response.producto.nombre}`, 'success');
         }
       );
-    } else {
-      this.producto.codProducto = this.producto.generarCodigo();
-      this.serviceProducto.create(this.producto).subscribe(
-        response => {
-          this.router.navigate(['/productos/index']);
-          swal.fire('Producto Guardado', `${response.mensaje}: ${response.producto.nombre}`, 'success');
-        }
-      );
-    }
   }
 
   update(): void {
@@ -123,6 +113,13 @@ export class CreateProductoComponent implements OnInit {
       return true;
     }
     return o1 == null || o2 == null || o1 === undefined || o2 === undefined ? false : o1.idTipoProducto === o2.idTipoProducto;
+  }
+
+  compararProveedor(o1: Proveedor, o2: Proveedor): boolean {
+    if (o1 === undefined && o2 === undefined) {
+      return true;
+    }
+    return o1 === null || o2 === null || o1 === undefined || o2 === undefined ? false : o1.idProveedor === o2.idProveedor;
   }
 
   calcularPorcentajeGanancia(): void {

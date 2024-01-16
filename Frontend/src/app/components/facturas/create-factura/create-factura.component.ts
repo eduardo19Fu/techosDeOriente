@@ -88,7 +88,7 @@ export class CreateFacturaComponent implements OnInit {
       this.clienteService.getClienteByNit(nit).subscribe(
         cliente => {
           this.cliente = cliente;
-          (document.getElementById('codigo')).focus();
+          (document.getElementById('serie')).focus();
         },
         error => {
           if (error.status === 400) {
@@ -123,10 +123,10 @@ export class CreateFacturaComponent implements OnInit {
   }
 
   buscarProducto(): void {
-    const codigo = ((document.getElementById('codigo') as HTMLInputElement)).value;
+    const serie = ((document.getElementById('serie') as HTMLInputElement)).value;
 
-    if (codigo) {
-      this.productoService.getProductoByCode(codigo).subscribe(
+    if (serie) {
+      this.productoService.getProductoBySerie(serie).subscribe(
         producto => {
           this.producto = producto;
           (document.getElementById('cantidad') as HTMLInputElement).focus();
@@ -141,9 +141,26 @@ export class CreateFacturaComponent implements OnInit {
           }
         }
       );
-    } else {
-      swal.fire('Código Inválido', 'Ingrese un código de producto válido para realizar la búsqueda.', 'warning');
     }
+  }
+
+  buscarProductoPorCodigo(codigo: string): void {
+    this.productoService.getProductoByCode(codigo).subscribe(
+      producto => {
+        console.log(producto);
+        this.producto = producto;
+        console.log(this.producto);
+        (document.getElementById('cantidad') as HTMLInputElement).focus();
+      }, error => {
+        if (error.status === 400) {
+          swal.fire(`Error: ${error.status}`, 'Petición no se puede llevar a cabo.', 'error');
+        }
+
+        if (error.status === 404) {
+          swal.fire(`Error: ${error.status}`, error.error.mensaje, 'error');
+        }
+      }
+    );
   }
 
   agregarLinea(): void {
@@ -310,10 +327,16 @@ export class CreateFacturaComponent implements OnInit {
   }
 
   loadProducto(event): void {
-    (document.getElementById('codigo') as HTMLInputElement).value = event.codProducto;
-    (document.getElementById('button-x')).click();
-    this.buscarProducto();
-    (document.getElementById('cantidad') as HTMLInputElement).focus();
+    console.log(event);
+    
+    // if (event.serie !== null || event.serie !== undefined) {
+      (document.getElementById('serie') as HTMLInputElement).value = event.serie;
+      this.buscarProducto();
+      (document.getElementById('button-x')).click();
+      (document.getElementById('cantidad') as HTMLInputElement).focus();
+    // } else if(event.serie === null || event.serie === '') {
+    //   this.buscarProductoPorCodigo(event.codProducto);
+    // }
   }
 
   loadCliente(event): void {

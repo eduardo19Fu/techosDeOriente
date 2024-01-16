@@ -17,7 +17,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -28,8 +27,8 @@ public class Producto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idProducto;
-	@NotNull(message = "Código de Producto no puede estar vacío.")
 	private String codProducto;
+	private String serie;
 	private String nombre;
 	private Double precioCompra;
 	private Double precioVenta;
@@ -49,13 +48,11 @@ public class Producto implements Serializable {
 
 	private int stock;
 
-	@NotNull(message = "Marca no puede estar vacío.")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_marca_producto")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private MarcaProducto marcaProducto;
 
-	@NotNull(message = "Tipo no puede estar vacío.")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_tipo_producto")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -65,6 +62,11 @@ public class Producto implements Serializable {
 	@JoinColumn(name = "id_estado")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Estado estado;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_proveedor")
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	private Proveedor proveedor;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "producto")
 	@JsonIgnoreProperties({ "producto", "hibernateLazyInitializer", "handler" })
@@ -93,6 +95,14 @@ public class Producto implements Serializable {
 
 	public void setCodProducto(String codProducto) {
 		this.codProducto = codProducto;
+	}
+
+	public String getSerie() {
+		return serie;
+	}
+
+	public void setSerie(String serie) {
+		this.serie = serie;
 	}
 
 	public String getNombre() {
@@ -191,6 +201,14 @@ public class Producto implements Serializable {
 		this.fechaRegistro = fechaRegistro;
 	}
 
+	public Proveedor getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
+	}
+
 	public List<MovimientoProducto> getMovimientos() {
 		return movimientos;
 	}
@@ -217,11 +235,28 @@ public class Producto implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Producto [idProducto=" + idProducto + ", codProducto=" + codProducto + ", nombre=" + nombre
-				+ ", precioCompra=" + precioCompra + ", precioVenta=" + precioVenta + ", porcentajeGanancia="
-				+ porcentajeGanancia + ", imagen=" + imagen + ", fechaVencimiento=" + fechaVencimiento
-				+ ", fechaIngreso=" + fechaIngreso + ", fechaRegistro=" + fechaRegistro + ", stock=" + stock
-				+ ", marcaProducto=" + marcaProducto + ", tipoProducto=" + tipoProducto + ", estado=" + estado + "]";
+		final StringBuilder sb = new StringBuilder("Producto{");
+		sb.append("idProducto=").append(idProducto);
+		sb.append(", codProducto='").append(codProducto).append('\'');
+		sb.append(", serie='").append(serie).append('\'');
+		sb.append(", nombre='").append(nombre).append('\'');
+		sb.append(", precioCompra=").append(precioCompra);
+		sb.append(", precioVenta=").append(precioVenta);
+		sb.append(", porcentajeGanancia=").append(porcentajeGanancia);
+		sb.append(", imagen='").append(imagen).append('\'');
+		sb.append(", descripcion='").append(descripcion).append('\'');
+		sb.append(", link='").append(link).append('\'');
+		sb.append(", fechaVencimiento=").append(fechaVencimiento);
+		sb.append(", fechaIngreso=").append(fechaIngreso);
+		sb.append(", fechaRegistro=").append(fechaRegistro);
+		sb.append(", stock=").append(stock);
+		sb.append(", marcaProducto=").append(marcaProducto);
+		sb.append(", tipoProducto=").append(tipoProducto);
+		sb.append(", estado=").append(estado);
+		sb.append(", proveedor=").append(proveedor);
+		sb.append(", movimientos=").append(movimientos);
+		sb.append('}');
+		return sb.toString();
 	}
 
 	private static final long serialVersionUID = 1L;

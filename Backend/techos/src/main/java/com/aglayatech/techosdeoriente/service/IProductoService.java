@@ -33,6 +33,8 @@ public interface IProductoService {
 	public List<Producto> findByName(String name);
 	
 	public Producto findByCodigo(String codigo);
+
+	public Producto findBySerie(String serie);
 	
 	// Listado de productos caducados
 	public List<Producto> findCaducados();

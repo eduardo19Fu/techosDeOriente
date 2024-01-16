@@ -221,6 +221,7 @@
                         <thead>
                             <tr>
                                 <th>Codigo</th>
+                                <th>Serie</th>
                                 <th>Producto</th>
                                 <th>Precio</th>
                                 <th>Cantidad</th>
@@ -231,6 +232,7 @@
                         <tbody>
                             <tr *ngFor="let item of compra.items; let i = index">
                                 <td>{{item.producto.codProducto}}</td>
+                                <td>{{item.producto.serie}}</td>
                                 <td>{{item.producto.nombre}}</td>
                                 <td>{{item.producto.precioCompra | currency: "Q" : "symbol"}}</td>
                                 <td>{{item.cantidad}}</td>

@@ -301,6 +301,28 @@ public class ProductoApiController {
 		
 		return new ResponseEntity<Producto>(producto, HttpStatus.OK);
 	}
+
+	@Secured({ "ROLE_ADMIN", "ROLE_COBRADOR", "ROLE_INVENTARIO" })
+	@GetMapping(value = "/productos/serie/{serie}")
+	public ResponseEntity<?> findBySerie(@PathVariable("serie") String serie) {
+		Producto producto = null;
+		Map<String, Object> response = new HashMap<>();
+
+		try {
+			producto = serviceProducto.findBySerie(serie);
+		} catch (DataAccessException e) {
+			response.put("mensaje", "¡Ha ocurrido un error en la base de datos!");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		if(producto == null) {
+			response.put("mensaje", "¡Producto no se encuentra registrado en la base de datos!");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<Producto>(producto, HttpStatus.OK);
+	}
 	
 	/*************** PDF REPORTS CONTROLLERS *****************/
 

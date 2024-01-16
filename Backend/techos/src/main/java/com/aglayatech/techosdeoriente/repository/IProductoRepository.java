@@ -22,6 +22,9 @@ public interface IProductoRepository extends JpaRepository<Producto, Integer> {
 	
 	@Query("select p from Producto p where p.codProducto = :codigo")
 	Optional<Producto> findByCodigo(@Param("codigo") String codigo);
+
+	@Query("select p from Producto p where p.serie = :serie")
+	Optional<Producto> findBySerie(@Param("serie") String serie);
 	
 	@Query(value = "select p from Producto p where p.fechaVencimiento <= :fecha")
 	List<Producto> findCaducados(@Param("fecha") Date fecha);
