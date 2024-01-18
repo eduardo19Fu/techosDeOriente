@@ -27,4 +27,12 @@ export class Compra {
 
         return (this.totalCompra * valorIva);
     }
+
+    calcularTotal(): number {
+        this.totalCompra = 0;
+        this.items.forEach(item => {
+            this.totalCompra += item.calcularSubTotal();
+        });
+        return this.totalCompra;
+    }
 }
