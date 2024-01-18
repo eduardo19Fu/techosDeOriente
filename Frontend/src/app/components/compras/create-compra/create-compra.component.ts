@@ -28,6 +28,8 @@ import { MarcaProducto } from '../../../models/marca-producto';
 export class CreateCompraComponent implements OnInit {
 
   title: string;
+  efectivo: number;
+  cambio: number;
 
   compra: Compra;
   usuario: UsuarioAuxiliar;
@@ -53,6 +55,10 @@ export class CreateCompraComponent implements OnInit {
     this.compra = new Compra();
     this.title = 'Nueva Compra';
     this.producto = new Producto();
+    this.proveedores = [];
+
+    this.efectivo = 0;
+    this.cambio = 0;
   }
 
   ngOnInit(): void {
@@ -227,6 +233,17 @@ export class CreateCompraComponent implements OnInit {
   }
 
   /**
+   * Función que permite realizar el calculo del cambio según el efectivo recibido
+   */
+  calcularCambio(event): void {
+    if (this.efectivo) {
+      this.cambio = this.efectivo - this.compra.calcularTotal();
+    } else {
+      this.cambio = 0.00;
+    }
+  }
+
+  /**
    * Método que muestra en el field de campo para precio de venta el calculo devuelto.
    * 
    */
@@ -248,5 +265,12 @@ export class CreateCompraComponent implements OnInit {
       return true;
     }
     return o1 == null || o2 == null || o1 === undefined || o2 === undefined ? false : o1.idTipoProducto === o2.idTipoProducto;
+  }
+
+  compararProveedor(o1: Proveedor, o2: Proveedor): boolean {
+    if (o1 === undefined && o2 === undefined) {
+      return true;
+    }
+    return o1 == null || o2 == null || o1 === undefined || o2 === undefined ? false : o1.idProveedor === o2.idProveedor;
   }
 }

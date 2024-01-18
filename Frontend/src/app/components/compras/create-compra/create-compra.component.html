@@ -1,44 +1,44 @@
 <!-- MODAL PARA BUSCAR PRODUCTOS -->
 <app-modal-buscar-producto (producto)="loadProducto($event)"></app-modal-buscar-producto>
 
-<div class="container">
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">{{title}}</h1>
-                </div>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">{{title}}</h1>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="col-md-12">
-        
+<div class="row">
+    <div class="col-md-9">
+
         <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">Ingrese los datos</h3>
             </div>
             <form #compraForm="ngForm">
                 <div class="card-body">
-
+    
                     <div class="row">
                         <div class="form-group col">
                             <label for="fecha-compra">Fecha Compra</label>
                             <input type="date" class="form-control" name="fecha-compra" [(ngModel)]="compra.fechaCompra"
                                 required #fechaCompra="ngModel">
-                                
+    
                             <div *ngIf="fechaCompra.invalid && (fechaCompra.touched || fechaCompra.dirty)">
                                 <span class="requerido">
                                     Ingrese un valor válido.
                                 </span>
                             </div>
                         </div>
-
+    
                         <div class="form-group col">
                             <label for="no-comprobante">Comprobante</label>
                             <input type="text" name="no-comprobante" class="form-control" [(ngModel)]="compra.noComprobante"
                                 required placeholder="Ingrese n&uacute;mero de comprobante" #noComprobante="ngModel">
-
+    
                             <div *ngIf="noComprobante.invalid && (noComprobante.touched || noComprobante.dirty)">
                                 <span class="requerido">
                                     Ingrese un valor válido.
@@ -46,8 +46,8 @@
                             </div>
                         </div>
                     </div>
-
-
+    
+    
                     <div class="row">
                         <div class="form-group col">
                             <label for="proveedor">Proveedor</label>
@@ -58,71 +58,45 @@
                                 </option>
                             </select>
                         </div>
-
+    
                         <div class="form-group col">
                             <label for="tipo-comprobante">Tipo Comprobante</label>
-                            <select name="tipo-comprobante" id="tipo-comprobante" [(ngModel)]="compra.tipoComprobante" class="form-control">
+                            <select name="tipo-comprobante" id="tipo-comprobante" [(ngModel)]="compra.tipoComprobante"
+                                class="form-control">
                                 <option [ngValue]="undefined">Elija tipo de Comprobante</option>
                                 <option *ngFor="let tipo of tiposComprobante" [ngValue]="tipo">
                                     {{tipo.tipoComprobante}}
                                 </option>
                             </select>
                         </div>
-
-                        
+    
+    
                     </div>
-
-                    <div class="row">
-                        <div class="form-group col">
-                            <label for="total-compra">Total</label>
-                            <input type="number" name="total-compra" class="form-control" [(ngModel)]="compra.totalCompra"
-                                required placeholder="Ingrese total de la compra" #totalCompra="ngModel">
-
-                            <div *ngIf="totalCompra.invalid && (totalCompra.touched || totalCompra.dirty)">
-                                <span class="requerido">
-                                    Ingrese un valor v&aacute;lido.
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="form-group col">
-                            <label for="iva">IVA</label>
-                            <input type="number" name="iva" id="iva" class="form-control" [(ngModel)]="compra.iva"
-                                placeholder="Ingrese IVA de la compra." #iva="ngModel"
-                                [required]="compra.tipoComprobante && compra.tipoComprobante.tipoComprobante === 'FACTURA'"
-                                [disabled]="compra.tipoComprobante && compra.tipoComprobante.tipoComprobante === 'RECIBO'">
-
-                            <div *ngIf="iva.invalid && (iva.touched || iva.dirty)">
-                                <span class="requerido">
-                                    Ingrese un valor v&aacute;lido.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
+    
                     <hr>
                     <div class="row">
                         <div class="col-md-auto">
                             <div class="form-group">
                                 <label for="codigo" style="display: block;">Codigo</label>
                                 <input type="text" class="form-control" name="codigo" id="codigo"
-                                    [(ngModel)]="producto.codProducto" style="width: 70%; display: inline; margin-right: 10px;">
-
+                                    [(ngModel)]="producto.codProducto"
+                                    style="width: 70%; display: inline; margin-right: 10px;">
+    
                                 <button type="button" class="btn bg-gradient-fuchsia" data-toggle="modal"
                                     data-target="#modal-buscar-producto">
                                     <i class="fas fa-search"></i>
                                 </button>
-
+    
                             </div>
                         </div>
-
+    
                         <div class="col">
                             <div class="form-group">
                                 <label for="precio-compra">Precio Compra</label>
-                                <input type="number" class="form-control" name="precio-compra" 
+                                <input type="number" class="form-control" name="precio-compra"
                                     [(ngModel)]="producto.precioCompra" #precioCompra="ngModel"
                                     [required]="!producto.precioCompra && compra.items.length <= 0">
-
+    
                                 <div *ngIf="precioCompra.invalid && (precioCompra.touched || precioCompra.dirty)">
                                     <span class="requerido">
                                         Ingrese un valor válido.
@@ -130,8 +104,8 @@
                                 </div>
                             </div>
                         </div>
-                        
-
+    
+    
                         <div class="col">
                             <div class="form-group">
                                 <label for="porcentaje-ganancia">% Ganancia</label>
@@ -139,15 +113,16 @@
                                     [(ngModel)]="producto.porcentajeGanancia" #porcentajeGanancia="ngModel"
                                     [required]="!producto.porcentajeGanancia && compra.items.length <= 0"
                                     (blur)="mostrarPrecioVenta()">
-                                    
-                                <div *ngIf="porcentajeGanancia.invalid && (porcentajeGanancia.touched || porcentajeGanancia.dirty)">
+    
+                                <div
+                                    *ngIf="porcentajeGanancia.invalid && (porcentajeGanancia.touched || porcentajeGanancia.dirty)">
                                     <span class="requerido">
                                         Ingrese un valor válido.
                                     </span>
                                 </div>
                             </div>
                         </div>
-
+    
                         <div class="col">
                             <div class="form-group">
                                 <label for="precio-venta">Precio Venta</label>
@@ -156,7 +131,7 @@
                             </div>
                         </div>
                     </div>
-
+    
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
@@ -169,11 +144,12 @@
                                 </select>
                             </div>
                         </div>
-
+    
                         <div class="col">
                             <div class="form-group">
                                 <label for="tipo-producto">Tipo Producto</label>
-                                <select name="tipo-producto" id="tipo-producto" [(ngModel)]="producto.tipoProducto" class="form-control">
+                                <select name="tipo-producto" id="tipo-producto" [(ngModel)]="producto.tipoProducto"
+                                    class="form-control">
                                     <option [ngValue]="undefined">Elija un tipo</option>
                                     <option *ngFor="let tipo of tiposProducto" [ngValue]="tipo">
                                         {{tipo.tipoProducto}}
@@ -182,31 +158,30 @@
                             </div>
                         </div>
                     </div>
-
+    
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
                                 <label for="nombre">Producto</label>
-                                <input type="text" class="form-control" name="nombre"
-                                    [(ngModel)]="producto.nombre" placeholder="Ingrese nombre del producto."
-                                    [required]="!producto.nombre && compra.items.length <= 0"
-                                    #nombre="ngModel">
-
-                                    <div *ngIf="nombre.invalid && (nombre.touched || nombre.dirty)">
-                                        <span class="requerido">
-                                            Ingrese un nombre para el producto.
-                                        </span>
-                                    </div>
+                                <input type="text" class="form-control" name="nombre" [(ngModel)]="producto.nombre"
+                                    placeholder="Ingrese nombre del producto."
+                                    [required]="!producto.nombre && compra.items.length <= 0" #nombre="ngModel">
+    
+                                <div *ngIf="nombre.invalid && (nombre.touched || nombre.dirty)">
+                                    <span class="requerido">
+                                        Ingrese un nombre para el producto.
+                                    </span>
+                                </div>
                             </div>
                         </div>
-
+    
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label for="cantidad" style="display: block;">Cantidad</label>
                                 <input type="number" name="cantidad" id="cantidad" class="form-control"
                                     style="width: 65%; display: inline; margin-right: 10px;" value="0"
                                     (keyup.enter)="agregarLinea()" autofocus>
-
+    
                                 <button type="button" class="btn bg-gradient-cyan" (click)="agregarLinea()">
                                     <i class="fas fa-plus-square"></i>
                                 </button>
@@ -214,8 +189,8 @@
                         </div>
                     </div>
                 </div>
-            
-
+    
+    
                 <div class="card-body table-responsive">
                     <table class="table table-hover table-sm">
                         <thead>
@@ -228,7 +203,7 @@
                                 <th>Subtotal</th>
                             </tr>
                         </thead>
-
+    
                         <tbody>
                             <tr *ngFor="let item of compra.items; let i = index">
                                 <td>{{item.producto.codProducto}}</td>
@@ -246,14 +221,42 @@
                         </tbody>
                     </table>
                 </div>
-
+    
                 <div class="card-footer">
-                    <button type="submit" role="button" class="btn btn-primary" (click)="create()" [disabled]="!compraForm.form.valid">
+                    <button type="submit" role="button" class="btn btn-primary" (click)="create()"
+                        [disabled]="!compraForm.form.valid">
                         Guardar
                     </button>
                 </div>
             </form>
         </div>
         <!-- /.card -->
+    </div>
+
+    <!-- VENTANA DE CALCULO DE CAMBIO POR EFECTIVO PAGADO -->
+    <div class="col-md-3">
+        <div class="card card-fuchsia">
+            <div class="card-header">
+                <h3 class="card-title">Calculo de Cambio y Total</h3>
+            </div>
+            <div class="card-body">
+                <h4>
+                    Total: 
+                    <span>
+                        <strong>
+                            {{compra.calcularTotal() | currency : "Q" : "symbol"}}
+                        </strong>
+                    </span>
+                </h4>
+                <hr>
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" role="button" class="btn btn-primary" (click)="create()"
+                        [disabled]="!compraForm.form.valid">
+                        Guardar
+                    </button>
+            </div>
+        </div>
     </div>
 </div>
