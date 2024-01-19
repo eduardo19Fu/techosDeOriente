@@ -141,6 +141,7 @@ export class CreateCompraComponent implements OnInit {
           this.producto.serie = 'GENERADO-SERIE-' + this.producto.generarCodigo();
         }
 
+        this.producto.precioSugerido = +(document.getElementById('precio-sugerido') as HTMLInputElement).value;
         this.producto.precioVenta = +(document.getElementById('precio-venta') as HTMLInputElement).value;
 
         if(this.producto.nombre && this.producto.nombre.length !== 0) {
@@ -247,9 +248,9 @@ export class CreateCompraComponent implements OnInit {
    * Método que muestra en el field de campo para precio de venta el calculo devuelto.
    * 
    */
-  mostrarPrecioVenta(): void {
-    (document.getElementById('precio-venta') as HTMLInputElement).value
-      = this.producto.calcularPrecioVenta(this.producto.precioCompra, this.producto.porcentajeGanancia).toString();
+  mostrarPrecioSugerido(): void {
+    (document.getElementById('precio-sugerido') as HTMLInputElement).value
+      = this.producto.calcularPrecioSugerido(this.producto.precioCompra, this.producto.porcentajeGanancia).toString();
   }
 
   // Comparar para reemplazar el valor en el select del formulario en caso de existir

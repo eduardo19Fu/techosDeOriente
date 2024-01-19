@@ -110,7 +110,7 @@
                                 <input [(ngModel)]="producto.porcentajeGanancia" type="number" id="porcentaje-ganancia"
                                     name="porcentaje-ganancia" class="form-control"
                                     placeholder="Ingrese porcentaje de ganancia deseado" required
-                                    #porcentajeGanancia="ngModel" (blur)="calcularPrecioVenta()">
+                                    #porcentajeGanancia="ngModel" (blur)="mostrarPrecioSugerido()">
 
                                 <div
                                     *ngIf="porcentajeGanancia.invalid && (porcentajeGanancia.dirty || porcentajeGanancia.touched)">
@@ -121,9 +121,16 @@
                             </div>
 
                             <div class="col">
+                                <label for="precio-sugerido">Precio Sugerido</label>
+                                <input type="number" id="precio-sugerido" name="precio-sugerido" class="form-control"
+                                    [(ngModel)]="producto.precioSugerido" required #precioSugerido="ngModel" readonly>
+
+                            </div>
+
+                            <div class="col">
                                 <label for="precio-venta">Precio Venta</label>
                                 <input type="number" id="precio-venta" name="precio-venta" class="form-control"
-                                    [(ngModel)]="producto.precioVenta" required #precioVenta="ngModel" readonly>
+                                    [(ngModel)]="producto.precioVenta" required #precioVenta="ngModel">
 
                             </div>
                         </div>
