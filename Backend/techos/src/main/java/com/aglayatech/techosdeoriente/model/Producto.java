@@ -32,6 +32,7 @@ public class Producto implements Serializable {
 	private String nombre;
 	private Double precioCompra;
 	private Double precioVenta;
+	private Double precioSugerido;
 	private float porcentajeGanancia;
 	private String imagen;
 	private String descripcion;
@@ -127,6 +128,14 @@ public class Producto implements Serializable {
 
 	public void setPrecioVenta(Double precioVenta) {
 		this.precioVenta = precioVenta;
+	}
+
+	public Double getPrecioSugerido() {
+		return precioSugerido;
+	}
+
+	public void setPrecioSugerido(Double precioSugerido) {
+		this.precioSugerido = precioSugerido;
 	}
 
 	public float getPorcentajeGanancia() {
@@ -242,6 +251,7 @@ public class Producto implements Serializable {
 		sb.append(", nombre='").append(nombre).append('\'');
 		sb.append(", precioCompra=").append(precioCompra);
 		sb.append(", precioVenta=").append(precioVenta);
+		sb.append(", precioSugerido=").append(precioSugerido);
 		sb.append(", porcentajeGanancia=").append(porcentajeGanancia);
 		sb.append(", imagen='").append(imagen).append('\'');
 		sb.append(", descripcion='").append(descripcion).append('\'');

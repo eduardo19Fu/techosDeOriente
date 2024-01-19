@@ -10,6 +10,7 @@ export class Producto {
     nombre: string;
     precioCompra: number;
     precioVenta: number;
+    precioSugerido: number;
     porcentajeGanancia: number;
     fechaVencimiento: Date;
     fechaIngreso: Date;
@@ -61,17 +62,17 @@ export class Producto {
      * @param pPorcentaje 
      * @returns 
      */
-    calcularPrecioVenta(pCompra: number, pPorcentaje: number): number {
+    calcularPrecioSugerido(pCompra: number, pPorcentaje: number): number {
 
-        let precioVenta = 0;
+        let precioSugerido = 0;
 
         if (!pCompra || !pPorcentaje) {
             console.log('valores incorrectos');
         } else {
-            precioVenta = ((pCompra) * pPorcentaje / 100) +  pCompra;
+            precioSugerido = ((pCompra) * pPorcentaje / 100) +  pCompra;
         }
 
-        return precioVenta;
+        return precioSugerido;
     }
 
 }

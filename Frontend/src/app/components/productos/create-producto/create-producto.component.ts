@@ -80,17 +80,16 @@ export class CreateProductoComponent implements OnInit {
   }
 
   create(): void {
-    this.producto.precioVenta = Number.parseFloat((document.getElementById('precio-venta') as HTMLInputElement).value);
-      this.serviceProducto.create(this.producto).subscribe(
-        response => {
-          this.router.navigate(['/productos/index']);
-          swal.fire('Producto Guardado', `${response.mensaje}: ${response.producto.nombre}`, 'success');
-        }
-      );
+    this.producto.precioSugerido = Number.parseFloat((document.getElementById('precio-sugerido') as HTMLInputElement).value);
+    this.serviceProducto.create(this.producto).subscribe(
+      response => {
+        this.router.navigate(['/productos/index']);
+        swal.fire('Producto Guardado', `${response.mensaje}: ${response.producto.nombre}`, 'success');
+      }
+    );
   }
 
   update(): void {
-    // this.producto.porcentajeGanancia = Number.parseFloat((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
     this.producto.precioVenta = Number.parseFloat((document.getElementById('precio-venta') as HTMLInputElement).value);
     this.serviceProducto.update(this.producto).subscribe(
       response => {
@@ -136,20 +135,12 @@ export class CreateProductoComponent implements OnInit {
     (document.getElementById('porcentaje-ganancia') as HTMLInputElement).value = porcentaje.toString();
   }
 
-  calcularPrecioVenta(): void {
-    const pcompra = ((document.getElementById('precio-compra') as HTMLInputElement).value);
-    const pporcentaje = ((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
+  mostrarPrecioSugerido(): void {
+    const porcentajeGanancia = +((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
+    const pcompra = +((document.getElementById('precio-compra') as HTMLInputElement).value);
 
-    let precioVenta = 0;
-
-    if (!pcompra || !pporcentaje) {
-      console.log('valores incorrectos');
-    } else {
-      precioVenta = ((Number.parseFloat(pcompra) + ((Number.parseFloat(pporcentaje) / 100) * Number.parseFloat(pcompra))));
-      console.log(precioVenta);
-    }
-
-    (document.getElementById('precio-venta') as HTMLInputElement).value = precioVenta.toString();
+    (document.getElementById('precio-sugerido') as HTMLInputElement).value 
+      = this.producto.calcularPrecioSugerido(pcompra, porcentajeGanancia).toString();
   }
 
 }
