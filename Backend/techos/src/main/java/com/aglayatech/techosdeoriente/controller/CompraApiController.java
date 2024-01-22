@@ -218,6 +218,10 @@ public class CompraApiController {
             producto = this.productoService.findByCodigo(item.getProducto().getCodProducto());
 
             if(producto != null) {
+                producto.setPrecioCompra(item.getProducto().getPrecioCompra());
+                producto.setPrecioVenta(item.getProducto().getPrecioVenta());
+                producto.setPrecioSugerido(item.getProducto().getPrecioSugerido());
+                producto.setPorcentajeGanancia(item.getProducto().getPorcentajeGanancia());
                 this.updateExistencias(producto, item.getCantidad());
             } else if (producto == null) {
                 producto = item.getProducto();
