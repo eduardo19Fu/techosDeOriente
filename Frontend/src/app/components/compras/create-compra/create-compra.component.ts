@@ -101,7 +101,25 @@ export class CreateCompraComponent implements OnInit {
     if (codigo) {
       this.productoService.getProductoByCode(codigo).subscribe(
         producto => {
-          this.producto = producto;
+          console.log(producto);
+          console.log(typeof producto);
+          this.producto = new Producto();
+          
+          // Para evitar error al ejecutar funcion producto.calcularPrecioSugerido()
+          this.producto.idProducto = producto.idProducto;
+          this.producto.codProducto = producto.codProducto;
+          this.producto.serie = producto.serie;
+          this.producto.nombre = producto.nombre;
+          this.producto.precioCompra = producto.precioCompra;
+          this.producto.precioVenta = producto.precioVenta;
+          this.producto.precioSugerido = producto.precioSugerido ? producto.precioSugerido : 0;
+          this.producto.porcentajeGanancia = producto.porcentajeGanancia;
+          this.producto.estado = producto.estado;
+          this.producto.fechaIngreso = producto.fechaIngreso;
+          this.producto.fechaRegistro = producto.fechaRegistro;
+          this.producto.tipoProducto = producto.tipoProducto;
+          this.producto.marcaProducto = producto.marcaProducto;
+
           (document.getElementById('cantidad') as HTMLInputElement).focus();
         },
         error => {
@@ -160,7 +178,16 @@ export class CreateCompraComponent implements OnInit {
             if (item.producto.nombre) {
               this.compra.items.push(item);
               this.producto = new Producto();
-              console.log(item.producto);
+
+              // Asigna el proveedor de la compra a los productos asignados
+              if(!this.compra.proveedor) {
+                Swal.fire('Advertencia', 'Debe elegirse un proveedor para llevar a cabo el registro de la compra', 'warning');
+                return;
+              } else {
+                this.compra.items.forEach(item => {
+                  item.producto.proveedor = this.compra.proveedor;
+                });
+              }
     
               (document.getElementById('cantidad') as HTMLInputElement).value = '';
             } else {

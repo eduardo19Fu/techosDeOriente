@@ -34,10 +34,12 @@
             role="grid" *ngIf="productos?.length > 0">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <!-- <th>#</th> -->
                     <th>Codigo</th>
+                    <th>Serie</th>
                     <th>Nombre</th>
                     <th>Precio</th>
+                    <th>Precio Sugerido</th>
                     <th>Stock</th>
                     <th>Proveedor</th>
                     <th>Tipo</th>
@@ -49,34 +51,14 @@
 
             <tbody>
                 <tr *ngFor="let producto of productos">
-                    <td>
-                        <!-- <img (click)="abrirModal(producto)" *ngIf="producto?.imagen"
-                            src="http://localhost:8282/api/uploads/img/{{producto.imagen}}" alt="{{producto.imagen}}"
-                            class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;"> -->
-
-                        <!-- <img (click)="abrirModal(producto)" *ngIf="producto?.imagen"
-                            src="https://dimsa-app2.herokuapp.com/api/uploads/img/{{producto.imagen}}" alt="{{producto.imagen}}"
-                            class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;"> -->
-
-                        <!-- <img (click)="abrirModal(producto)" *ngIf="producto?.imagen"
-                            src="https://dimsa-new.herokuapp.com/api/uploads/img/{{producto.imagen}}" alt="{{producto.imagen}}"
-                            class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;"> -->
-
-                        <!-- <img (click)="abrirModal(producto)" *ngIf="!producto?.imagen"
-                            src="http://31.220.56.29:8282/images/no-image.jpg" alt="{{producto.imagen}}"
-                            class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;"> -->
-
-                        <!-- <img (click)="abrirModal(producto)" *ngIf="!producto?.imagen"
-                            src="https://dimsa-app2.herokuapp.com/images/no-image.jpg" alt="{{producto.imagen}}"
-                            class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;"> -->
-
-                        <!-- <img (click)="abrirModal(producto)" *ngIf="!producto?.imagen"
-                            src="https://dimsa-new.herokuapp.com/images/no-image.jpg" alt="{{producto.imagen}}"
-                            class="img-thumbnail rounded" style="width: 45px; height: 48px; cursor: pointer;"> -->
-                    </td>
+                    <!-- <td>
+                        
+                    </td> -->
                     <td>{{producto.codProducto}}</td>
+                    <td>{{producto.serie}}</td>
                     <td>{{producto.nombre}}</td>
-                    <td>{{producto.precioVenta}}</td>
+                    <td>{{producto.precioVenta | currency: "Q" : "symbol"}}</td>
+                    <td>{{ (producto.precioSugerido ? producto.precioSugerido : 0) | currency: "Q" : "symbol" }}</td>
                     <td>{{producto.stock}}</td>
                     <td>{{producto.proveedor ? producto.proveedor.nombre : ''}}</td>
                     <td>{{producto.tipoProducto ? producto.tipoProducto.tipoProducto : ''}}</td>
@@ -109,10 +91,12 @@
 
             <tfoot>
                 <tr>
-                    <th>#</th>
+                    <!-- <th>#</th> -->
                     <th>Codigo</th>
+                    <th>Serie</th>
                     <th>Nombre</th>
                     <th>Precio</th>
+                    <th>Precio Venta</th>
                     <th>Stock</th>
                     <th>Proveedor</th>
                     <th>Tipo</th>
