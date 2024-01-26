@@ -22,7 +22,7 @@ public class CompraServiceImpl implements ICompraService {
     }
 
     @Override
-    public Compra getCompra(Integer idcompra) {
+    public Compra getCompra(Long idcompra) {
         return this.compraRepository.findById(idcompra).orElse(null);
     }
 
@@ -32,7 +32,7 @@ public class CompraServiceImpl implements ICompraService {
     }
 
     @Override
-    public void delete(Integer idcompra) {
+    public void delete(Long idcompra) {
         this.compraRepository.deleteById(idcompra);
     }
 

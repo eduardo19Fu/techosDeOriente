@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ICompraRepository extends JpaRepository<Compra, Integer> {
+public interface ICompraRepository extends JpaRepository<Compra, Long> {
 
     @Query("Select t from TipoComprobante t")
     List<TipoComprobante> findtipos();

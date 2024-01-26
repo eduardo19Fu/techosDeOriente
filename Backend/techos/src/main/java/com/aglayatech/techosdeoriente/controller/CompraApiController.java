@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +58,7 @@ public class CompraApiController {
     }
 
     @GetMapping("/compras/{id}")
-    public ResponseEntity<?> getCompra(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> getCompra(@PathVariable("id") Long id) {
 
         Map<String, Object> response = new HashMap<>();
         Compra compra = null;
@@ -158,6 +159,31 @@ public class CompraApiController {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
+    @Secured(value = {"ROLE_ADMIN"})
+    @DeleteMapping(value = "/compras/eliminar/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long idcompra) {
+
+        Compra compra = null;
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            compra = compraService.getCompra(idcompra);
+
+            for(DetalleCompra item : compra.getItems()) {
+                updateExistencias(item.getProducto(), item.getCantidad(), "eliminar_compra".toUpperCase());
+            }
+
+            compraService.delete(idcompra);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "¡Ha ocurrido un error en la Base de Datos!");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "¡Compra con ID: ".concat(idcompra.toString()).concat(" fué eliminado con éxito!"));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     /**
      * Endpoint que devuelve los tipos de comprobante registrados en la base de datos.
      * */
@@ -168,13 +194,23 @@ public class CompraApiController {
 
 
     /**
-     * Función encargado de la actualización de existencias
+     * Función encargado de la actualización de existencias.
      * <p>Este se encarga de determinar la cantidad de existencias del  producto recién ingresado
-     * para poder actualizar su stock de forma adecuada según los items recibidos.</p>
+     * para poder actualizar su stock de forma adecuada según los items recibidos y según el tipo de movimiento.</p>
+     * <p>Si el tipo de movimiento es compra, agregará la cantidad recibida al stock del producto.</p>
+     * <p>Si el tipo de movimiento es eliminar_compra, restará la cantidad agregada anteriormente al stock.</p>
+     * @param producto Es el producto a procesar
+     * @param cantidad Es la cantidad a agregar o quitar
+     * @param tipoMovimiento Determina el tipo movimiento que se va a realizar
      * */
-    public void updateExistencias(Producto producto, int cantidad) {
+    public void updateExistencias(Producto producto, int cantidad, String tipoMovimiento) {
         Producto productoUpdated = new Producto();
-        producto.setStock(producto.getStock() + cantidad);
+
+        if(tipoMovimiento.equals("compra".toUpperCase())) {
+            producto.setStock(producto.getStock() + cantidad);
+        } else if(tipoMovimiento.equals("eliminar_compra".toUpperCase())) {
+            producto.setStock(producto.getStock() - cantidad);
+        }
         productoUpdated = productoService.save(producto);
     }
 
@@ -222,7 +258,7 @@ public class CompraApiController {
                 producto.setPrecioVenta(item.getProducto().getPrecioVenta());
                 producto.setPrecioSugerido(item.getProducto().getPrecioSugerido());
                 producto.setPorcentajeGanancia(item.getProducto().getPorcentajeGanancia());
-                this.updateExistencias(producto, item.getCantidad());
+                this.updateExistencias(producto, item.getCantidad(), "compra".toUpperCase());
             } else if (producto == null) {
                 producto = item.getProducto();
                 producto.setEstado(estadoProductoNuevo);

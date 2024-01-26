@@ -109,6 +109,13 @@
                                 <input type="text" class="form-control" name="serie" id="serie" [(ngModel)]="producto.serie">
                             </div>
                         </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="total">Total</label>
+                                <input type="number" class="form-control" name="total" id="total" [(ngModel)]="compra.totalCompra">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -267,7 +274,7 @@
     <!-- VENTANA DE CALCULO DE CAMBIO POR EFECTIVO PAGADO -->
     <div class="col-md-3">
         <div class="card card-fuchsia">
-            <div class="card-header">
+            <!-- <div class="card-header">
                 <h3 class="card-title">Calculo de Cambio y Total</h3>
             </div>
             <div class="card-body">
@@ -280,9 +287,9 @@
                     </span>
                 </h4>
                 <hr>
-            </div>
+            </div> -->
 
-            <div class="card-footer">
+            <div class="card-body" >
                 <button type="submit" role="button" class="btn btn-primary" (click)="create()"
                         [disabled]="!compraForm.form.valid">
                         Guardar
