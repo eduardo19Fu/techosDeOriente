@@ -24,6 +24,14 @@ export class ComprasComponent implements OnInit {
 
   jqueryConfigs: JqueryConfigs;
 
+  swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-success',
+      cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: true
+  });
+
   constructor(
     private compraService: CompraService,
     public authService: AuthService,
@@ -53,6 +61,41 @@ export class ComprasComponent implements OnInit {
   abrirDetalle(compra: Compra): void {
     this.compraSeleccionada = compra;
     this.detailService.abrirModal();
+  }
+
+  delete(compra: Compra): void {
+    this.swalWithBootstrapButtons.fire({
+      title: '¿Está seguro?',
+      text: `¿Seguro que desea eliminar la compra ${compra.idCompra}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '¡Si, eliminar!',
+      cancelButtonText: '¡No, cancelar!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.compraService.delete(compra.idCompra).subscribe(
+          response => {
+            this.compras = this.compras.filter(com => com !== compra);
+            this.swalWithBootstrapButtons.fire(
+              'Compra Eliminada!',
+              'La compra ha sido eliminado con éxito!',
+              'success'
+            );
+          }
+        );
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        this.swalWithBootstrapButtons.fire(
+          'Proceso Cancelado',
+          'La compra no fúe eliminado de la base de datos.',
+          'error'
+        );
+      }
+    });
   }
 
 }

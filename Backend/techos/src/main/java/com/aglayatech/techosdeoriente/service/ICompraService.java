@@ -9,11 +9,11 @@ public interface ICompraService {
 
     public List<Compra> getAll();
 
-    public Compra getCompra(Integer idcompra);
+    public Compra getCompra(Long idcompra);
 
     public Compra save(Compra compra);
 
-    public void delete(Integer idcompra);
+    public void delete(Long idcompra);
 
     /****** Buscar Tipos de Comprobante ******/
     public List<TipoComprobante> getTipos();
