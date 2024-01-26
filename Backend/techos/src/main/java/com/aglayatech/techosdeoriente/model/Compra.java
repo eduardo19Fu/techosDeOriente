@@ -14,7 +14,7 @@ import java.util.List;
 public class Compra implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCompra;
+    private Long idCompra;
     private String noComprobante;
     private float iva;
     private Double totalCompra;
@@ -55,11 +55,11 @@ public class Compra implements Serializable {
         this.fechaRegistro = LocalDateTime.now();
     }
 
-    public Integer getIdCompra() {
+    public Long getIdCompra() {
         return idCompra;
     }
 
-    public void setIdCompra(Integer idCompra) {
+    public void setIdCompra(Long idCompra) {
         this.idCompra = idCompra;
     }
 
@@ -145,18 +145,20 @@ public class Compra implements Serializable {
 
     @Override
     public String toString() {
-        return "Compra{" +
-                "idCompra=" + idCompra +
-                ", noComprobante='" + noComprobante + '\'' +
-                ", iva=" + iva +
-                ", totalCompra=" + totalCompra +
-                ", fechaCompra=" + fechaCompra +
-                ", fechaRegistro=" + fechaRegistro +
-                ", proveedor=" + proveedor +
-                ", estado=" + estado +
-                ", tipoComprobante=" + tipoComprobante +
-                ", items=" + items +
-                '}';
+        final StringBuilder sb = new StringBuilder("Compra{");
+        sb.append("idCompra=").append(idCompra);
+        sb.append(", noComprobante='").append(noComprobante).append('\'');
+        sb.append(", iva=").append(iva);
+        sb.append(", totalCompra=").append(totalCompra);
+        sb.append(", fechaCompra=").append(fechaCompra);
+        sb.append(", fechaRegistro=").append(fechaRegistro);
+        sb.append(", proveedor=").append(proveedor);
+        sb.append(", estado=").append(estado);
+        sb.append(", tipoComprobante=").append(tipoComprobante);
+        sb.append(", items=").append(items);
+        sb.append(", usuario=").append(usuario);
+        sb.append('}');
+        return sb.toString();
     }
 
     private static final long serialVersioUID = 1L;

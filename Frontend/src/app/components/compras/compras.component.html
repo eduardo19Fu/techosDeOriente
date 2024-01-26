@@ -46,7 +46,6 @@
                     <th>Fecha de Compra</th>
                     <th>Tipo Comprobante</th>
                     <th>No. Comprobante</th>
-                    <th>IVA</th>
                     <th>Total</th>
                     <th>Estado</th>
                     <th>Fecha Registro</th>
@@ -60,7 +59,6 @@
                     <td>{{compra.fechaCompra | date: 'dd/MM/yyyy'}}</td>
                     <td>{{compra.tipoComprobante.tipoComprobante}}</td>
                     <td>{{compra.noComprobante}}</td>
-                    <td>{{compra.iva}}</td>
                     <td>{{compra.totalCompra}}</td>
                     <td>
                         <span class="badge" 
@@ -79,7 +77,7 @@
                         </button>
                         <!-- Aquí va el botón de eliminar -->
                         <button class="btn bg-gradient-danger margin" name="delete" placement="top" ngbTooltip="Eliminar Compra"
-                            type="button" (click)="anularCompra(compra)">
+                            type="button" (click)="delete(compra)">
                             <i class="fas fa-ban"></i>
                         </button>
                     </td>
@@ -92,7 +90,6 @@
                     <th>Fecha de Compra</th>
                     <th>Tipo Comprobante</th>
                     <th>No. Comprobante</th>
-                    <th>IVA</th>
                     <th>Total</th>
                     <th>Estado</th>
                     <th>Fecha Registro</th>
