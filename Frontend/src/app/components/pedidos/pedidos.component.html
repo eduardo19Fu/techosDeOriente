@@ -1,1 +1,107 @@
-<p>pedidos works!</p>
+<!-- MODAL DE DETALLE PARA COMPRA SELECCIONADA -->
+<!-- <app-modal-detalle-compra *ngIf="compraSeleccionada" [compra]="compraSeleccionada"></app-modal-detalle-compra> -->
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    {{title}}
+                </h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+        <hr>
+        <div class="row">
+            <div class="col s6">
+                <a [routerLink]="['/compras/create']" class="btn bg-gradient-success">
+                    <i class="fas fa-plus-square"></i>&nbsp; Nuevo</a>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Listado</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body table-responsive">
+
+        <div *ngIf="pedidos?.length == 0" class="alert alert-info alert-dismissible">
+            <h5>
+                <i class="icon fas fa-info"></i>
+                ¡Atención!
+            </h5>
+
+            No existe ninguna compra registrada en la base de datos.
+        </div>
+
+        <table id="compras" class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid" 
+            *ngIf="pedidos?.length > 0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Proveedor</th>
+                    <th>Fecha de Pedido</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Realizado Por</th>
+                    <th>Fecha Registro</th>
+                    <th *ngIf="authService.hasRole('ROLE_ADMIN')">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pedido of pedidos">
+                    <td>{{pedido.idCompra}}</td>
+                    <td>{{pedido.proveedor.nombre}}</td>
+                    <td>{{pedido.fechaCompra | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{pedido.tipoComprobante.tipoComprobante}}</td>
+                    <td>{{pedido.noComprobante}}</td>
+                    <td>{{pedido.iva}}</td>
+                    <td>{{pedido.totalCompra}}</td>
+                    <td>
+                        <span class="badge" 
+                            [ngClass]="{'badge-primary': compra.estado.estado === 'ACTIVO',
+                                'badge-danger' : compra.estado.estado === 'ANULADO',
+                                'badge-secondary' : compra.estado.estado === 'INACTIVO'}">
+                            {{compra.estado.estado}}
+                        </span>
+                    </td>
+                    <td>{{compra.fechaRegistro | date: 'dd/MM/yyyy - hh:mm:ss'}}</td>
+                    <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+                        <!-- Aquí val el botón de detalle de compra -->
+                        <button class="btn bg-gradient-success margin" placement="top" ngbTooltip="Detalle Compra"
+                            (click)="abrirDetalle(compra)">
+                            <i class="fas fa-asterisk"></i>
+                        </button>
+                        <!-- Aquí va el botón de eliminar -->
+                        <button class="btn bg-gradient-danger margin" name="delete" placement="top" ngbTooltip="Eliminar Compra"
+                            type="button" (click)="anularCompra(compra)">
+                            <i class="fas fa-ban"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>#</th>
+                    <th>Proveedor</th>
+                    <th>Fecha de Compra</th>
+                    <th>Tipo Comprobante</th>
+                    <th>No. Comprobante</th>
+                    <th>IVA</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Fecha Registro</th>
+                    <th *ngIf="authService.hasRole('ROLE_ADMIN')">Opciones</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+
+
+
+
