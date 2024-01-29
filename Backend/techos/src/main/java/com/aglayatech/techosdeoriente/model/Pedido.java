@@ -2,6 +2,7 @@ package com.aglayatech.techosdeoriente.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,11 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -26,11 +30,8 @@ public class Pedido implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPedido;
     private BigDecimal totalPedido;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaRegistro;
-    @Temporal(TemporalType.DATE)
-    private Date fechaPedido;
+    private LocalDateTime fechaRegistro;
+    private LocalDate fechaPedido;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_estado")
@@ -47,10 +48,15 @@ public class Pedido implements Serializable {
     @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
     private Usuario usuario;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_pedido")
     @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
     private List<DetallePedido> itemsPedido;
+
+    @PrePersist
+    public void prepersist() {
+        this.fechaRegistro = LocalDateTime.now();
+    }
 
     public Long getIdPedido() {
         return idPedido;
@@ -68,19 +74,19 @@ public class Pedido implements Serializable {
         this.totalPedido = totalPedido;
     }
 
-    public Date getFechaRegistro() {
+    public LocalDateTime getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(Date fechaRegistro) {
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public Date getFechaPedido() {
+    public LocalDate getFechaPedido() {
         return fechaPedido;
     }
 
-    public void setFechaPedido(Date fechaPedido) {
+    public void setFechaPedido(LocalDate fechaPedido) {
         this.fechaPedido = fechaPedido;
     }
 

@@ -61,6 +61,7 @@ import { ModalProductosInventarioComponent } from './components/reportes/modales
 import { ModalVentasCategoriaComponent } from './components/reportes/modales/modal-ventas-categoria/modal-ventas-categoria.component';
 import { PedidosComponent } from './components/pedidos/pedidos.component';
 import { CreatePedidoComponent } from './components/pedidos/create-pedido/create-pedido.component';
+import { ModalDetallePedidoComponent } from './components/pedidos/modal-detalle-pedido/modal-detalle-pedido.component';
 
 @NgModule({
   declarations: [
@@ -116,7 +117,8 @@ import { CreatePedidoComponent } from './components/pedidos/create-pedido/create
     ModalProductosInventarioComponent,
     ModalVentasCategoriaComponent,
     PedidosComponent,
-    CreatePedidoComponent
+    CreatePedidoComponent,
+    ModalDetallePedidoComponent
   ],
   imports: [
     BrowserModule,

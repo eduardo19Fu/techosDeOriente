@@ -12,5 +12,13 @@ export class Pedido {
     estado: Estado;
     proveedor: Proveedor;
     usuario: UsuarioAuxiliar;
-    itemsPedido: DetallePedido[];
+    itemsPedido: DetallePedido[] = [];
+
+    calcularTotal(): number {
+        this.totalPedido = 0;
+        this.itemsPedido.forEach(item => {
+            this.totalPedido += item.calcularSubTotal();
+        });
+        return this.totalPedido;
+    }
 }

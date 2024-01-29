@@ -1,5 +1,5 @@
-<!-- MODAL DE DETALLE PARA COMPRA SELECCIONADA -->
-<!-- <app-modal-detalle-compra *ngIf="compraSeleccionada" [compra]="compraSeleccionada"></app-modal-detalle-compra> -->
+<!-- MODAL DE DETALLE PARA PEDIDO SELECCIONADO -->
+<app-modal-detalle-pedido *ngIf="pedidoSeleccionado" [pedido]="pedidoSeleccionado"></app-modal-detalle-pedido>
 
 <div class="content-header">
     <div class="container-fluid">
@@ -13,7 +13,7 @@
         <hr>
         <div class="row">
             <div class="col s6">
-                <a [routerLink]="['/compras/create']" class="btn bg-gradient-success">
+                <a [routerLink]="['/pedidos/create']" class="btn bg-gradient-success">
                     <i class="fas fa-plus-square"></i>&nbsp; Nuevo</a>
             </div>
         </div>
@@ -53,31 +53,29 @@
             </thead>
             <tbody>
                 <tr *ngFor="let pedido of pedidos">
-                    <td>{{pedido.idCompra}}</td>
+                    <td>{{pedido.idPedido}}</td>
                     <td>{{pedido.proveedor.nombre}}</td>
-                    <td>{{pedido.fechaCompra | date: 'dd/MM/yyyy'}}</td>
-                    <td>{{pedido.tipoComprobante.tipoComprobante}}</td>
-                    <td>{{pedido.noComprobante}}</td>
-                    <td>{{pedido.iva}}</td>
-                    <td>{{pedido.totalCompra}}</td>
+                    <td>{{pedido.fechaPedido | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{pedido.totalPedido}}</td>
                     <td>
                         <span class="badge" 
-                            [ngClass]="{'badge-primary': compra.estado.estado === 'ACTIVO',
-                                'badge-danger' : compra.estado.estado === 'ANULADO',
-                                'badge-secondary' : compra.estado.estado === 'INACTIVO'}">
-                            {{compra.estado.estado}}
+                            [ngClass]="{'badge-primary': pedido.estado.estado === 'ACTIVO',
+                                'badge-danger' : pedido.estado.estado === 'ANULADO',
+                                'badge-secondary' : pedido.estado.estado === 'INACTIVO'}">
+                            {{pedido.estado.estado}}
                         </span>
                     </td>
-                    <td>{{compra.fechaRegistro | date: 'dd/MM/yyyy - hh:mm:ss'}}</td>
+                    <td>{{pedido.usuario.primerNombre + '' + pedido.usuario.apellido}}</td>
+                    <td>{{pedido.fechaRegistro | date: 'dd/MM/yyyy - hh:mm:ss'}}</td>
                     <td *ngIf="authService.hasRole('ROLE_ADMIN')">
                         <!-- Aquí val el botón de detalle de compra -->
-                        <button class="btn bg-gradient-success margin" placement="top" ngbTooltip="Detalle Compra"
-                            (click)="abrirDetalle(compra)">
+                        <button class="btn bg-gradient-success margin" placement="top" ngbTooltip="Detalle Pedido"
+                            (click)="abrirDetalle(pedido)">
                             <i class="fas fa-asterisk"></i>
                         </button>
                         <!-- Aquí va el botón de eliminar -->
-                        <button class="btn bg-gradient-danger margin" name="delete" placement="top" ngbTooltip="Eliminar Compra"
-                            type="button" (click)="anularCompra(compra)">
+                        <button class="btn bg-gradient-danger margin" name="delete" placement="top" ngbTooltip="Eliminar Pedido"
+                            type="button" (click)="eliminarPedido(pedido)">
                             <i class="fas fa-ban"></i>
                         </button>
                     </td>
@@ -87,12 +85,10 @@
                 <tr>
                     <th>#</th>
                     <th>Proveedor</th>
-                    <th>Fecha de Compra</th>
-                    <th>Tipo Comprobante</th>
-                    <th>No. Comprobante</th>
-                    <th>IVA</th>
+                    <th>Fecha de Pedido</th>
                     <th>Total</th>
                     <th>Estado</th>
+                    <th>Realizado Por</th>
                     <th>Fecha Registro</th>
                     <th *ngIf="authService.hasRole('ROLE_ADMIN')">Opciones</th>
                 </tr>

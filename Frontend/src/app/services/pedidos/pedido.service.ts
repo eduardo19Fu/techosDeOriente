@@ -23,7 +23,7 @@ export class PedidoService {
   getPedidos(): Observable<any> {
     return this.http.get<any>(`${this.url}/pedidos`).pipe(
       catchError(e => {
-        Swal.fire(e.error.message, e.error, 'error');
+        Swal.fire(e.error.mensaje, e.error, 'error');
         return throwError(e);
       })
     );
@@ -32,7 +32,7 @@ export class PedidoService {
   getPedido(id: number): Observable<any> {
     return this.http.get<any>(`${this.url}/pedidos/${id}`).pipe(
       catchError(e => {
-        Swal.fire(e.error.message, e.error.error, 'error');
+        Swal.fire(e.error.mensaje, e.error.error, 'error');
         return throwError(e);
       })
     )
@@ -41,7 +41,16 @@ export class PedidoService {
   create(pedido: Pedido): Observable<any> {
     return this.http.post<any>(`${this.url}/pedidos`, pedido).pipe(
       catchError((e) => {
-        Swal.fire(e.error.message, e.error.error, 'error');
+        Swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
+
+  delete(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.url}/pedidos/delete/${id}`).pipe(
+      catchError(e => {
+        Swal.fire(e.error.mensaje, e.error.error, 'error');
         return throwError(e);
       })
     );

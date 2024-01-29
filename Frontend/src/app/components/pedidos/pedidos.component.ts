@@ -6,6 +6,7 @@ import { PedidoService } from '../../services/pedidos/pedido.service';
 import { JqueryConfigs } from '../../utils/jquery/jquery-utils';
 
 import Swal from 'sweetalert2'; 
+import { DetailService } from 'src/app/services/facturas/detail.service';
 
 @Component({
   selector: 'app-pedidos',
@@ -16,12 +17,22 @@ export class PedidosComponent implements OnInit {
 
   title: string;
 
+  pedidoSeleccionado: Pedido;
   pedidos: Pedido[];
   jqueryConfigs: JqueryConfigs;
 
+  swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-success',
+      cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: true
+  });
+
   constructor(
     public authService: AuthService,
-    private pedidoService: PedidoService
+    private pedidoService: PedidoService,
+    public detailService: DetailService
   ) { 
     this.title = "Pedidos";
     this.pedidos = [];
@@ -39,6 +50,46 @@ export class PedidosComponent implements OnInit {
         this.jqueryConfigs.configDataTable("pedidos");
       }
     );
+  }
+
+  abrirDetalle(pedido: Pedido): void {
+    this.pedidoSeleccionado = pedido;
+    this.detailService.abrirModal();
+  }
+
+  eliminarPedido(pedido: Pedido): void {
+    this.swalWithBootstrapButtons.fire({
+      title: '¿Está seguro?',
+      text: `¿Seguro que desea eliminar el pedido #${pedido.idPedido}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '¡Si, eliminar!',
+      cancelButtonText: '¡No, cancelar!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.pedidoService.delete(pedido.idPedido).subscribe(
+          response => {
+            this.pedidos = this.pedidos.filter(ped => ped !== pedido);
+            this.swalWithBootstrapButtons.fire(
+              '¡Pedido Eliminado!',
+              `${response.mensaje}`,
+              'success'
+            );
+          }
+        );
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        this.swalWithBootstrapButtons.fire(
+          'Proceso Cancelado',
+          'La compra no fúe eliminado de la base de datos.',
+          'error'
+        );
+      }
+    });
   }
 
 }

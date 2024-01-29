@@ -1,9 +1,13 @@
 package com.aglayatech.techosdeoriente.controller;
 
 import com.aglayatech.techosdeoriente.generics.ErroresHandler;
+import com.aglayatech.techosdeoriente.model.Compra;
 import com.aglayatech.techosdeoriente.model.DetalleCompra;
+import com.aglayatech.techosdeoriente.model.DetallePedido;
 import com.aglayatech.techosdeoriente.model.Estado;
+import com.aglayatech.techosdeoriente.model.MovimientoProducto;
 import com.aglayatech.techosdeoriente.model.Pedido;
+import com.aglayatech.techosdeoriente.model.Producto;
 import com.aglayatech.techosdeoriente.service.IEstadoService;
 import com.aglayatech.techosdeoriente.service.IPedidoService;
 import com.aglayatech.techosdeoriente.service.IProductoService;
@@ -16,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,12 +100,10 @@ public class PedidoApiController {
             estado = this.estadoService.findByEstado("ACTIVO");
             pedido.setEstado(estado);
 
-//            // Recorrer item por item para validr si los productos existen o no.
-//            for(DetalleCompra item : pedido.getItems()) {
-//                if (this.crearProducto(item, compra.getFechaCompra())) {
-//                    this.movimiento(item.getProducto(), compra, item.getCantidad());
-//                }
-//            }
+            // Recorrer item por item para validr si los productos existen o no.
+            for(DetallePedido item : pedido.getItemsPedido()) {
+                crearProducto(item, pedido.getFechaPedido());
+            }
 
             newPedido = this.pedidoService.save(pedido);
 
@@ -146,6 +152,52 @@ public class PedidoApiController {
         response.put("mensaje", "¡Registro Anulado!");
         response.put("pedido", pedidoDisabled);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+    }
+
+    @Secured(value = {"ROLE_ADMIN"})
+    @DeleteMapping(value = "/pedidos/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long idpedido) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            pedidoService.delete(idpedido);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "¡Ha ocurrido un error en la Base de Datos!");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "¡El pedido ha sido eliminado con éxito!");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Método que recibe un producto que no existe y lo registra.
+     *
+     * @param item Recibe el item a analizar.
+     * @param fechaIngreso Fecha de ingreso para el producto misma que la compra realizada
+     * @return boolean Devuelve un valor booleano analizando si se llevo a cabo el registro con éxito o no.
+     * @exception DataAccessException Lanza una posible excepcion en caso de ocurrir un problema a nivel de base de datos del tipo
+     *
+     * */
+    private void crearProducto(DetallePedido item, LocalDate fechaIngreso) {
+        Producto producto = null;
+        Estado estadoProductoNuevo = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            estadoProductoNuevo = this.estadoService.findByEstado("activo".toUpperCase());
+            producto = this.productoService.findByCodigo(item.getProducto().getCodProducto());
+
+            if (producto == null) {
+                producto = item.getProducto();
+                producto.setEstado(estadoProductoNuevo);
+                producto.setFechaIngreso(simpleDateFormat.parse(fechaIngreso.toString()));
+                producto.setStock(0);
+                productoService.save(producto);
+            }
+        } catch(DataAccessException | ParseException e) {
+            LOGGER.error("Error = ".concat(e.getMessage()));
+        }
     }
 
 }

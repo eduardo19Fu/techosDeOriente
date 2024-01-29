@@ -9,4 +9,8 @@ export class DetallePedido {
     subTotal: number;
 
     producto: Producto;
+
+    public calcularSubTotal(): number {
+        return this.cantidad * this.producto.precioCompra;
+    }
 }
