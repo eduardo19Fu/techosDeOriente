@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,9 +16,12 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import com.aglayatech.techosdeoriente.model.DetalleCompra;
+import com.aglayatech.techosdeoriente.service.IEstadoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -45,6 +49,9 @@ public class ProductoServiceImpl implements IProductoService {
 
 	@Autowired
 	private IProductoRepository repoProducto;
+
+	@Autowired
+	private IEstadoService estadoService;
 	
 	@Autowired
 	protected DataSource localDataSource;
@@ -104,6 +111,73 @@ public class ProductoServiceImpl implements IProductoService {
 	@Override
 	public List<Producto> findAllByEstado(Estado estado) {
 		return repoProducto.findByEstado(estado);
+	}
+
+	/**
+	 * Método que recibe un producto que no existe y lo registra.
+	 *
+	 * @param item Recibe el item a analizar.
+	 * @param fechaIngreso Fecha de ingreso para el producto misma que la compra realizada
+	 * @return boolean Devuelve un valor booleano analizando si se llevo a cabo el registro con éxito o no.
+	 * @exception DataAccessException Lanza una posible excepcion en caso de ocurrir un problema a nivel de base de datos del tipo
+	 *
+	 * */
+	public boolean crearProducto(DetalleCompra item, LocalDate fechaIngreso, String tipoMovimiento) {
+		Producto producto = null;
+		Estado estadoProductoNuevo = null;
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		try {
+			estadoProductoNuevo = this.estadoService.findByEstado("activo".toUpperCase());
+			producto = findByCodigo(item.getProducto().getCodProducto());
+
+			if(producto != null) {
+				producto.setPrecioCompra(item.getProducto().getPrecioCompra());
+				producto.setPrecioVenta(item.getProducto().getPrecioVenta());
+				producto.setPrecioSugerido(item.getProducto().getPrecioSugerido());
+				producto.setPorcentajeGanancia(item.getProducto().getPorcentajeGanancia());
+				this.updateExistencias(producto, item.getCantidad(), tipoMovimiento.toUpperCase());
+			} else if (producto == null) {
+				producto = item.getProducto();
+				producto.setEstado(estadoProductoNuevo);
+				producto.setFechaIngreso(simpleDateFormat.parse(fechaIngreso.toString()));
+			}
+
+			save(producto);
+			return true;
+		} catch(DataAccessException | ParseException e) {
+			LOGGER.error(e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Función encargado de la actualización de existencias.
+	 * <p>Este se encarga de determinar la cantidad de existencias del  producto recién ingresado
+	 * para poder actualizar su stock de forma adecuada según los items recibidos y según el tipo de movimiento.</p>
+	 * <p>Si el tipo de movimiento es compra, agregará la cantidad recibida al stock del producto.</p>
+	 * <p>Si el tipo de movimiento es eliminar_compra, restará la cantidad agregada anteriormente al stock.</p>
+	 * @param producto Es el producto a procesar
+	 * @param cantidad Es la cantidad a agregar o quitar
+	 * @param tipoMovimiento Determina el tipo movimiento que se va a realizar
+	 * */
+	public void updateExistencias(Producto producto, int cantidad, String tipoMovimiento) {
+		Producto productoUpdated = new Producto();
+
+		switch (tipoMovimiento) {
+			case "COMPRA":
+			case "ANULACION_FACTURA":
+				producto.setStock(producto.getStock() + cantidad);
+				break;
+			case "ELIMINAR_COMPRA":
+			case "VENTA":
+				producto.setStock(producto.getStock() - cantidad);
+				break;
+			default:
+				LOGGER.error("No existe una operación asignada para el tipo de movimiento ".concat(tipoMovimiento));
+				break;
+		}
+		productoUpdated = save(producto);
 	}
 
 
