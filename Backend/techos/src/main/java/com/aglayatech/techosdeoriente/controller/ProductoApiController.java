@@ -280,8 +280,8 @@ public class ProductoApiController {
 	}
 
 	@Secured({ "ROLE_ADMIN", "ROLE_COBRADOR", "ROLE_INVENTARIO" })
-	@GetMapping(value = "/productos/codigo/{codigo}")
-	public ResponseEntity<?> findByCodigo(@PathVariable("codigo") String codigo) {
+	@GetMapping(value = "/productos/get-by-code")
+	public ResponseEntity<?> findByCodigo(@RequestParam("codigo") String codigo) {
 		
 		Producto producto = null;
 		Map<String, Object> response = new HashMap<>();

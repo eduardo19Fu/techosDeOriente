@@ -24,6 +24,7 @@ import Swal from 'sweetalert2';
 export class CreatePedidoComponent implements OnInit {
 
   title: string;
+  tmpvalorCompra: number;
 
   pedido: Pedido;
   producto: Producto;
@@ -70,8 +71,6 @@ export class CreatePedidoComponent implements OnInit {
       if (codigo) {
         this.productoService.getProductoByCode(codigo).subscribe(
           producto => {
-            console.log(producto);
-            console.log(typeof producto);
             this.producto = new Producto();
             
             // Para evitar error al ejecutar funcion producto.calcularPrecioSugerido()
@@ -90,6 +89,8 @@ export class CreatePedidoComponent implements OnInit {
             this.producto.marcaProducto = producto.marcaProducto;
   
             (document.getElementById('cantidad') as HTMLInputElement).focus();
+
+            this.tmpvalorCompra = this.producto.precioCompra;
           },
           error => {
             if (error.status === 400) {
@@ -144,6 +145,8 @@ export class CreatePedidoComponent implements OnInit {
             response => {
               this.router.navigate(['/pedidos/index']);
               Swal.fire(response.mensaje, `La compra: ${response.pedido.idPedido} fue guardada con éxito.`, 'success');
+              
+              this.generarPedido(response.pedido);
             }
           );
         }
@@ -159,7 +162,7 @@ export class CreatePedidoComponent implements OnInit {
   agregarLinea(): void {
     if (this.producto) { // comprueba que el producto exista
       const item = new DetallePedido();
-
+    
       item.cantidad = +((document.getElementById('cantidad') as HTMLInputElement)).value; // valor obtenido del formulario de cantidad
 
       if (item.cantidad && item.cantidad !== 0) {
@@ -222,6 +225,25 @@ export class CreatePedidoComponent implements OnInit {
         Swal.fire('Valor Inválido', 'La cantidad no puede estar vacía.  Ingrese un valor válido.', 'warning');
       }
     }
+  }
+
+  /** GENERAR REPORTE CON EL PEDIDO RECIÉN CREADO **/
+  generarPedido(pedido: Pedido): void {
+    this.pedidoService.getPedidoPDF(pedido.idPedido).subscribe(response => {
+      const url = window.URL.createObjectURL(response.data);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.setAttribute('target', 'blank');
+      a.href = url;
+
+      window.open(a.toString(), '_blank');
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    },
+      error => {
+        console.log(error);
+    });
   }
 
   /**

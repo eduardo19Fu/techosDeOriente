@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { global } from '../global';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import Swal from 'sweetalert2';
 import { Pedido } from 'src/app/models/pedido';
@@ -52,6 +52,22 @@ export class PedidoService {
       catchError(e => {
         Swal.fire(e.error.mensaje, e.error.error, 'error');
         return throwError(e);
+      })
+    );
+  }
+
+  /************ REPORTES PDF ***************/
+  getPedidoPDF(idpedido: number): Observable<any>{
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/pdf');
+    const requestOptions: any = { headers, responseType: 'blob' };
+
+    return this.http.get<any>(`${this.url}/pedidos/generate-pedido/${idpedido}`, requestOptions).pipe(
+      map((response: any) => {
+        return{
+          filename: 'pedido.pdf',
+          data: new Blob([response], { type: 'application/pdf' })
+        };
       })
     );
   }
