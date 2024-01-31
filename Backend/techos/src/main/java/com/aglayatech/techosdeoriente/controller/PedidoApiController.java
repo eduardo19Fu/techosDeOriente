@@ -1,16 +1,15 @@
 package com.aglayatech.techosdeoriente.controller;
 
 import com.aglayatech.techosdeoriente.generics.ErroresHandler;
-import com.aglayatech.techosdeoriente.model.Compra;
 import com.aglayatech.techosdeoriente.model.DetalleCompra;
 import com.aglayatech.techosdeoriente.model.DetallePedido;
 import com.aglayatech.techosdeoriente.model.Estado;
-import com.aglayatech.techosdeoriente.model.MovimientoProducto;
 import com.aglayatech.techosdeoriente.model.Pedido;
 import com.aglayatech.techosdeoriente.model.Producto;
 import com.aglayatech.techosdeoriente.service.IEstadoService;
 import com.aglayatech.techosdeoriente.service.IPedidoService;
 import com.aglayatech.techosdeoriente.service.IProductoService;
+import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -197,6 +202,32 @@ public class PedidoApiController {
             }
         } catch(DataAccessException | ParseException e) {
             LOGGER.error("Error = ".concat(e.getMessage()));
+        }
+    }
+
+    /*************** PDF REPORTS CONTROLLERS ********************/
+
+    @GetMapping(value = "/pedidos/generate-pedido/{id}")
+    public void generarPedidoPDF(@PathVariable("id") Long idpedido, HttpServletResponse httpServletResponse)
+            throws JRException, SQLException, FileNotFoundException {
+
+
+        try {
+            byte[] bytesPedido = pedidoService.showReport(idpedido);
+            ByteArrayOutputStream out = new ByteArrayOutputStream(bytesPedido.length);
+            out.write(bytesPedido, 0, bytesPedido.length);
+
+            httpServletResponse.setContentType("application/pdf");
+            httpServletResponse.addHeader("Content-Disposition", "inline; filename=pedido-" + idpedido + ".pdf");
+
+            OutputStream os;
+
+            os = httpServletResponse.getOutputStream();
+            out.writeTo(os);
+            os.flush();
+            os.close();
+        } catch (IOException e) {
+            LOGGER.error("Ha ocurrido un error al tratar de generar el pedido: " + e.getCause().getMessage());
         }
     }
 

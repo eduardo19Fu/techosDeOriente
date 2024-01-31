@@ -92,4 +92,23 @@ export class PedidosComponent implements OnInit {
     });
   }
 
+  /** GENERAR REPORTE CON EL PEDIDO RECIÉN CREADO **/
+  generarPedido(pedido: Pedido): void {
+    this.pedidoService.getPedidoPDF(pedido.idPedido).subscribe(response => {
+      const url = window.URL.createObjectURL(response.data);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.setAttribute('target', 'blank');
+      a.href = url;
+
+      window.open(a.toString(), '_blank');
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    },
+      error => {
+        console.log(error);
+    });
+  }
+
 }

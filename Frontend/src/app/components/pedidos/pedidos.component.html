@@ -78,6 +78,11 @@
                             type="button" (click)="eliminarPedido(pedido)">
                             <i class="fas fa-ban"></i>
                         </button>
+
+                        <button type="button" class="btn bg-gradient-warning margin" name="print" placement="top" ngbTooltip="Imprimir Pedido"
+                            (click)="generarPedido(pedido)">
+                            <i class="fas fa-print"></i>
+                        </button>
                     </td>
                 </tr>
             </tbody>

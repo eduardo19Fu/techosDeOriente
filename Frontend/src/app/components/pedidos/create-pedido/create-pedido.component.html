@@ -34,11 +34,7 @@
                                 </span>
                             </div>
                         </div>
-    
-                    </div>
-    
-    
-                    <div class="row">
+
                         <div class="form-group col">
                             <label for="proveedor">Proveedor</label>
                             <select name="proveedor" id="proveedor" [(ngModel)]="pedido.proveedor" class="form-control" 
@@ -56,14 +52,9 @@
                             </div>
                         </div>
     
-                        <div class="form-group col">
-                            
-                        </div>
-    
-    
                     </div>
-    
                     <hr>
+
                     <div class="row">
                         <div class="col-md-auto">
                             <div class="form-group">
@@ -100,7 +91,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="precio-compra">Precio Compra</label>
-                                <input type="number" class="form-control" name="precio-compra"
+                                <input type="number" class="form-control" name="precio-compra" id="precio-compra"
                                     [(ngModel)]="producto.precioCompra" #precioCompra="ngModel"
                                     [required]="!producto.precioCompra && pedido.itemsPedido.length <= 0">
     
@@ -271,6 +262,14 @@
                         [disabled]="!pedidoForm.form.valid">
                         <i class="fas fa-save"></i> Guardar
                 </button>
+            </div>
+        </div>
+
+        <div>
+            <div class="alert alert-danger alert-dismissible" *ngIf="producto && (producto.precioCompra > tmpvalorCompra)">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> ¡Alerta!</h5>
+                {{"El precio del producto " + producto.codProducto + " no concuerda con el registrado en la base de datos."}}
             </div>
         </div>
     </div>

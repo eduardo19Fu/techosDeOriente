@@ -53,7 +53,7 @@ export class ProductoService {
   }
 
   getProductoByCode(codigo: string): Observable<Producto> {
-    return this.http.get<Producto>(`${this.url}/productos/codigo/${codigo}`).pipe(
+    return this.http.get<Producto>(`${this.url}/productos/get-by-code?codigo=${codigo}`).pipe(
       catchError(e => {
         swal.fire('Error al consultar el producto', e.error, 'error');
         return throwError(e);
