@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Compra } from '../../../models/compra';
 import { Router } from '@angular/router';
 
@@ -25,11 +25,12 @@ import { MarcaProducto } from '../../../models/marca-producto';
   styles: [
   ]
 })
-export class CreateCompraComponent implements OnInit {
+export class CreateCompraComponent implements OnInit, OnDestroy {
 
   title: string;
   efectivo: number;
   cambio: number;
+  compraKey: string;
 
   compra: Compra;
   usuario: UsuarioAuxiliar;
@@ -66,7 +67,27 @@ export class CreateCompraComponent implements OnInit {
     this.loadProveedores();
     this.cargarMarcas();
     this.cargarTipos();
+    
+    // this.cargarCompra();
   }
+
+  ngOnDestroy(): void {
+    // this.compraService.almacenarCompra(this.compra);
+  }
+
+  // cargarCompra(): void {
+  //   const compraGuardada = this.compraService.obtenerCompra();
+  //   if(compraGuardada) {
+  //     this.compra.fechaCompra = compraGuardada.fechaCompra;
+  //     this.compra.totalCompra = compraGuardada.totalCompra;
+  //     this.compra.noComprobante = compraGuardada.noComprobante;
+  //     this.compra.proveedor = compraGuardada.proveedor;
+  //     this.compra.tipoComprobante = compraGuardada.tipoComprobante;
+  //     this.compra.items = compraGuardada.items;
+
+  //     console.log(this.compra);
+  //   }
+  // }
 
   /**
    * Método create que ejecuta la petición para registrar la nueva compra en la Base de Datos del lado
@@ -83,6 +104,7 @@ export class CreateCompraComponent implements OnInit {
             response => {
               this.router.navigate(['/compras/index']);
               Swal.fire(response.mensaje, `La compra: ${response.compra.noComprobante} fue guardada con éxito.`, 'success');
+              this.compraService.limpiarCompra();
             }
           );
         }
@@ -101,8 +123,6 @@ export class CreateCompraComponent implements OnInit {
     if (codigo) {
       this.productoService.getProductoByCode(codigo).subscribe(
         producto => {
-          console.log(producto);
-          console.log(typeof producto);
           this.producto = new Producto();
           
           // Para evitar error al ejecutar funcion producto.calcularPrecioSugerido()
@@ -177,6 +197,7 @@ export class CreateCompraComponent implements OnInit {
 
             if (item.producto.nombre) {
               this.compra.items.push(item);
+              // this.compraService.agregarItemCompra(item);
               this.producto = new Producto();
 
               // Asigna el proveedor de la compra a los productos asignados
@@ -269,6 +290,13 @@ export class CreateCompraComponent implements OnInit {
     } else {
       this.cambio = 0.00;
     }
+  }
+
+  calcularTotal(event): void {
+    this.compra.totalFlete = +((document.getElementById("total-flete")) as HTMLInputElement).value;
+    this.compra.totalDescuento = +((document.getElementById("total-descuento")) as HTMLInputElement).value;
+    
+    this.compra.calcularTotal();
   }
 
   /**
