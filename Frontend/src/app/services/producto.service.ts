@@ -101,6 +101,15 @@ export class ProductoService {
     );
   }
 
+  delete(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.url}/productos/${id}`).pipe(
+      catchError(e => {
+        swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
+
   // Código modificado para agregar barra de progreso
   uploadImage(archivo: File, id): Observable<HttpEvent<{}>> {
     const formData = new FormData();
