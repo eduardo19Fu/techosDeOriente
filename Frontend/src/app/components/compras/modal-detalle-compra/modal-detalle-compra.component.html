@@ -24,6 +24,14 @@
                                         {{compra.noComprobante}}
                                     </li>
                                     <li class="list-group-item">
+                                        <strong>DESCUENTO APLICADO EN Q.: </strong>
+                                        {{compra.totalDescuento | currency: "Q" : "symbol"}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>COSTO POR TRANSPORTE: </strong>
+                                        {{compra.totalFlete | currency : "Q" : "symbol"}}
+                                    </li>
+                                    <li class="list-group-item">
                                         <strong>TOTAL: </strong>
                                         {{compra.totalCompra | currency: "Q" : "symbol"}}
                                     </li>

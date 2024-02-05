@@ -1,24 +1,19 @@
 <!-- MODAL PARA BUSCAR PRODUCTOS -->
 <app-modal-buscar-producto (producto)="loadProducto($event)"></app-modal-buscar-producto>
 
-<div class="container">
+
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0 text-dark">{{title}}</h1>
-                    <hr>
-                    <button type="submit" role="button" class="btn btn-primary" (click)="create()"
-                            [disabled]="!compraForm.form.valid">
-                            <i class="fas fa-save"></i> Guardar
-                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-9">
     
             <div class="card card-primary">
                 <div class="card-header">
@@ -116,12 +111,6 @@
                                 </div>
                             </div>
     
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="total">Total</label>
-                                    <input type="number" class="form-control" name="total" id="total" [(ngModel)]="compra.totalCompra">
-                                </div>
-                            </div>
                         </div>
     
                         <div class="row">
@@ -278,33 +267,55 @@
         </div>
     
         <!-- VENTANA DE CALCULO DE CAMBIO POR EFECTIVO PAGADO -->
-        <!-- <div class="col-md-3">
+        <div class="col-md-3">
             <div class="card card-fuchsia">
-                <!-- <div class="card-header">
-                    <h3 class="card-title">Calculo de Cambio y Total</h3>
+                <div class="card-header">
+                    <h3 class="card-title">Calculo del Total de la Compra</h3>
                 </div>
                 <div class="card-body">
                     <h4>
                         Total: 
                         <span>
                             <strong>
-                                {{compra.calcularTotal() | currency : "Q" : "symbol"}}
+                                {{ compra.calcularTotal() | currency : "Q" : "symbol" }}
                             </strong>
                         </span>
                     </h4>
                     <hr>
-                </div> 
+                    
+                    <div class="form-group">
+                        <label for="total-descuento">Total Descuento:</label>
+                        <input type="number" name="total-descuento" id="total-descuento" class="form-control"
+                            [(ngModel)]="compra.totalDescuento" (keyup)="calcularTotalConNuevosValores($event)" min="0" step="0.99">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="total-flete">Total por Transporte:</label>
+                        <input type="number" name="total-flete" id="total-flete" class="form-control"
+                            [(ngModel)]="compra.totalFlete" (keyup)="calcularTotalConNuevosValores($event)">
+                    </div>
+
+                    <hr>
+                    <h4>
+                        Nuevo Total: 
+                        <span>
+                            <strong>
+                                {{ nuevoTotal | currency : "Q" : "symbol" }}
+                            </strong>
+                        </span>
+                    </h4>
+                </div>
     
                 <div class="card-body" >
                     <button type="submit" role="button" class="btn btn-primary" (click)="create()"
                             [disabled]="!compraForm.form.valid">
-                            Guardar
-                        </button>
+                            <i class="fas fa-save"></i> Guardar
+                    </button>
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
-</div>
+
 
 
 

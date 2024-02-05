@@ -47,7 +47,6 @@
                     <th>Tipo Comprobante</th>
                     <th>No. Comprobante</th>
                     <th>Total</th>
-                    <th>Estado</th>
                     <th>Fecha Registro</th>
                     <th *ngIf="authService.hasRole('ROLE_ADMIN')">Opciones</th>
                 </tr>
@@ -59,15 +58,7 @@
                     <td>{{compra.fechaCompra | date: 'dd/MM/yyyy'}}</td>
                     <td>{{compra.tipoComprobante.tipoComprobante}}</td>
                     <td>{{compra.noComprobante}}</td>
-                    <td>{{compra.totalCompra}}</td>
-                    <td>
-                        <span class="badge" 
-                            [ngClass]="{'badge-primary': compra.estado.estado === 'ACTIVO',
-                                'badge-danger' : compra.estado.estado === 'ANULADO',
-                                'badge-secondary' : compra.estado.estado === 'INACTIVO'}">
-                            {{compra.estado.estado}}
-                        </span>
-                    </td>
+                    <td>{{compra.totalCompra | currency: "Q" : "symbol"}}</td>
                     <td>{{compra.fechaRegistro | date: 'dd/MM/yyyy - hh:mm:ss'}}</td>
                     <td *ngIf="authService.hasRole('ROLE_ADMIN')">
                         <!-- Aquí val el botón de detalle de compra -->
@@ -91,7 +82,6 @@
                     <th>Tipo Comprobante</th>
                     <th>No. Comprobante</th>
                     <th>Total</th>
-                    <th>Estado</th>
                     <th>Fecha Registro</th>
                     <th *ngIf="authService.hasRole('ROLE_ADMIN')">Opciones</th>
                 </tr>
