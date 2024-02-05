@@ -82,7 +82,7 @@
                         </button>
 
                         <button class="btn bg-gradient-danger margin" placement="top" ngbTooltip="Eliminar Producto"
-                            *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')">
+                            *ngIf="auth.hasRole('ROLE_ADMIN') || auth.hasRole('ROLE_INVENTARIO')" (click)="delete(producto)">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>

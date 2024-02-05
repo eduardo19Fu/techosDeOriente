@@ -32,7 +32,7 @@ export class Producto {
     generarCodigo(): string {
         var rand: number;
 
-        rand = Math.floor(Math.random() * 1000000) + 1; // DEVUELVE UN VALOR ALEATORIO ENTRE 1 Y 1000000
+        rand = Math.floor(Math.random() * 100000000) + 1; // DEVUELVE UN VALOR ALEATORIO ENTRE 1 Y 1000000
         return (rand.toString());
     }
 
