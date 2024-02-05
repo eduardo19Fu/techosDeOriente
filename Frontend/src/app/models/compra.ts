@@ -8,8 +8,8 @@ export class Compra {
     idCompra: number;
     noComprobante: string;
     iva: number;
-    totalFlete: number;
-    totalDescuento: number;
+    totalFlete: number = 0;
+    totalDescuento: number = 0;
     totalCompra: number;
     fechaCompra: Date;
 
@@ -33,16 +33,8 @@ export class Compra {
     calcularTotal(): number {
         this.totalCompra = 0;
 
-        if (!this.totalDescuento) {
-            this.totalDescuento = 0;
-        }
-
-        if (!this.totalFlete) {
-            this.totalFlete = 0;
-        }
-
         this.items.forEach(item => {
-            this.totalCompra += (item.calcularSubTotal() + this.totalFlete - this.totalDescuento);
+            this.totalCompra += item.calcularSubTotal();
         });
         return this.totalCompra;
     }

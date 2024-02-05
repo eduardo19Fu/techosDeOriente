@@ -46,7 +46,10 @@ export class CreateProductoComponent implements OnInit {
 
       if (id) {
         this.serviceProducto.getProducto(id).subscribe(
-          producto => this.producto = producto
+          producto => {
+            this.producto = new Producto();
+            this.producto = producto
+          }
         );
       }
     });
@@ -136,11 +139,19 @@ export class CreateProductoComponent implements OnInit {
   }
 
   mostrarPrecioSugerido(): void {
-    const porcentajeGanancia = +((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
-    const pcompra = +((document.getElementById('precio-compra') as HTMLInputElement).value);
+    // this.producto = new Producto();
+    const pPorcentaje = +((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
+    const pCompra = +((document.getElementById('precio-compra') as HTMLInputElement).value);
+    let precioSugerido = 0;
 
-    (document.getElementById('precio-sugerido') as HTMLInputElement).value 
-      = this.producto.calcularPrecioSugerido(pcompra, porcentajeGanancia).toString();
+    if (!pPorcentaje || !pCompra) {
+      console.log('Valores Incorrectos');
+    } else {
+      // precioSugerido = this.producto.calcularPrecioSugerido(+pcompra, +porcentajeGanancia);
+      precioSugerido = ((pCompra) * pPorcentaje / 100) +  pCompra;
+      (document.getElementById('precio-sugerido') as HTMLInputElement).value = precioSugerido.toString();
+    }
+
   }
 
 }

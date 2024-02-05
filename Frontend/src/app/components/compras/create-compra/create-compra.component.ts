@@ -28,9 +28,8 @@ import { MarcaProducto } from '../../../models/marca-producto';
 export class CreateCompraComponent implements OnInit, OnDestroy {
 
   title: string;
-  efectivo: number;
-  cambio: number;
   compraKey: string;
+  nuevoTotal: number;
 
   compra: Compra;
   usuario: UsuarioAuxiliar;
@@ -57,9 +56,7 @@ export class CreateCompraComponent implements OnInit, OnDestroy {
     this.title = 'Nueva Compra';
     this.producto = new Producto();
     this.proveedores = [];
-
-    this.efectivo = 0;
-    this.cambio = 0;
+    this.nuevoTotal = 0;
   }
 
   ngOnInit(): void {
@@ -100,6 +97,11 @@ export class CreateCompraComponent implements OnInit, OnDestroy {
         this.compra.usuario = response;
 
         if (this.compra.usuario) {
+
+          if (this.nuevoTotal && this.nuevoTotal > 0) {
+            this.compra.totalCompra = this.nuevoTotal;
+          }
+
           this.compraService.create(this.compra).subscribe(
             response => {
               this.router.navigate(['/compras/index']);
@@ -281,22 +283,11 @@ export class CreateCompraComponent implements OnInit, OnDestroy {
     (document.getElementById('cantidad') as HTMLInputElement).focus();
   }
 
-  /**
-   * Función que permite realizar el calculo del cambio según el efectivo recibido
-   */
-  calcularCambio(event): void {
-    if (this.efectivo) {
-      this.cambio = this.efectivo - this.compra.calcularTotal();
-    } else {
-      this.cambio = 0.00;
-    }
-  }
 
-  calcularTotal(event): void {
+  calcularTotalConNuevosValores(event): void {
     this.compra.totalFlete = +((document.getElementById("total-flete")) as HTMLInputElement).value;
     this.compra.totalDescuento = +((document.getElementById("total-descuento")) as HTMLInputElement).value;
-    
-    this.compra.calcularTotal();
+    this.nuevoTotal = (this.compra.totalCompra - this.compra.totalDescuento) + this.compra.totalFlete;
   }
 
   /**
