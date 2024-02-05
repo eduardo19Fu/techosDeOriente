@@ -2,8 +2,19 @@ package com.aglayatech.techosdeoriente.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,8 +27,10 @@ public class Compra implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCompra;
     private String noComprobante;
-    private float iva;
-    private Double totalCompra;
+    private Float iva;
+    private BigDecimal totalFlete;
+    private BigDecimal totalDescuento;
+    private BigDecimal totalCompra;
     private LocalDate fechaCompra;
     private LocalDateTime fechaRegistro;
 
@@ -79,19 +92,31 @@ public class Compra implements Serializable {
         this.noComprobante = noComprobante;
     }
 
-    public float getIva() {
-        return iva;
-    }
-
-    public void setIva(float iva) {
+    public void setIva(Float iva) {
         this.iva = iva;
     }
 
-    public Double getTotalCompra() {
+    public BigDecimal getTotalFlete() {
+        return totalFlete;
+    }
+
+    public void setTotalFlete(BigDecimal totalFlete) {
+        this.totalFlete = totalFlete;
+    }
+
+    public BigDecimal getTotalDescuento() {
+        return totalDescuento;
+    }
+
+    public void setTotalDescuento(BigDecimal totalDescuento) {
+        this.totalDescuento = totalDescuento;
+    }
+
+    public BigDecimal getTotalCompra() {
         return totalCompra;
     }
 
-    public void setTotalCompra(Double totalCompra) {
+    public void setTotalCompra(BigDecimal totalCompra) {
         this.totalCompra = totalCompra;
     }
 
@@ -149,6 +174,8 @@ public class Compra implements Serializable {
         sb.append("idCompra=").append(idCompra);
         sb.append(", noComprobante='").append(noComprobante).append('\'');
         sb.append(", iva=").append(iva);
+        sb.append(", totalFlete=").append(totalFlete);
+        sb.append(", totalDescuento=").append(totalDescuento);
         sb.append(", totalCompra=").append(totalCompra);
         sb.append(", fechaCompra=").append(fechaCompra);
         sb.append(", fechaRegistro=").append(fechaRegistro);

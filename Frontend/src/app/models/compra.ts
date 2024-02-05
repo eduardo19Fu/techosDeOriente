@@ -8,6 +8,8 @@ export class Compra {
     idCompra: number;
     noComprobante: string;
     iva: number;
+    totalFlete: number = 0;
+    totalDescuento: number = 0;
     totalCompra: number;
     fechaCompra: Date;
 
@@ -30,6 +32,7 @@ export class Compra {
 
     calcularTotal(): number {
         this.totalCompra = 0;
+
         this.items.forEach(item => {
             this.totalCompra += item.calcularSubTotal();
         });
