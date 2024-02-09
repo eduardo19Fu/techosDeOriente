@@ -34,6 +34,8 @@ import { CreateEnvioComponent } from './components/envios/create-envio/create-en
 import { ReportesComponent } from './components/reportes/reportes.component';
 import { PedidosComponent } from './components/pedidos/pedidos.component';
 import { CreatePedidoComponent } from './components/pedidos/create-pedido/create-pedido.component';
+import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.component';
+import { CreateCotizacionComponent } from './components/cotizaciones/create-cotizacion/create-cotizacion.component';
 
 const appRoutes: Routes = [
     {path: '', component: LoginComponent},
@@ -52,6 +54,12 @@ const appRoutes: Routes = [
     {path: 'productos/categorias/create/:id', component: CreateTipoComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
     {path: 'productos/inventario/index', component: MovimientosProductoComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
     {path: 'productos/inventario/create', component: CreateMovimientoComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_INVENTARIO']}},
+
+    /****** MENUS DE COTIZACIONES ******/
+    {path: 'cotizaciones/index', component: CotizacionesComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_COBRADOR']}},
+    {path: 'cotizaciones/create', component: CreateCotizacionComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_COBRADOR']}},
+    {path: 'cotizaciones/create/:id', component: CreateCotizacionComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_COBRADOR']}},
+
 
     /****** MENUS DE FACTURAS ******/
     {path: 'facturas/index', component: FacturasComponent, canActivate: [AuthGuard, RoleGuard], data: {role: ['ROLE_ADMIN', 'ROLE_COBRADOR']}},

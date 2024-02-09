@@ -2,31 +2,39 @@ package com.aglayatech.techosdeoriente.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "proformas_detalle")
+@Table(name = "cotizaciones_detalle")
 public class DetalleCotizacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idDetalle;
+    private Long idCotizacionDetalle;
     private Integer cantidad;
     private Float descuento;
-    private Double subTotal;
-    private Double subTotalDescuento;
+    private BigDecimal subTotal;
+    private BigDecimal subTotalDescuento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto")
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Producto producto;
 
-    public Long getIdDetalle() {
-        return idDetalle;
+    public Long getIdCotizacionDetalle() {
+        return idCotizacionDetalle;
     }
 
-    public void setIdDetalle(Long idDetalle) {
-        this.idDetalle = idDetalle;
+    public void setIdCotizacionDetalle(Long idCotizacionDetalle) {
+        this.idCotizacionDetalle = idCotizacionDetalle;
     }
 
     public Integer getCantidad() {
@@ -45,19 +53,19 @@ public class DetalleCotizacion {
         this.descuento = descuento;
     }
 
-    public Double getSubTotal() {
+    public BigDecimal getSubTotal() {
         return subTotal;
     }
 
-    public void setSubTotal(Double subTotal) {
+    public void setSubTotal(BigDecimal subTotal) {
         this.subTotal = subTotal;
     }
 
-    public Double getSubTotalDescuento() {
+    public BigDecimal getSubTotalDescuento() {
         return subTotalDescuento;
     }
 
-    public void setSubTotalDescuento(Double subTotalDescuento) {
+    public void setSubTotalDescuento(BigDecimal subTotalDescuento) {
         this.subTotalDescuento = subTotalDescuento;
     }
 
