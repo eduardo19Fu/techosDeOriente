@@ -1,0 +1,90 @@
+<div *ngIf="detailService.modal" class="abrir-modal animacion fadeIn">
+    <div class="modal" tabindex="-1" style="display: block; overflow-y: scroll;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{title}}</h5>
+                    <button (click)="cerrarModal()" id="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white;">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <h4>Datos Generales</h4>
+                        <div class="row">
+                            <div class="col-sm">
+
+                                <ul *ngIf="cotizacion" class="list-group mb-3">
+                                    <li class="list-group-item">
+                                        <strong>NO. COTIZACION: </strong>
+                                        {{'00000000' + cotizacion.idCotizacion}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>TOTAL: </strong>
+                                        {{cotizacion.total | currency: "Q" : "symbol"}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>FECHA EMISIÓN: </strong>
+                                        {{cotizacion.fechaEmision | date: 'dd/MM/yyyy'}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>CLIENTE: </strong>
+                                        {{cotizacion.cliente.nombre}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>NIT CLIENTE: </strong>
+                                        {{cotizacion.cliente.nit}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>DIRECCION CLIENTE: </strong>
+                                        {{cotizacion.cliente.direccion}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>INGRESADO POR: </strong>
+                                        {{cotizacion.usuario.usuario}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>ESTADO:</strong>
+                                        {{cotizacion.estado.estado}}
+                                    </li>
+                                </ul>
+
+                            </div>
+
+
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <h4>Detalle de Cotizaci&oacute;n</h4>&nbsp;
+                            <table class="table table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Fila</th>
+                                        <th>Registro</th>
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>SubTotal</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr class="" *ngFor="let item of cotizacion.itemsProforma; let i = index">
+                                        <td>{{'#' + (i + 1)}}</td>
+                                        <td>{{item.idCotizacionDetalle}}</td>
+                                        <td>{{item.producto.nombre}}</td>
+                                        <td>{{item.cantidad}}</td>
+                                        <td>{{item.subTotal | currency : "Q" : "symbol"}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button (click)="cerrarModal()" type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

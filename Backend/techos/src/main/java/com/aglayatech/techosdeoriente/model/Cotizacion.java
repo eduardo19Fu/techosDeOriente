@@ -2,23 +2,31 @@ package com.aglayatech.techosdeoriente.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "proformas")
+@Table(name = "cotizaciones")
 public class Cotizacion implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idproforma;
-    private Long noProforma;
-    private Double total;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaEmision;
+    private Long idCotizacion;
+    private BigDecimal total;
+    private LocalDateTime fechaEmision;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
@@ -36,44 +44,36 @@ public class Cotizacion implements Serializable {
     private Cliente cliente;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_proforma")
+    @JoinColumn(name = "id_cotizacion")
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private List<DetalleCotizacion> itemsProforma;
 
     @PrePersist
     public void prepersist(){
-        this.fechaEmision = new Date();
+        this.fechaEmision = LocalDateTime.now();
     }
 
-    public Long getIdproforma() {
-        return idproforma;
+    public Long getIdCotizacion() {
+        return idCotizacion;
     }
 
-    public void setIdproforma(Long idproforma) {
-        this.idproforma = idproforma;
+    public void setIdCotizacion(Long idCotizacion) {
+        this.idCotizacion = idCotizacion;
     }
 
-    public Long getNoProforma() {
-        return noProforma;
-    }
-
-    public void setNoProforma(Long noProforma) {
-        this.noProforma = noProforma;
-    }
-
-    public Double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
-    public Date getFechaEmision() {
+    public LocalDateTime getFechaEmision() {
         return fechaEmision;
     }
 
-    public void setFechaEmision(Date fechaEmision) {
+    public void setFechaEmision(LocalDateTime fechaEmision) {
         this.fechaEmision = fechaEmision;
     }
 
@@ -111,16 +111,16 @@ public class Cotizacion implements Serializable {
 
     @Override
     public String toString() {
-        return "Proforma{" +
-                "idproforma=" + idproforma +
-                ", noProforma=" + noProforma +
-                ", total=" + total +
-                ", fechaEmision=" + fechaEmision +
-                ", usuario=" + usuario +
-                ", estado=" + estado +
-                ", cliente=" + cliente +
-                ", itemsProforma=" + itemsProforma +
-                '}';
+        final StringBuilder sb = new StringBuilder("Cotizacion{");
+        sb.append("idCotizacion=").append(idCotizacion);
+        sb.append(", total=").append(total);
+        sb.append(", fechaEmision=").append(fechaEmision);
+        sb.append(", usuario=").append(usuario);
+        sb.append(", estado=").append(estado);
+        sb.append(", cliente=").append(cliente);
+        sb.append(", itemsProforma=").append(itemsProforma);
+        sb.append('}');
+        return sb.toString();
     }
 
     private static final long serialVersionUID = 1L;

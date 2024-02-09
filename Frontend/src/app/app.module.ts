@@ -62,6 +62,9 @@ import { ModalVentasCategoriaComponent } from './components/reportes/modales/mod
 import { PedidosComponent } from './components/pedidos/pedidos.component';
 import { CreatePedidoComponent } from './components/pedidos/create-pedido/create-pedido.component';
 import { ModalDetallePedidoComponent } from './components/pedidos/modal-detalle-pedido/modal-detalle-pedido.component';
+import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.component';
+import { CreateCotizacionComponent } from './components/cotizaciones/create-cotizacion/create-cotizacion.component';
+import { ModalCotizacionDetalleComponent } from './components/cotizaciones/modal-cotizacion-detalle/modal-cotizacion-detalle.component';
 
 @NgModule({
   declarations: [
@@ -118,7 +121,10 @@ import { ModalDetallePedidoComponent } from './components/pedidos/modal-detalle-
     ModalVentasCategoriaComponent,
     PedidosComponent,
     CreatePedidoComponent,
-    ModalDetallePedidoComponent
+    ModalDetallePedidoComponent,
+    CotizacionesComponent,
+    CreateCotizacionComponent,
+    ModalCotizacionDetalleComponent
   ],
   imports: [
     BrowserModule,
