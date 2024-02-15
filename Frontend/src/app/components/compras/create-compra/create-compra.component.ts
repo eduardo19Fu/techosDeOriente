@@ -159,6 +159,23 @@ export class CreateCompraComponent implements OnInit, OnDestroy {
     }
   }
 
+  buscarProductoPorId(id: number): void {
+    this.productoService.getProducto(id).subscribe(
+      producto => {
+        this.producto = producto;(document.getElementById('cantidad') as HTMLInputElement).focus();
+      },
+      error => {
+        if (error.status === 400) {
+          Swal.fire(`Error: ${error.status}`, 'Petición no se puede llevar a cabo.', 'error');
+        }
+
+        if (error.status === 404) {
+          Swal.fire(`Error: ${error.status}`, error.error.mensaje, 'error');
+        }
+      }
+    );
+  }
+
   /** 
    * Agregar un nuevo Item de de tipo Producto a cada DetalleCompra una vez se activa el evento requerido.
    * 
@@ -279,7 +296,8 @@ export class CreateCompraComponent implements OnInit, OnDestroy {
   loadProducto(event): void {
     (document.getElementById('codigo') as HTMLInputElement).value = event.codProducto;
     (document.getElementById('button-x')).click();
-    this.buscarProducto();
+    this.buscarProductoPorId(event.idProducto);
+    // this.buscarProducto();
     (document.getElementById('cantidad') as HTMLInputElement).focus();
   }
 

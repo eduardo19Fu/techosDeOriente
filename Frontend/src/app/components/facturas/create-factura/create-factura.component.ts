@@ -144,6 +144,23 @@ export class CreateFacturaComponent implements OnInit {
     }
   }
 
+  buscarProductoPorId(id: number): void {
+    this.productoService.getProducto(id).subscribe(
+      producto => {
+        this.producto = producto;(document.getElementById('cantidad') as HTMLInputElement).focus();
+      },
+      error => {
+        if (error.status === 400) {
+          swal.fire(`Error: ${error.status}`, 'Petición no se puede llevar a cabo.', 'error');
+        }
+
+        if (error.status === 404) {
+          swal.fire(`Error: ${error.status}`, error.error.mensaje, 'error');
+        }
+      }
+    );
+  }
+
   buscarProductoPorCodigo(codigo: string): void {
     this.productoService.getProductoByCode(codigo).subscribe(
       producto => {
@@ -328,15 +345,10 @@ export class CreateFacturaComponent implements OnInit {
 
   loadProducto(event): void {
     console.log(event);
-    
-    // if (event.serie !== null || event.serie !== undefined) {
-      (document.getElementById('serie') as HTMLInputElement).value = event.serie;
-      this.buscarProducto();
-      (document.getElementById('button-x')).click();
-      (document.getElementById('cantidad') as HTMLInputElement).focus();
-    // } else if(event.serie === null || event.serie === '') {
-    //   this.buscarProductoPorCodigo(event.codProducto);
-    // }
+    (document.getElementById('serie') as HTMLInputElement).value = event.serie;
+    this.buscarProductoPorId(event.idProducto);
+    (document.getElementById('button-x')).click();
+    (document.getElementById('cantidad') as HTMLInputElement).focus();
   }
 
   loadCliente(event): void {
