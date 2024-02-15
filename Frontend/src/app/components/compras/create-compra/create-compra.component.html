@@ -118,7 +118,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="precio-compra">Precio Compra</label>
-                                    <input type="number" class="form-control" name="precio-compra"
+                                    <input type="number" class="form-control" name="precio-compra" id="precio-compra"
                                         [(ngModel)]="producto.precioCompra" #precioCompra="ngModel"
                                         [required]="!producto.precioCompra && compra.items.length <= 0">
         
@@ -134,7 +134,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="porcentaje-ganancia">% Ganancia</label>
-                                    <input type="number" class="form-control" name="porcentaje-ganancia"
+                                    <input type="number" class="form-control" name="porcentaje-ganancia" id="porcentaje-ganancia"
                                         [(ngModel)]="producto.porcentajeGanancia" #porcentajeGanancia="ngModel"
                                         [required]="!producto.porcentajeGanancia && compra.items.length <= 0"
                                         (blur)="mostrarPrecioSugerido()">
