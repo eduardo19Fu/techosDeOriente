@@ -112,6 +112,23 @@ export class CreateCotizacionComponent implements OnInit {
     }
   }
 
+  buscarProductoPorID(id: number): void {
+    this.productoService.getProducto(id).subscribe(
+      producto => {
+        this.producto = producto;(document.getElementById('cantidad') as HTMLInputElement).focus();
+      },
+      error => {
+        if (error.status === 400) {
+          Swal.fire(`Error: ${error.status}`, 'Petición no se puede llevar a cabo.', 'error');
+        }
+
+        if (error.status === 404) {
+          Swal.fire(`Error: ${error.status}`, error.error.mensaje, 'error');
+        }
+      }
+    );
+  }
+
   buscarProductoPorCodigo(codigo: string): void {
     this.productoService.getProductoByCode(codigo).subscribe(
       producto => {
@@ -228,7 +245,7 @@ export class CreateCotizacionComponent implements OnInit {
 
   loadProducto(event): void {
       (document.getElementById('serie') as HTMLInputElement).value = event.serie;
-      this.buscarProducto();
+      this.buscarProductoPorID(event.idProducto);
       (document.getElementById('button-x')).click();
       (document.getElementById('cantidad') as HTMLInputElement).focus();
   }

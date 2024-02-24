@@ -1,21 +1,21 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { UsuarioAuxiliar } from 'src/app/models/auxiliar/usuario-auxiliar';
-import { Cliente } from 'src/app/models/cliente';
-import { DetalleEnvio } from 'src/app/models/detalle-envio';
-import { Envio } from 'src/app/models/envio';
-import { Producto } from 'src/app/models/producto';
+import { UsuarioAuxiliar } from '../../../models/auxiliar/usuario-auxiliar';
+import { Cliente } from '../../../models/cliente';
+import { DetalleEnvio } from '../../../models/detalle-envio';
+import { Envio } from '../../../models/envio';
+import { Producto } from '../../../models/producto';
+import { Usuario } from '../../../models/usuario';
 
-import { ClienteService } from 'src/app/services/cliente.service';
-import { EnvioService } from 'src/app/services/envios/envio.service';
-import { ClienteCreateService } from 'src/app/services/facturas/cliente-create.service';
-import { ProductoService } from 'src/app/services/producto.service';
-import { UsuarioService } from 'src/app/services/usuarios/usuario.service';
+import { ClienteService } from '../../../services/cliente.service';
+import { EnvioService } from '../../../services/envios/envio.service';
+import { ClienteCreateService } from '../../../services/facturas/cliente-create.service';
+import { ProductoService } from '../../../services/producto.service';
+import { UsuarioService } from '../../../services/usuarios/usuario.service';
+import { AuthService } from '../../../services/auth.service';
 
 import swal from 'sweetalert2';
-import { AuthService } from '../../../services/auth.service';
-import { Usuario } from '../../../models/usuario';
 
 @Component({
   selector: 'app-create-envio',
@@ -118,6 +118,23 @@ export class CreateEnvioComponent implements OnInit {
     } else {
       swal.fire('Código Inválido', 'Ingrese un código de producto válido para realizar la búsqueda.', 'warning');
     }
+  }
+
+  buscarProductoPorID(id: number): void {
+    this.productoService.getProducto(id).subscribe(
+      producto => {
+        this.producto = producto;(document.getElementById('cantidad') as HTMLInputElement).focus();
+      },
+      error => {
+        if (error.status === 400) {
+          swal.fire(`Error: ${error.status}`, 'Petición no se puede llevar a cabo.', 'error');
+        }
+
+        if (error.status === 404) {
+          swal.fire(`Error: ${error.status}`, error.error.mensaje, 'error');
+        }
+      }
+    );
   }
 
   agregarLinea(): void {
@@ -239,9 +256,8 @@ export class CreateEnvioComponent implements OnInit {
   }
 
   loadProducto(event): void {
-    this.myCodProdRef.nativeElement.value = event.codProducto;
     (document.getElementById ('button-x')).click(); // No se utilizó el nativeElement ya que no reconocia el botón para cerrar el modal
-    this.buscarProducto();
+    this.buscarProductoPorID(event.idProducto);
     this.myCantidadRef.nativeElement.focus();
   }
 

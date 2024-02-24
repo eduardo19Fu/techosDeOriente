@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DetallePedido } from 'src/app/models/detalle-pedido';
-import { MarcaProducto } from 'src/app/models/marca-producto';
-import { Pedido } from 'src/app/models/pedido';
-import { Producto } from 'src/app/models/producto';
-import { Proveedor } from 'src/app/models/proveedor';
-import { TipoProducto } from 'src/app/models/tipo-producto';
-import { AuthService } from 'src/app/services/auth.service';
-import { MarcaProductoService } from 'src/app/services/marca-producto.service';
-import { PedidoService } from 'src/app/services/pedidos/pedido.service';
-import { ProductoService } from 'src/app/services/producto.service';
-import { ProveedorService } from 'src/app/services/proveedores/proveedor.service';
-import { TipoProductoService } from 'src/app/services/tipo-producto.service';
-import { UsuarioService } from 'src/app/services/usuarios/usuario.service';
+
+import { DetallePedido } from '../../../models/detalle-pedido';
+import { MarcaProducto } from '../../../models/marca-producto';
+import { Pedido } from '../../../models/pedido';
+import { Producto } from '../../../models/producto';
+import { Proveedor } from '../../../models/proveedor';
+import { TipoProducto } from '../../../models/tipo-producto';
+
+import { AuthService } from '../../../services/auth.service';
+import { MarcaProductoService } from '../../../services/marca-producto.service';
+import { PedidoService } from '../../../services/pedidos/pedido.service';
+import { ProductoService } from '../../../services/producto.service';
+import { ProveedorService } from '../../../services/proveedores/proveedor.service';
+import { TipoProductoService } from '../../../services/tipo-producto.service';
+import { UsuarioService } from '../../../services/usuarios/usuario.service';
 
 import Swal from 'sweetalert2';
 
@@ -57,8 +59,46 @@ export class CreatePedidoComponent implements OnInit {
   loadProducto(event): void {
     (document.getElementById('codigo') as HTMLInputElement).value = event.codProducto;
     (document.getElementById('button-x')).click();
-    this.buscarProducto();
+    this.buscarProductoPorID(event.idProducto);
     (document.getElementById('cantidad') as HTMLInputElement).focus();
+  }
+
+  buscarProductoPorID(id: number): void {
+    if(id) {
+      this.productoService.getProducto(id).subscribe(
+        producto => {
+          this.producto = new Producto();
+            
+            // Para evitar error al ejecutar funcion producto.calcularPrecioSugerido()
+            this.producto.idProducto = producto.idProducto;
+            this.producto.codProducto = producto.codProducto;
+            this.producto.serie = producto.serie;
+            this.producto.nombre = producto.nombre;
+            this.producto.precioCompra = producto.precioCompra;
+            this.producto.precioVenta = producto.precioVenta;
+            this.producto.precioSugerido = producto.precioSugerido ? producto.precioSugerido : 0;
+            this.producto.porcentajeGanancia = producto.porcentajeGanancia;
+            this.producto.estado = producto.estado;
+            this.producto.fechaIngreso = producto.fechaIngreso;
+            this.producto.fechaRegistro = producto.fechaRegistro;
+            this.producto.tipoProducto = producto.tipoProducto;
+            this.producto.marcaProducto = producto.marcaProducto;
+  
+            (document.getElementById('cantidad') as HTMLInputElement).focus();
+
+            this.tmpvalorCompra = this.producto.precioCompra;
+        },
+        error => {
+          if (error.status === 400) {
+            Swal.fire(`Error: ${error.status}`, 'Petición no se puede llevar a cabo.', 'error');
+          }
+  
+          if (error.status === 404) {
+            Swal.fire(`Error: ${error.status}`, error.error.mensaje, 'error');
+          }
+        }
+      );
+    }
   }
 
     /** 
