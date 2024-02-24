@@ -313,8 +313,19 @@ export class CreateCompraComponent implements OnInit, OnDestroy {
    * 
    */
   mostrarPrecioSugerido(): void {
-    (document.getElementById('precio-sugerido') as HTMLInputElement).value
-      = this.producto.calcularPrecioSugerido(this.producto.precioCompra, this.producto.porcentajeGanancia).toString();
+    // (document.getElementById('precio-sugerido') as HTMLInputElement).value
+    //   = this.producto.calcularPrecioSugerido(this.producto.precioCompra, this.producto.porcentajeGanancia).toString();
+    const pPorcentaje = +((document.getElementById('porcentaje-ganancia') as HTMLInputElement).value);
+    const pCompra = +((document.getElementById('precio-compra') as HTMLInputElement).value);
+    let precioSugerido = 0;
+
+    if (!pPorcentaje || !pCompra) {
+      console.log('Valores Incorrectos.');
+    } else {
+      // precioSugerido = this.producto.calcularPrecioSugerido(+pcompra, +porcentajeGanancia);
+      precioSugerido = ((pCompra) * pPorcentaje / 100) +  pCompra;
+      (document.getElementById('precio-sugerido') as HTMLInputElement).value = precioSugerido.toString();
+    }
   }
 
   // Comparar para reemplazar el valor en el select del formulario en caso de existir
