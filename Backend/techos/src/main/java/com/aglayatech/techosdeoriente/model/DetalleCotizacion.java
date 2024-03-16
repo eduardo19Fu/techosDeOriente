@@ -18,7 +18,7 @@ public class DetalleCotizacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCotizacionDetalle;
+    private Long idDetalle;
     private Integer cantidad;
     private Float descuento;
     private BigDecimal subTotal;
@@ -29,12 +29,12 @@ public class DetalleCotizacion {
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Producto producto;
 
-    public Long getIdCotizacionDetalle() {
-        return idCotizacionDetalle;
+    public Long getIdDetalle() {
+        return idDetalle;
     }
 
-    public void setIdCotizacionDetalle(Long idCotizacionDetalle) {
-        this.idCotizacionDetalle = idCotizacionDetalle;
+    public void setIdDetalle(Long idDetalle) {
+        this.idDetalle = idDetalle;
     }
 
     public Integer getCantidad() {

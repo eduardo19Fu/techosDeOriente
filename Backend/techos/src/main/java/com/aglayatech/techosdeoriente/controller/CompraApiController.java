@@ -251,22 +251,16 @@ public class CompraApiController {
 
         try {
             estadoProductoNuevo = this.estadoService.findByEstado("activo".toUpperCase());
-            producto = this.productoService.findByCodigo(item.getProducto().getCodProducto());
 
-            if(producto != null) {
-                producto.setPrecioCompra(item.getProducto().getPrecioCompra());
-                producto.setPrecioVenta(item.getProducto().getPrecioVenta());
-                producto.setPrecioSugerido(item.getProducto().getPrecioSugerido());
-                producto.setPorcentajeGanancia(item.getProducto().getPorcentajeGanancia());
-                this.updateExistencias(producto, item.getCantidad(), "compra".toUpperCase());
-            } else if (producto == null) {
+              if(item.getProducto().getIdProducto() != null) {
+                this.updateExistencias(item.getProducto(), item.getCantidad(), "compra".toUpperCase());
+              } else {
                 producto = item.getProducto();
                 producto.setEstado(estadoProductoNuevo);
                 producto.setFechaIngreso(simpleDateFormat.parse(fechaIngreso.toString()));
                 // producto.stock() debe ir a cero para evitar que el movimiento del producto sume exitencias
-            }
-
-            this.productoService.save(producto);
+                this.productoService.save(producto);
+              }
             return true;
         } catch(DataAccessException | ParseException e) {
             e.printStackTrace();

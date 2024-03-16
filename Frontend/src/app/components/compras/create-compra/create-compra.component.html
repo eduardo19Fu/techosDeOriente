@@ -308,7 +308,7 @@
     
                 <div class="card-body" >
                     <button type="submit" role="button" class="btn btn-primary" (click)="create()"
-                            [disabled]="!compraForm.form.valid">
+                            [disabled]="!compraForm.form.valid || !guardarHabilitado">
                             <i class="fas fa-save"></i> Guardar
                     </button>
                 </div>

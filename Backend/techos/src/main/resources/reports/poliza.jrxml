@@ -15,8 +15,8 @@
 	sum(fd.cantidad),
 	p.nombre,
 	p.precio_compra * sum(fd.cantidad) as pc_total,
-	sum(fd.sub_total) as pv_total,
-	(sum(fd.sub_total)) - (p.precio_compra * sum(fd.cantidad)) as ganancia,
+	sum(fd.sub_total_descuento) as pv_total,
+	(sum(fd.sub_total_descuento)) - (p.precio_compra * sum(fd.cantidad)) as ganancia,
 	concat(u.primer_nombre,' ',u.apellido) as vendedor
 from facturas_detalle fd
 inner join facturas fac on fac.id_factura = fd.id_factura
@@ -25,7 +25,7 @@ inner join usuarios u on fac.id_usuario = u.id_usuario
 inner join estados es on fac.id_estado = es.id_estado
 where es.estado != 'ANULADO' and date(fac.fecha) = $P{fechaIni} and u.id_usuario = $P{usuario}
 group by p.nombre
-order by p.nombre asc;]]>
+order by p.nombre asc]]>
 	</queryString>
 	<field name="sum(fd.cantidad)" class="java.math.BigDecimal"/>
 	<field name="nombre" class="java.lang.String"/>

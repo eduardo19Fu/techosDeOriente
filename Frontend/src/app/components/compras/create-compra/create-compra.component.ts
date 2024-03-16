@@ -1,23 +1,24 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Compra } from '../../../models/compra';
 import { Router } from '@angular/router';
 
+import { Compra } from '../../../models/compra';
+import { TipoComprobante } from '../../../models/tipo-comprobante';
+import { UsuarioAuxiliar } from '../../../models/auxiliar/usuario-auxiliar';
+import { Proveedor } from '../../../models/proveedor';
+import { Producto } from '../../../models/producto';
+import { DetalleCompra } from '../../../models/detalle-compra';
+import { TipoProducto } from '../../../models/tipo-producto';
+import { MarcaProducto } from '../../../models/marca-producto';
+
+import { UsuarioService } from '../../../services/usuarios/usuario.service';
+import { ProductoService } from '../../../services/producto.service';
+import { TipoProductoService } from '../../../services/tipo-producto.service';
+import { MarcaProductoService } from '../../../services/marca-producto.service';
+import { ProveedorService } from '../../../services/proveedores/proveedor.service';
 import { AuthService } from '../../../services/auth.service';
 import { CompraService } from '../../../services/compras/compra.service';
 
 import Swal from 'sweetalert2';
-import { TipoComprobante } from '../../../models/tipo-comprobante';
-import { UsuarioAuxiliar } from '../../../models/auxiliar/usuario-auxiliar';
-import { ProveedorService } from '../../../services/proveedores/proveedor.service';
-import { Proveedor } from '../../../models/proveedor';
-import { UsuarioService } from '../../../services/usuarios/usuario.service';
-import { Producto } from '../../../models/producto';
-import { ProductoService } from '../../../services/producto.service';
-import { DetalleCompra } from '../../../models/detalle-compra';
-import { TipoProductoService } from '../../../services/tipo-producto.service';
-import { MarcaProductoService } from '../../../services/marca-producto.service';
-import { TipoProducto } from '../../../models/tipo-producto';
-import { MarcaProducto } from '../../../models/marca-producto';
 
 @Component({
   selector: 'app-create-compra',
@@ -41,6 +42,7 @@ export class CreateCompraComponent implements OnInit, OnDestroy {
   tiposProducto: TipoProducto[];
   marcasProducto: MarcaProducto[];
 
+  guardarHabilitado: boolean = true;
 
   constructor(
     private router: Router,
@@ -101,7 +103,8 @@ export class CreateCompraComponent implements OnInit, OnDestroy {
           if (this.nuevoTotal && this.nuevoTotal > 0) {
             this.compra.totalCompra = this.nuevoTotal;
           }
-
+          
+          this.guardarHabilitado = false;
           this.compraService.create(this.compra).subscribe(
             response => {
               this.router.navigate(['/compras/index']);
@@ -195,7 +198,7 @@ export class CreateCompraComponent implements OnInit, OnDestroy {
         }
 
         if (!this.producto.serie || this.producto.serie.length === 0) {
-          this.producto.serie = 'GENERADO-SERIE-' + this.producto.generarCodigo();
+          this.producto.serie = 'GENERADO-SERIE-' + this.generarCodigo();
         }
 
         this.producto.precioSugerido = +(document.getElementById('precio-sugerido') as HTMLInputElement).value;
@@ -327,6 +330,17 @@ export class CreateCompraComponent implements OnInit, OnDestroy {
       (document.getElementById('precio-sugerido') as HTMLInputElement).value = precioSugerido.toString();
     }
   }
+
+  /**
+     * Método que genera un codigo aleatorio para un producto que no tenga código de barras predefinido.
+     * @returns código
+     */
+  generarCodigo(): string {
+    var rand: number;
+
+    rand = Math.floor(Math.random() * 100000000) + 1; // DEVUELVE UN VALOR ALEATORIO ENTRE 1 Y 1000000
+    return (rand.toString());
+}
 
   // Comparar para reemplazar el valor en el select del formulario en caso de existir
   compararMarca(o1: MarcaProducto, o2: MarcaProducto): boolean {
