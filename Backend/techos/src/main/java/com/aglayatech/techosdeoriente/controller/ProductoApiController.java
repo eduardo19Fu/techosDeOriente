@@ -73,6 +73,12 @@ public class ProductoApiController {
 	public Page<Producto> index(@PathVariable("page") Integer page) {
 		return serviceProducto.findAll(PageRequest.of(page, 5));
 	}
+
+	@Secured(value = {"ROLE_ADMIN", "ROLE_COBRADOR"})
+	@GetMapping(value = "/productos-activos-sp")
+	public List<Producto> findAllSP() {
+		return serviceProducto.findAllBySP();
+	}
 	
 	@GetMapping(value = "/productos-activos")
 	public List<Producto> findAll(){

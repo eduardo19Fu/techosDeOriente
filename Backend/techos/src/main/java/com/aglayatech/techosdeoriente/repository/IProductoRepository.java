@@ -12,6 +12,10 @@ import com.aglayatech.techosdeoriente.model.Estado;
 import com.aglayatech.techosdeoriente.model.Producto;
 
 public interface IProductoRepository extends JpaRepository<Producto, Integer> {
+
+	// Consultar productos por procedimiento almacenado
+	@Query(value = "{call PR_CONSULTAR_PRODUCTOS()}", nativeQuery = true)
+	List<Producto> getAllProductosSP();
 	
 	// Buscar listado de productos por estado
 	List<Producto> findByEstado(Estado estado);

@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-buscar-producto">
+<div class="modal fade" id="modal-buscar-producto" >
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header header-modal" style="background-color: rgb(58, 151, 185);">
@@ -10,9 +10,12 @@
 
             <div class="card-body">
                 <div class="modal-body table-responsive">
+                    <div *ngIf="loading" class="text-center">
+                        <i class="fa fa-spinner fa-spin"></i> Cargando datos...
+                    </div>
                     <table id="productos"
                         class="table table-hover table-striped table-bordered dataTable dtr-inline table-sm" role="grid"
-                        *ngIf="productos?.length > 0">
+                        *ngIf="productos?.length > 0 && !loading">
                         <thead>
                             <tr>
                                 <th>Serie</th>

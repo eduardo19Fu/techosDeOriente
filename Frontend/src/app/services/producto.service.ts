@@ -27,6 +27,10 @@ export class ProductoService {
     return this.http.get<Producto[]>(this.url + '/productos');
   }
 
+  getProductosActivosSP(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(this.url + '/productos-activos-sp');
+  }
+
   getProductosActivos(): Observable<Producto[]>{
     return this.http.get<Producto[]>(`${this.url}/productos-activos`);
   }

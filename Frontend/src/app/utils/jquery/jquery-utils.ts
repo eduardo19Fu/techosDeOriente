@@ -32,6 +32,7 @@ export class JqueryConfigs {
     // MÉTODO DE INICIALIZACIÓN DE DATATABLE ADMILTE PARA MODAL PRODUCTOS
     configDataTableModal(nombreTabla: string): void {
         $(() => {
+            console.log('Estas llamando esta tabla con ' + nombreTabla);
             $(`#${nombreTabla}`).DataTable({
                 destroy : true,
                 responsive: false,

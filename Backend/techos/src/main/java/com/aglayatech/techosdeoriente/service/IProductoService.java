@@ -16,6 +16,8 @@ import net.sf.jasperreports.engine.JRException;
 public interface IProductoService {
 	
 	public List<Producto> findAll();
+
+	public List<Producto> findAllBySP();
 	
 	public List<Producto> findAllByEstado(Estado estado);
 	

@@ -41,7 +41,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
-@SuppressWarnings("unused")
 @Service
 public class ProductoServiceImpl implements IProductoService {
 
@@ -59,6 +58,11 @@ public class ProductoServiceImpl implements IProductoService {
 	@Override
 	public List<Producto> findAll() {
 		return repoProducto.findAll(Sort.by(Direction.ASC, "nombre"));
+	}
+
+	@Override
+	public List<Producto> findAllBySP() {
+		return repoProducto.getAllProductosSP();
 	}
 
 	@Override
