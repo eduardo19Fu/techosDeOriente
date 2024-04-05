@@ -286,6 +286,10 @@ export class CreatePedidoComponent implements OnInit {
     });
   }
 
+  eliminarItem(index: number): void {
+    this.pedido.itemsPedido.splice(index, 1);
+  }
+
   /**
    * Método que muestra en el field de campo para precio de venta el calculo devuelto.
    * 
