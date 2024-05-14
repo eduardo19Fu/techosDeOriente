@@ -11,7 +11,7 @@ declare var $: any;
   styles: [
   ]
 })
-export class ModalBuscarProductoComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ModalBuscarProductoComponent implements OnInit {
 
   @Output() producto = new EventEmitter<Producto>();
 
@@ -31,42 +31,14 @@ export class ModalBuscarProductoComponent implements OnInit, AfterViewInit, OnDe
   }
 
   ngOnInit(): void {
-    // this.loadProductos();
+    this.loadProductos();
   }
-
-  ngOnDestroy(): void {
-    // Desuscribirse del evento shown.bs.modal para evitar memory leaks
-    $(this.elementRef.nativeElement).find('#modal-buscar-producto').off('shown.bs.modal');
-    $(this.elementRef.nativeElement).find('#modal-buscar-producto').off('hidden.bs.modal');
-  }
-
-  ngAfterViewInit(): void {
-    /** Carga los productos al disparar el modal */
-    $(this.elementRef.nativeElement).find('#modal-buscar-producto').on('shown.bs.modal', () => {
-      this.clearTable();
-      this.loadProductos();
-    });
-
-    // Suscribirse al evento hidden.bs.modal
-    $(this.elementRef.nativeElement).find('#modal-buscar-producto').on('hidden.bs.modal', () => {
-      // Limpiar la tabla cuando se oculta el modal
-      this.clearTable();
-    });
-  }
-
 
   loadProductos(): void{
-    this.loading = true;
     this.productoService.getProductosActivosSP().subscribe(
       productos => {
         this.productos = productos;
-        this.loading = false;
-        this.cdr.detectChanges();
         this.jqueryConfigs.configDataTableModal("productos");
-        // this.loading = false;
-      }, error => {
-        console.error('Error al cargar los productos:', error);
-        this.loading = false;
       }
     );
   }
@@ -74,9 +46,4 @@ export class ModalBuscarProductoComponent implements OnInit, AfterViewInit, OnDe
   chooseProducto(producto: Producto): void{
     this.producto.emit(producto);
   }
-
-  clearTable(): void {
-    this.productos = [];
-  }
-
 }
